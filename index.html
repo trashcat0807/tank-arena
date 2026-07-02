@@ -1,5 +1,3 @@
-This is a complete HTML document for "Tank Arena · Ultimate Edition". You can run it directly in your browser to play.
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,12 +8,8 @@ This is a complete HTML document for "Tank Arena · Ultimate Edition". You can r
     *{margin:0;padding:0;box-sizing:border-box;touch-action:none}
     html,body{overflow:hidden;font-family:'Courier New',monospace;background:#0a0a1a;height:100%}
     canvas{display:block}
-    #authScreen, #dashScreen, #startScreen, #gameOverScreen, #settingsScreen, #ownerPanel, #skinScreen, #modeScreen {
-      position:fixed;top:0;left:0;width:100%;height:100%;z-index:300;color:#fff;
-      background:linear-gradient(135deg,#0a0a1e,#1a1a3e,#0a0a2e);
-      display:flex;flex-direction:column;justify-content:center;align-items:center;
-    }
-    #authScreen{z-index:400} #authScreen h1{font-size:48px;color:#0ff;text-shadow:0 0 20px rgba(0,255,255,0.6);margin-bottom:6px}
+    #authScreen,#dashScreen,#startScreen,#gameOverScreen,#settingsScreen,#ownerPanel,#skinScreen,#modeScreen{position:fixed;top:0;left:0;width:100%;height:100%;z-index:300;color:#fff;background:linear-gradient(135deg,#0a0a1e,#1a1a3e,#0a0a2e);display:flex;flex-direction:column;justify-content:center;align-items:center}
+    #authScreen{z-index:400}#authScreen h1{font-size:48px;color:#0ff;text-shadow:0 0 20px rgba(0,255,255,0.6);margin-bottom:6px}
     .auth-sub{font-size:12px;color:#888;margin-bottom:28px}
     .auth-box{width:300px;max-width:90vw;display:flex;flex-direction:column;gap:10px}
     .auth-input{width:100%;padding:12px;background:#111;border:2px solid #333;border-radius:8px;color:#fff;font-size:16px;font-family:'Courier New',monospace;outline:none}
@@ -30,8 +24,8 @@ This is a complete HTML document for "Tank Arena · Ultimate Edition". You can r
     .dash-table th{background:rgba(93,92,222,0.3);color:#0ff;padding:8px;text-align:left}
     .dash-table td{padding:7px;border-bottom:1px solid #222;color:#ccc}
     .rank-1{color:#f1c40f;font-weight:bold}.rank-2{color:#c0c0c0;font-weight:bold}.rank-3{color:#cd7f32;font-weight:bold}
-    .menu-btn, .mode-btn{padding:14px 28px;margin:8px;border:2px solid #5D5CDE;border-radius:10px;background:rgba(93,92,222,0.15);color:#fff;font-family:'Courier New',monospace;font-size:16px;cursor:pointer;text-align:center;transition:0.2s}
-    .menu-btn:hover, .mode-btn:hover{background:rgba(93,92,222,0.4);border-color:#0ff;transform:scale(1.05)}
+    .menu-btn,.mode-btn{padding:14px 28px;margin:8px;border:2px solid #5D5CDE;border-radius:10px;background:rgba(93,92,222,0.15);color:#fff;font-family:'Courier New',monospace;font-size:16px;cursor:pointer;text-align:center;transition:0.2s}
+    .menu-btn:hover,.mode-btn:hover{background:rgba(93,92,222,0.4);border-color:#0ff;transform:scale(1.05)}
     .top-btn{position:fixed;top:20px;padding:8px 14px;background:rgba(20,20,20,0.8);border-radius:4px;z-index:20;cursor:pointer;font-size:12px;font-family:'Courier New',monospace}
     #shopBtn{right:20px;border:1px solid #f1c40f;color:#f1c40f}
     #settingsBtn{right:100px;border:1px solid #aaa;color:#aaa}
@@ -40,7 +34,7 @@ This is a complete HTML document for "Tank Arena · Ultimate Edition". You can r
     #hud{position:fixed;top:20px;left:20px;z-index:10;color:#fff;font-size:13px}
     #healthBar{width:180px;height:18px;background:rgba(255,255,255,0.1);border-radius:9px;overflow:hidden;margin:4px 0}
     #healthFill{height:100%;background:#2ecc71;width:100%}
-    #o2Bar, #warmthBar{width:150px;height:10px;background:rgba(255,255,255,0.1);border-radius:5px;overflow:hidden;margin:3px 0;display:none}
+    #o2Bar,#warmthBar{width:150px;height:10px;background:rgba(255,255,255,0.1);border-radius:5px;overflow:hidden;margin:3px 0;display:none}
     #o2Fill{height:100%;background:#4dc9f6}#warmthFill{height:100%;background:#f90}
     .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:none;justify-content:center;align-items:center;z-index:250}
     .panel{background:#111;border:2px solid #f1c40f;border-radius:10px;padding:20px;width:360px;max-width:92vw;max-height:85vh;overflow-y:auto;color:#fff}
@@ -64,10 +58,10 @@ This is a complete HTML document for "Tank Arena · Ultimate Edition". You can r
     .weapon-btn.active{border-color:#5D5CDE;background:rgba(93,92,222,0.3)}
     #controls{position:fixed;bottom:20px;left:0;width:100%;display:none;justify-content:space-between;padding:0 20px;z-index:10}
     .steering-container{position:relative;width:160px;height:60px;background:rgba(255,255,255,0.08);border-radius:30px;display:flex;align-items:center;justify-content:center}
-    .steering-thumb{width:50px;height:50px;background:rgba(93,92,222,0.8);border-radius:50%;position:absolute;left:55px;transition:left 0.05s}
+    .steering-thumb{width:50px;height:50px;background:rgba(93,92,222,0.8);border-radius:50%;position:absolute;left:55px}
     .gas-btns{display:flex;flex-direction:column;gap:8px;align-items:center}
     .gas-btn{width:70px;height:45px;background:rgba(46,204,113,0.6);border-radius:10px;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fff;font-size:18px;user-select:none}
-    #fireBtn2{width:80px;height:80px;background:rgba(231,76,60,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fff;font-size:16px;user-select:none}
+    #fireBtn2{width:80px;height:80px;background:rgba(231,76,60,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fff;font-size:16px;user-select:none;position:relative}
   </style>
 </head>
 <body>
@@ -96,7 +90,7 @@ function registerUser(u,p){if(!u||!p)return{ok:false,msg:'Username and password 
 function loginUser(u,p){if(!u||!p)return{ok:false,msg:'Enter username and password'};if(u===OWNER_USER&&p===OWNER_PASS){isOwner=true;currentUser=OWNER_USER;return{ok:true,owner:true};}if(!userDB[u])return{ok:false,msg:'User not found'};if(userDB[u].password!==p)return{ok:false,msg:'Wrong password'};isOwner=false;currentUser=u;return{ok:true};}
 function updateUserStats(won){if(isOwner||!currentUser||!userDB[currentUser])return;var u=userDB[currentUser];u.gamesPlayed++;if(!won)u.deaths++;if(gameMode==='normal'){if(won){if(totalTime<u.normalBest||u.normalBest===0)u.normalBest=totalTime;if(totalTime>u.normalWorst)u.normalWorst=totalTime;}}else{if(wave.cur>u.bestWave)u.bestWave=wave.cur;if(wave.cur>u.endlessBest)u.endlessBest=wave.cur;}if(score>u.bestScore)u.bestScore=score;u.totalCoins+=coinsThisRun;u.totalDiamonds+=diamondsThisRun;saveDB();}
 
-var settings={aimAssist:true,autoShoot:true,screenShake:true,darkMode:true,controlLayout:'default',fireLocked:true,keyUp:'w',keyDown:'s',keyLeft:'a',keyRight:'d',keyFire:' ',keyDash:'Shift'};
+var settings={aimAssist:true,autoShoot:true,screenShake:true,darkMode:true,controlLayout:'default',fireLocked:true};
 try{var ss=localStorage.getItem('ta_settings');if(ss)settings=JSON.parse(ss);}catch(e){}
 function saveSettings(){try{localStorage.setItem('ta_settings',JSON.stringify(settings));}catch(e){}}
 var tankSkin='default',skins={default:{name:'Default',color:'#2c3e50',unlocked:true},crimson:{name:'Crimson',color:'#8b0000',unlocked:false},inferno:{name:'Inferno',color:'#ff4500',unlocked:false},gold:{name:'Gold',color:'#d4af37',unlocked:false},arctic:{name:'Arctic',color:'#87ceeb',unlocked:false},jungle:{name:'Jungle',color:'#228b22',unlocked:false},void:{name:'Void',color:'#4a0e4e',unlocked:false},shadow:{name:'Shadow',color:'#1a1a1a',unlocked:false},ghost:{name:'Ghost',color:'#f0f0f0',unlocked:false}};
@@ -123,7 +117,6 @@ var toxicPools=[],lavaCracks=[],vineTraps=[];
 function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;genBG();}
 resizeCanvas();window.addEventListener('resize',resizeCanvas);
 
-// AUTH
 document.getElementById('eyeBtn').addEventListener('click',function(){var p=document.getElementById('authPass');p.type=p.type==='password'?'text':'password';});
 document.getElementById('loginBtn').addEventListener('click',function(){var u=document.getElementById('authUser').value.trim(),p=document.getElementById('authPass').value;var r=loginUser(u,p);if(r.ok){authMsg.textContent='';authScreen.style.display='none';showModeScreen();}else{authMsg.textContent=r.msg;}});
 document.getElementById('signupBtn').addEventListener('click',function(){var u=document.getElementById('authUser').value.trim(),p=document.getElementById('authPass').value;var r=registerUser(u,p);authMsg.textContent=r.msg;authMsg.style.color=r.ok?'#2ecc71':'#e74c3c';});
@@ -150,18 +143,14 @@ document.getElementById('startDashLink').addEventListener('click',function(){sta
 document.getElementById('logoutLink').addEventListener('click',function(){currentUser=null;isOwner=false;startScreen.style.display='none';authScreen.style.display='flex';authMsg.textContent='';});
 document.getElementById('goLeaderboard').addEventListener('click',function(){gameOverScreen.style.display='none';showDashboard('start','normal','fast');});
 
-// SKINS
 function updateSkins(){try{skins.crimson.unlocked=userDB[currentUser]&&userDB[currentUser].bestWave>=10;skins.inferno.unlocked=userDB[currentUser]&&userDB[currentUser].bestWave>=10;skins.arctic.unlocked=userDB[currentUser]&&userDB[currentUser].bestWave>=20;skins.jungle.unlocked=userDB[currentUser]&&userDB[currentUser].bestWave>=30;skins.void.unlocked=userDB[currentUser]&&userDB[currentUser].bestWave>=40;skins.gold.unlocked=userDB[currentUser]&&userDB[currentUser].totalCoins>=1000;skins.shadow.unlocked=userDB[currentUser]&&userDB[currentUser].totalCoins>=500;skins.ghost.unlocked=userDB[currentUser]&&userDB[currentUser].deaths>=10;}catch(e){}}
 document.getElementById('skinSelectBtn').addEventListener('click',function(){startScreen.style.display='none';skinScreen.style.display='flex';var h='';for(var k in skins){var sk=skins[k];h+='<div style="text-align:center;cursor:pointer;padding:10px;border:2px solid '+(tankSkin===k?'#0ff':'#333')+';border-radius:8px" onclick="selectSkin(\''+k+'\')"><div style="width:40px;height:40px;background:'+sk.color+';border-radius:5px;margin:0 auto 5px"></div><span style="font-size:11px">'+sk.name+'</span></div>';}document.getElementById('skinOptions').innerHTML=h;});
 function selectSkin(k){if(skins[k].unlocked||k==='default'){tankSkin=k;localStorage.setItem('ta_skin',k);}}
 document.getElementById('skinBackBtn').addEventListener('click',function(){skinScreen.style.display='none';showStartScreen();});
 
-// SETTINGS
 document.getElementById('settingsBtn').addEventListener('click',function(){settingsScreen.style.display='flex';var h='';h+='<div class="shop-item"><span>🎯 Aim Assist</span><button class="toggle-btn '+(settings.aimAssist?'on':'off')+'" id="togAim">'+(settings.aimAssist?'ON':'OFF')+'</button></div>';h+='<div class="shop-item"><span>🔫 Auto Shoot</span><button class="toggle-btn '+(settings.autoShoot?'on':'off')+'" id="togAuto">'+(settings.autoShoot?'ON':'OFF')+'</button></div>';if(!isMobile){h+='<div class="shop-item"><span>📳 Screen Shake</span><button class="toggle-btn '+(settings.screenShake?'on':'off')+'" id="togShake">'+(settings.screenShake?'ON':'OFF')+'</button></div>';}h+='<div class="shop-item"><span>🌗 Dark Mode</span><button class="toggle-btn '+(settings.darkMode?'on':'off')+'" id="togDark">'+(settings.darkMode?'ON':'OFF')+'</button></div>';if(isMobile){h+='<div class="shop-item"><span>📱 Layout</span><select id="layoutSel" style="background:#111;color:#fff;padding:5px"><option '+(settings.controlLayout==='default'?'selected':'')+'>Default</option><option '+(settings.controlLayout==='flipped'?'selected':'')+'>Flipped</option><option '+(settings.controlLayout==='classic'?'selected':'')+'>Classic</option></select></div>';h+='<div class="shop-item"><span>🔥 Fire Lock</span><button class="toggle-btn '+(settings.fireLocked?'on':'off')+'" id="togFireLock">'+(settings.fireLocked?'🔒 LOCKED':'🔓 FREE')+'</button></div>';}h+='<button class="close-btn" id="closeSettings">CLOSE</button>';document.getElementById('settingsContent').innerHTML=h;document.getElementById('togAim').addEventListener('click',function(){settings.aimAssist=!settings.aimAssist;saveSettings();settingsScreen.style.display='none';document.getElementById('settingsBtn').click();});document.getElementById('togAuto').addEventListener('click',function(){settings.autoShoot=!settings.autoShoot;saveSettings();settingsScreen.style.display='none';document.getElementById('settingsBtn').click();});if(!isMobile){document.getElementById('togShake').addEventListener('click',function(){settings.screenShake=!settings.screenShake;saveSettings();settingsScreen.style.display='none';document.getElementById('settingsBtn').click();});}document.getElementById('togDark').addEventListener('click',function(){settings.darkMode=!settings.darkMode;saveSettings();settingsScreen.style.display='none';document.getElementById('settingsBtn').click();});if(isMobile){document.getElementById('layoutSel').addEventListener('change',function(){settings.controlLayout=this.value.toLowerCase();saveSettings();});document.getElementById('togFireLock').addEventListener('click',function(){settings.fireLocked=!settings.fireLocked;saveSettings();settingsScreen.style.display='none';document.getElementById('settingsBtn').click();});}document.getElementById('closeSettings').addEventListener('click',function(){settingsScreen.style.display='none';});});
-
 lockBtn.addEventListener('click',function(){settings.fireLocked=!settings.fireLocked;lockBtn.textContent=settings.fireLocked?'🔒':'🔓';saveSettings();});
 
-// WEAPONS
 var weapons={handgun:{name:'Handgun',damage:25,cd:400,bs:8,bsz:5,bc:1,range:1000,hr:0,cr:0,icon:'🔫',color:'#f1c40f',maxAmmo:45,unlocked:true},shotgun:{name:'Shotgun',damage:15,cd:800,bs:7,bsz:4,bc:6,spread:0.3,range:400,hr:0,cr:0,icon:'🔫',color:'#e67e22',maxAmmo:20,unlocked:true},rifle:{name:'Rifle',damage:35,cd:200,bs:10,bsz:4,bc:1,range:1200,hr:0,cr:0,icon:'🔫',color:'#3498db',maxAmmo:90,unlocked:true},minigun:{name:'Minigun',damage:10,cd:50,bs:9,bsz:3,bc:1,range:800,hr:5,cr:2,maxHeat:100,icon:'🔄',color:'#7f8c8d',maxAmmo:1000,unlocked:true},'knife-melee':{name:'Knife(Melee)',damage:100,cd:500,range:50,icon:'🔪',melee:true,color:'#95a5a6',maxAmmo:-1,unlocked:true},'knife-throw':{name:'Knife(Throw)',damage:70,cd:1000,bs:6,bsz:10,bc:1,range:400,icon:'🔪',color:'#95a5a6',maxAmmo:12,unlocked:true},flamethrower:{name:'Flamethrower',damage:3,cd:30,bs:5,bsz:8,bc:3,spread:0.2,range:200,hr:3,cr:1,maxHeat:120,icon:'🔥',fx:'fire',color:'#e67e22',maxAmmo:500,unlocked:true},'nuke-launcher':{name:'☢️ Nuke',damage:9999,cd:3000,bs:4,bsz:30,bc:1,range:2000,hr:0,cr:0,icon:'☢️',color:'#ff0',maxAmmo:-1,unlocked:false,ownerOnly:true}};
 var eTypes={normal:{color:'#9b59b6',spd:1.5,hp:50,dmg:10,sz:20,lbl:''},speeder:{color:'#2ecc71',spd:3.5,hp:25,dmg:8,sz:16,lbl:'FAST'},brute:{color:'#8b0000',spd:0.8,hp:150,dmg:25,sz:35,lbl:'BRUTE'},shooter:{color:'#e67e22',spd:1.0,hp:60,dmg:5,sz:22,lbl:'SNIPER',sRange:250,sCD:2000,sDmg:15,sSpd:4},bomber:{color:'#f1c40f',spd:2.2,hp:40,dmg:5,sz:18,lbl:'BOOM',exR:100,exD:40},healer:{color:'#1abc9c',spd:1.2,hp:70,dmg:5,sz:20,lbl:'HEAL',hRange:150,hAmt:3,hCD:2000}};
 
@@ -171,7 +160,7 @@ var wave={cur:0,maxW:50,eTotal:0,eSpawned:0,bTotal:0,bSpawned:0,inProg:false,bet
 var tank={x:0,y:0,angle:0,spd:3,sz:18,hp:1000,maxHp:1000,curW:'handgun',heat:0,dashCD:0,dashMaxCD:2000,dashing:false,dashInv:0,godMode:false,o2:100,warmth:100};
 var bullets=[],enemies=[],eBullets=[],drops=[],particles=[],floatTexts=[];
 var score=0,activeKeys={},lastFire=0,spinnerAngle=0,screenShakeAmount=0;
-var joystickVec={x:0,y:0},steerVal=0,gasActive=false,revActive=false;
+var steerVal=0,gasActive=false,revActive=false;
 var bgF=[];
 
 function initAmmo(){for(var k in weapons)ammo[k]=weapons[k].maxAmmo;}
@@ -191,7 +180,6 @@ function drawBG(){
   if(wi===2){for(var i=0;i<10;i++){ctx.fillStyle='rgba(200,220,255,'+(0.3+Math.random()*0.5)+')';ctx.beginPath();ctx.ellipse(Math.random()*canvas.width,Math.random()*canvas.height,15+Math.random()*30,6+Math.random()*12,0,0,Math.PI*2);ctx.fill();}for(var i=0;i<25;i++){ctx.fillStyle='rgba(255,255,255,'+(0.2+Math.random()*0.4)+')';ctx.beginPath();ctx.arc(Math.random()*canvas.width,Math.random()*canvas.height,Math.random()*2+0.5,0,Math.PI*2);ctx.fill();}}
   if(wi===3){for(var i=0;i<25;i++){ctx.strokeStyle='rgba(30,180,30,0.5)';ctx.lineWidth=2;var gx=Math.random()*canvas.width,gy=Math.random()*canvas.height;for(var j=0;j<6;j++){ctx.beginPath();ctx.moveTo(gx,gy);ctx.lineTo(gx+(Math.random()-0.5)*18,gy-(Math.random()*15+5));ctx.stroke();}}for(var i=0;i<8;i++){var bushX=Math.random()*canvas.width,bushY=Math.random()*canvas.height,bushR=8+Math.random()*15;ctx.fillStyle='rgba(20,140,20,0.6)';ctx.beginPath();ctx.arc(bushX,bushY,bushR,0,Math.PI*2);ctx.fill();}}
   if(wi===4){for(var i=0;i<10;i++){ctx.fillStyle='rgba(180,60,220,'+(0.3+Math.random()*0.5)+')';var cx4=Math.random()*canvas.width,cy4=Math.random()*canvas.height;ctx.beginPath();ctx.moveTo(cx4-8,cy4+12);ctx.lineTo(cx4,cy4-18);ctx.lineTo(cx4+8,cy4+12);ctx.closePath();ctx.fill();}for(var i=0;i<30;i++){ctx.globalAlpha=0.3+Math.sin(t*0.003+i)*0.4;ctx.fillStyle=Math.random()>0.5?'#fff':'#c0f';ctx.beginPath();ctx.arc(Math.random()*canvas.width,Math.random()*canvas.height,Math.random()*2+0.5,0,Math.PI*2);ctx.fill();}ctx.globalAlpha=1;}
-  // Hazards
   for(var ti=0;ti<toxicPools.length;ti++){var tp=toxicPools[ti];ctx.fillStyle='rgba(100,255,50,0.35)';ctx.beginPath();ctx.arc(tp.x,tp.y,tp.r,0,Math.PI*2);ctx.fill();}
   for(var li=0;li<lavaCracks.length;li++){var lv=lavaCracks[li];ctx.strokeStyle='#f60';ctx.lineWidth=3;ctx.beginPath();ctx.moveTo(lv.x1,lv.y1);ctx.lineTo(lv.x2,lv.y2);ctx.stroke();}
   for(var vi=0;vi<vineTraps.length;vi++){var v=vineTraps[vi];ctx.fillStyle='rgba(0,180,0,0.5)';ctx.beginPath();for(var p=0;p<6;p++){var a=Math.PI*2/6*p;ctx.lineTo(v.x+Math.cos(a)*12,v.y+Math.sin(a)*12);}ctx.closePath();ctx.fill();}
@@ -213,35 +201,15 @@ document.getElementById('closeShop').addEventListener('click',function(){shopMod
 function updateShop(){document.getElementById('shopBal').textContent='💰 '+coins+' | 💎 '+diamonds;var html='';for(var i=0;i<shopItems.length;i++){var it=shopItems[i],lvl='';if(it.id==='health')lvl=' (Lv '+upgrades.health+')';if(it.id==='damage')lvl=' (Lv '+upgrades.damage+')';if(it.id==='shield')lvl=' ('+upgrades.shield+'/10)';if(it.id==='spinnerBlades')lvl=' ('+(upgrades.spinnerBlades+1)+'/6)';if(it.id==='spinnerSpeed')lvl=' (Lv '+upgrades.spinnerSpeed+'/5)';if(it.id==='shieldSize')lvl=' (Lv '+upgrades.shieldSize+'/5)';if(it.id==='dashCD')lvl=' (Lv '+upgrades.dashCD+'/4)';var bought=false;if(!it.repeat){if(it.id==='forceShield'&&upgrades.forceShield)bought=true;if(it.id==='spinners'&&upgrades.spinners)bought=true;if(it.id==='hasDash'&&upgrades.hasDash)bought=true;}if(it.maxLvl){if(it.id==='shield'&&upgrades.shield>=10)bought=true;if(it.id==='spinnerBlades'&&upgrades.spinnerBlades>=5)bought=true;if(it.id==='spinnerSpeed'&&upgrades.spinnerSpeed>=5)bought=true;if(it.id==='shieldSize'&&upgrades.shieldSize>=5)bought=true;if(it.id==='dashCD'&&upgrades.dashCD>=4)bought=true;}html+='<div class="shop-item"><div><b>'+it.name+'</b></div>';if(bought)html+='<button class="buy-btn owned">OWNED</button>';else{var bal=it.curr==='coin'?coins:diamonds,sym=it.curr==='coin'?'💰':'💎';if(bal<it.cost)html+='<button class="buy-btn cant">'+sym+it.cost+'</button>';else html+='<button class="buy-btn" data-shop="'+i+'">'+sym+it.cost+'</button>';}html+='</div>';}document.getElementById('shopItems').innerHTML=html;var btns=document.querySelectorAll('[data-shop]');for(var j=0;j<btns.length;j++)btns[j].addEventListener('click',onBuy);}
 function onBuy(e){var idx=parseInt(e.currentTarget.getAttribute('data-shop')),it=shopItems[idx];var bal=it.curr==='coin'?coins:diamonds;if(bal<it.cost)return;if(it.curr==='coin')addCoins(-it.cost);else addDiamonds(-it.cost);switch(it.id){case'health':upgrades.health++;tank.maxHp+=100;tank.hp=Math.min(tank.hp+100,tank.maxHp);updateHP();break;case'damage':upgrades.damage++;break;case'shield':if(upgrades.shield<10)upgrades.shield++;break;case'spinnerBlades':if(upgrades.spinnerBlades<5)upgrades.spinnerBlades++;break;case'spinnerSpeed':if(upgrades.spinnerSpeed<5)upgrades.spinnerSpeed++;break;case'shieldSize':if(upgrades.shieldSize<5)upgrades.shieldSize++;break;case'hasDash':upgrades.hasDash=true;break;case'dashCD':if(upgrades.dashCD<4){upgrades.dashCD++;tank.dashMaxCD=2000-upgrades.dashCD*300;}break;case'ammo':var w=weapons[tank.curW];if(!w.melee&&ammo[tank.curW]!==-1){ammo[tank.curW]=Math.min(ammo[tank.curW]+12,w.maxAmmo);updateAmmoUI();}break;case'forceShield':upgrades.forceShield=true;break;case'spinners':upgrades.spinners=true;break;}updateShop();}
 
-// OWNER
 ownerBtn.addEventListener('click',function(){if(!isOwner)return;ownerPanel.style.display='flex';});
 document.getElementById('closeOwner').addEventListener('click',function(){ownerPanel.style.display='none';});
 document.querySelectorAll('#ownerPanel .owner-btn').forEach(function(b){b.addEventListener('click',function(e){var act=e.currentTarget.getAttribute('data-ow');if(act==='w1')ownerJumpWorld(0);if(act==='w2')ownerJumpWorld(1);if(act==='w3')ownerJumpWorld(2);if(act==='w4')ownerJumpWorld(3);if(act==='w5')ownerJumpWorld(4);if(act==='spawn'){var n=parseInt(prompt('How many enemies?'))||10;for(var i=0;i<n;i++){var p=spawnEdge();enemies.push(mkEnemy(p.x,p.y,'normal',null,null));}}if(act==='boss'){var p2=spawnEdge();enemies.push(mkEnemy(p2.x,p2.y,'normal','mini',null));}if(act==='nuke'){screenShakeAmount=30;for(var ni=enemies.length-1;ni>=0;ni--){enemies[ni].hp-=9999;if(enemies[ni].hp<=0){handleKill(enemies[ni]);enemies.splice(ni,1);}}}if(act==='killall'){for(var ki=enemies.length-1;ki>=0;ki--){handleKill(enemies[ki]);enemies.splice(ki,1);}}if(act==='coins'){var ca=parseInt(prompt('How many coins?'))||1000;addCoins(ca);}if(act==='diamonds'){var da=parseInt(prompt('How many diamonds?'))||100;addDiamonds(da);}if(act==='heal'){tank.hp=tank.maxHp;updateHP();}if(act==='god'){tank.godMode=!tank.godMode;document.getElementById('godToggle').textContent='GOD:'+(tank.godMode?'ON':'OFF');}if(act==='nextwave'){for(var wi2=enemies.length-1;wi2>=0;wi2--){handleKill(enemies[wi2]);enemies.splice(wi2,1);}wave.inProg=false;wave.between=true;wave.nextT=Date.now()+500;}if(act==='nukewep'){weapons['nuke-launcher'].unlocked=true;tank.curW='nuke-launcher';buildWeaponUI();}});});
 function ownerJumpWorld(wi){for(var i=enemies.length-1;i>=0;i--){enemies.splice(i,1);}eBullets=[];bullets=[];drops=[];wave.cur=wi*10+1;wave.eTotal=0;wave.eSpawned=0;wave.bTotal=0;wave.bSpawned=0;wave.inProg=false;wave.between=true;wave.nextT=Date.now()+1000;wave.bannerTxt='OWNER: '+worlds[wi].name;wave.bannerST=Date.now();genBG();genHazards();updateWaveUI();tank.hp=tank.maxHp;tank.o2=100;tank.warmth=100;updateHP();}
 
-// KEYBOARD
-window.addEventListener('keydown',function(e){
-  if(!gameActive||shopModal.style.display==='flex'||settingsScreen.style.display==='flex'||ownerPanel.style.display==='flex')return;
-  var k=e.key.toLowerCase();
-  if(k===settings.keyUp)activeKeys.up=true;
-  if(k===settings.keyDown)activeKeys.down=true;
-  if(k===settings.keyLeft)activeKeys.left=true;
-  if(k===settings.keyRight)activeKeys.right=true;
-  if(k===settings.keyFire||e.key===' '||e.key==='e'){activeKeys.FIRE=true;e.preventDefault();}
-  if(k===settings.keyDash&&upgrades.hasDash&&tank.dashCD<=0&&!tank.dashing)dash();
-  if(k==='o'&&isOwner)ownerPanel.style.display=ownerPanel.style.display==='flex'?'none':'flex';
-});
-window.addEventListener('keyup',function(e){
-  var k=e.key.toLowerCase();
-  if(k===settings.keyUp)activeKeys.up=false;
-  if(k===settings.keyDown)activeKeys.down=false;
-  if(k===settings.keyLeft)activeKeys.left=false;
-  if(k===settings.keyRight)activeKeys.right=false;
-  if(k===settings.keyFire||e.key===' '||e.key==='e')activeKeys.FIRE=false;
-});
+window.addEventListener('keydown',function(e){if(!gameActive||shopModal.style.display==='flex'||settingsScreen.style.display==='flex'||ownerPanel.style.display==='flex')return;switch(e.key){case'ArrowUp':case'w':activeKeys.up=true;break;case'ArrowLeft':case'a':activeKeys.left=true;break;case'ArrowRight':case'd':activeKeys.right=true;break;case'ArrowDown':case's':activeKeys.down=true;break;case' ':case'e':activeKeys.FIRE=true;break;case'Shift':if(upgrades.hasDash&&tank.dashCD<=0&&!tank.dashing)dash();break;case'o':if(isOwner)ownerPanel.style.display=ownerPanel.style.display==='flex'?'none':'flex';break;}});
+window.addEventListener('keyup',function(e){switch(e.key){case'ArrowUp':case'w':activeKeys.up=false;break;case'ArrowLeft':case'a':activeKeys.left=false;break;case'ArrowRight':case'd':activeKeys.right=false;break;case'ArrowDown':case's':activeKeys.down=false;break;case' ':case'e':activeKeys.FIRE=false;break;}});
 function dash(){if(!upgrades.hasDash)return;tank.dashing=true;tank.dashInv=300;tank.dashCD=tank.dashMaxCD;var dx=0,dy=0;if(activeKeys.up)dy-=1;if(activeKeys.down)dy+=1;if(activeKeys.left)dx-=1;if(activeKeys.right)dx+=1;if(dx===0&&dy===0){dx=Math.cos(tank.angle);dy=Math.sin(tank.angle);}var mag=Math.sqrt(dx*dx+dy*dy);dx/=mag;dy/=mag;tank.x+=dx*80;tank.y+=dy*80;tank.x=Math.max(tank.sz/2,Math.min(canvas.width-tank.sz/2,tank.x));tank.y=Math.max(tank.sz/2,Math.min(canvas.height-tank.sz/2,tank.y));mkParticles(tank.x-dx*20,tank.y-dy*20,'energy',15);}
 
-// MOBILE STEERING
 var steerStartX=0,steerBaseX=0,fireDragActive=false,fireDragStart={x:0,y:0};
 steeringContainer.addEventListener('touchstart',function(e){e.preventDefault();steerStartX=e.touches[0].clientX;steerBaseX=parseInt(steeringThumb.style.left)||55;});
 steeringContainer.addEventListener('touchmove',function(e){e.preventDefault();var dx=e.touches[0].clientX-steerStartX;var newX=Math.max(5,Math.min(105,steerBaseX+dx));steeringThumb.style.left=newX+'px';steerVal=(newX-55)/50;});
@@ -282,26 +250,21 @@ function fireWeapon(){var w=weapons[tank.curW];if(w.melee){for(var i=enemies.len
 function gameOver(won){gameActive=false;if(animId){cancelAnimationFrame(animId);animId=null;}if(timerInterval){clearInterval(timerInterval);timerInterval=null;}updateUserStats(won);gameOverTitle.textContent=won?'VICTORY!':'GAME OVER';gameOverTitle.style.color=won?'#2ecc71':'#e74c3c';var ts=Math.floor(totalTime/60)+':'+('0'+Math.floor(totalTime%60)).slice(-2);finalScoreEl.textContent='Score: '+score+' | ⏱️ '+ts;document.getElementById('gameOverStats').textContent='Wave: '+wave.cur+' | Coins: '+coinsThisRun+' | Diamonds: '+diamondsThisRun;gameOverScreen.style.display='flex';hudDiv.style.display='none';document.getElementById('shopBtn').style.display='none';document.getElementById('settingsBtn').style.display='none';lockBtn.style.display='none';}
 document.getElementById('restartBtn').addEventListener('click',function(){gameOverScreen.style.display='none';showStartScreen();});
 function startGame(){startScreen.style.display='none';modeScreen.style.display='none';hudDiv.style.display='block';document.getElementById('shopBtn').style.display='block';document.getElementById('settingsBtn').style.display='block';if(isMobile)lockBtn.style.display='block';resetGame();}
-function resetGame(){if(animId){cancelAnimationFrame(animId);animId=null;}if(timerInterval){clearInterval(timerInterval);}totalTime=0;timerDisplay.textContent='00:00';timerInterval=setInterval(function(){if(gameActive&&!gamePaused){totalTime++;var ts=Math.floor(totalTime/60)+':'+('0'+Math.floor(totalTime%60)).slice(-2);timerDisplay.textContent=ts;}},1000);tank.x=canvas.width/2;tank.y=canvas.height/2;tank.angle=0;tank.maxHp=1000+upgrades.health*100;tank.hp=tank.maxHp;tank.heat=0;tank.dashCD=0;tank.dashMaxCD=2000-upgrades.dashCD*300;tank.dashing=false;tank.dashInv=0;tank.godMode=false;tank.o2=100;tank.warmth=100;tank.curW=isOwner?'nuke-launcher':'handgun';bullets=[];enemies=[];eBullets=[];drops=[];particles=[];floatTexts=[];score=0;lastFire=0;gamePaused=false;coinsThisRun=0;diamondsThisRun=0;for(var k in weapons)weapons[k].unlocked=!weapons[k].ownerOnly||isOwner;if(isOwner)weapons['nuke-launcher'].unlocked=true;initAmmo();wave.cur=0;wave.eTotal=0;wave.eSpawned=0;wave.bTotal=0;wave.bSpawned=0;wave.inProg=false;wave.between=true;wave.nextT=Date.now()+1500;wave.bannerTxt='GET READY!';wave.bannerST=Date.now();wave.won=false;spinnerAngle=0;screenShakeAmount=0;o2Bar.style.display='none';warmthBar.style.display='none';buildWeaponUI();scoreEl.textContent='Score: 0';updateHP();updateWaveUI();coinCountEl.textContent=coins;diamondCountEl.textContent=diamonds;gameActive=true;gameOverScreen.style.display='none';shopModal.style.display='none';ownerPanel.style.display='none';for(var key in activeKeys)activeKeys[key]=false;joystickVec.x=0;joystickVec.y=0;steerVal=0;gasActive=false;revActive=false;genBG();genHazards();update();}
+function resetGame(){if(animId){cancelAnimationFrame(animId);animId=null;}if(timerInterval){clearInterval(timerInterval);}totalTime=0;timerDisplay.textContent='00:00';timerInterval=setInterval(function(){if(gameActive&&!gamePaused){totalTime++;var ts=Math.floor(totalTime/60)+':'+('0'+Math.floor(totalTime%60)).slice(-2);timerDisplay.textContent=ts;}},1000);tank.x=canvas.width/2;tank.y=canvas.height/2;tank.angle=0;tank.maxHp=1000+upgrades.health*100;tank.hp=tank.maxHp;tank.heat=0;tank.dashCD=0;tank.dashMaxCD=2000-upgrades.dashCD*300;tank.dashing=false;tank.dashInv=0;tank.godMode=false;tank.o2=100;tank.warmth=100;tank.curW=isOwner?'nuke-launcher':'handgun';bullets=[];enemies=[];eBullets=[];drops=[];particles=[];floatTexts=[];score=0;lastFire=0;gamePaused=false;coinsThisRun=0;diamondsThisRun=0;for(var k in weapons)weapons[k].unlocked=!weapons[k].ownerOnly||isOwner;if(isOwner)weapons['nuke-launcher'].unlocked=true;initAmmo();wave.cur=0;wave.eTotal=0;wave.eSpawned=0;wave.bTotal=0;wave.bSpawned=0;wave.inProg=false;wave.between=true;wave.nextT=Date.now()+1500;wave.bannerTxt='GET READY!';wave.bannerST=Date.now();wave.won=false;spinnerAngle=0;screenShakeAmount=0;o2Bar.style.display='none';warmthBar.style.display='none';buildWeaponUI();scoreEl.textContent='Score: 0';updateHP();updateWaveUI();coinCountEl.textContent=coins;diamondCountEl.textContent=diamonds;gameActive=true;gameOverScreen.style.display='none';shopModal.style.display='none';ownerPanel.style.display='none';for(var key in activeKeys)activeKeys[key]=false;steerVal=0;gasActive=false;revActive=false;genBG();genHazards();update();}
 
 function update(){if(!gameActive)return;if(gamePaused){animId=requestAnimationFrame(update);draw();return;}var t=Date.now(),w=weapons[tank.curW],wld=getWorld();
   if(wave.between&&t>=wave.nextT)startWave();if(wave.inProg){spawnWaveE(t);checkWaveDone();}updateWaveUI();if(w.hr&&tank.heat>0)tank.heat=Math.max(0,tank.heat-w.cr);
-  // HAZARDS
   if(wld.hazard==='oxygen'){o2Bar.style.display='block';warmthBar.style.display='none';tank.o2-=0.04;if(tank.o2<=0){tank.hp-=8;updateHP();if(tank.hp<=0){gameOver(false);return;}}o2Fill.style.width=tank.o2+'%';}else if(wld.hazard==='cold'){o2Bar.style.display='none';warmthBar.style.display='block';var moving=activeKeys.up||activeKeys.down||activeKeys.left||activeKeys.right||gasActive||revActive||Math.abs(steerVal)>0.1;tank.warmth+=moving?0.2:-0.1;tank.warmth=Math.max(0,Math.min(100,tank.warmth));tank.spd=1+tank.warmth/100*2;warmthFill.style.width=tank.warmth+'%';}else{o2Bar.style.display='none';warmthBar.style.display='none';tank.spd=3;}
   if(wld.hazard==='toxic'){for(var ti=0;ti<toxicPools.length;ti++){if(Math.hypot(tank.x-toxicPools[ti].x,tank.y-toxicPools[ti].y)<toxicPools[ti].r){tank.hp-=0.6;updateHP();if(tank.hp<=0){gameOver(false);return;}}}}
   if(wld.hazard==='lava'){for(var li=0;li<lavaCracks.length;li++){var lv=lavaCracks[li];var dist=Math.abs((lv.y2-lv.y1)*tank.x-(lv.x2-lv.x1)*tank.y+lv.x2*lv.y1-lv.y2*lv.x1)/Math.hypot(lv.y2-lv.y1,lv.x2-lv.x1);if(dist<20){tank.hp-=4;updateHP();if(tank.hp<=0){gameOver(false);return;}}}}
   if(wld.hazard==='vines'){for(var vi=0;vi<vineTraps.length;vi++){if(Date.now()-vineTraps[vi].cd>3000&&Math.hypot(tank.x-vineTraps[vi].x,tank.y-vineTraps[vi].y)<25){vineTraps[vi].cd=Date.now();tank.dashCD=Math.max(tank.dashCD,2000);addFloatText(tank.x,tank.y-20,'GRABBED!','#f44');}}}
-  // MOVEMENT
   if(settings.aimAssist){var mx=0,my=0;if(activeKeys.up||gasActive)my-=1;if(activeKeys.down||revActive)my+=1;if(activeKeys.left)mx-=1;if(activeKeys.right)mx+=1;mx+=steerVal;var mm=Math.sqrt(mx*mx+my*my);if(mm>1){mx/=mm;my/=mm;}tank.x+=mx*tank.spd;tank.y+=my*tank.spd;var ne=nearestEnemy();if(ne)tank.angle=Math.atan2(ne.y-tank.y,ne.x-tank.x);}else{tank.angle+=steerVal*0.08;if(activeKeys.left)tank.angle-=0.05;if(activeKeys.right)tank.angle+=0.05;if(activeKeys.up||gasActive){tank.x+=Math.cos(tank.angle)*tank.spd;tank.y+=Math.sin(tank.angle)*tank.spd;}if(activeKeys.down||revActive){tank.x-=Math.cos(tank.angle)*tank.spd;tank.y-=Math.sin(tank.angle)*tank.spd;}}
   tank.x=Math.max(tank.sz/2,Math.min(canvas.width-tank.sz/2,tank.x));tank.y=Math.max(tank.sz/2,Math.min(canvas.height-tank.sz/2,tank.y));
   var shouldFire=activeKeys.FIRE||(settings.autoShoot&&enemies.length>0),overheated=w.maxHeat&&tank.heat>=w.maxHeat,hasAmmo=w.ownerOnly||w.melee||ammo[tank.curW]===-1||ammo[tank.curW]>0;
   if(shouldFire&&t-lastFire>w.cd&&!overheated&&hasAmmo){fireWeapon();lastFire=t;}
   if(tank.dashCD>0)tank.dashCD-=16;if(tank.dashInv>0){tank.dashInv-=16;if(tank.dashInv<=0)tank.dashing=false;}
-  // SPINNER
   if(upgrades.spinners){var spinSpeed=0.04+(upgrades.spinnerSpeed*0.015);spinnerAngle+=spinSpeed;var bladeCount=upgrades.spinnerBlades+1;for(var si=0;si<bladeCount;si++){var sa=spinnerAngle+Math.PI*2/bladeCount*si,sx=tank.x+Math.cos(sa)*45,sy=tank.y+Math.sin(sa)*45;for(var sei=enemies.length-1;sei>=0;sei--){if(Math.hypot(sx-enemies[sei].x,sy-enemies[sei].y)<enemies[sei].sz/2+8){enemies[sei].hp-=30*dmgMult();var kbForce=enemies[sei].boss?3:25;enemies[sei].x+=Math.cos(sa)*kbForce;enemies[sei].y+=Math.sin(sa)*kbForce;if(enemies[sei].hp<=0){handleKill(enemies[sei]);enemies.splice(sei,1);}}}}}
-  // FORCE SHIELD
   if(upgrades.forceShield){var shieldRad=tank.sz*(1.3+upgrades.shieldSize*0.6);var shieldDmg=20*dmgMult();for(var fi=enemies.length-1;fi>=0;fi--){var fd=Math.hypot(tank.x-enemies[fi].x,tank.y-enemies[fi].y);if(fd<shieldRad&&t-enemies[fi].lastShieldHit>200){enemies[fi].hp-=shieldDmg;enemies[fi].lastShieldHit=t;if(enemies[fi].hp<=0){handleKill(enemies[fi]);enemies.splice(fi,1);}}}}
-  // BULLETS
   for(var bi=bullets.length-1;bi>=0;bi--){var b=bullets[bi];if(b.life<=0){bullets.splice(bi,1);continue;}b.x+=b.spd*Math.cos(b.a);b.y+=b.spd*Math.sin(b.a);b.life--;if(b.x<-50||b.x>canvas.width+50||b.y<-50||b.y>canvas.height+50)bullets.splice(bi,1);}
   for(var ei=eBullets.length-1;ei>=0;ei--){var eb=eBullets[ei];eb.x+=eb.spd*Math.cos(eb.a);eb.y+=eb.spd*Math.sin(eb.a);eb.life--;if(eb.life<=0){eBullets.splice(ei,1);continue;}if(tank.dashInv<=0&&Math.hypot(tank.x-eb.x,tank.y-eb.y)<tank.sz/2+eb.sz/2){if(!tank.godMode)tank.hp-=Math.floor(eb.dmg*shieldMult());updateHP();eBullets.splice(ei,1);if(tank.hp<=0){gameOver(false);return;}}}
   for(var pi=particles.length-1;pi>=0;pi--){particles[pi].x+=particles[pi].vx;particles[pi].y+=particles[pi].vy;particles[pi].l--;if(particles[pi].l<=0)particles.splice(pi,1);}
@@ -316,4 +279,3 @@ buildWeaponUI();
 </script>
 </body>
 </html>
-```

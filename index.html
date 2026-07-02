@@ -380,22 +380,71 @@
     function genBG(){bgF=[];for(var i=0;i<40;i++)bgF.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,s:Math.random()*20+5,o:Math.random()*0.08+0.02,t:Math.floor(Math.random()*3)})}
     genBG();
     function drawBG(){
-        var wld=getWorld();ctx.fillStyle=wld.bg;ctx.fillRect(0,0,canvas.width,canvas.height);
-        ctx.strokeStyle=wld.grid;ctx.lineWidth=1;
-        for(var x=0;x<canvas.width;x+=60){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,canvas.height);ctx.stroke()}
-        for(var y=0;y<canvas.height;y+=60){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(canvas.width,y);ctx.stroke()}
-        for(var i=0;i<bgF.length;i++){var f=bgF[i];ctx.globalAlpha=f.o;ctx.beginPath();ctx.arc(f.x,f.y,f.s,0,Math.PI*2);ctx.fillStyle=f.t===0?wld.bg2:'#0f0f20';ctx.fill()}
-        ctx.globalAlpha=1;ctx.strokeStyle=wld.border;ctx.lineWidth=4;ctx.strokeRect(2,2,canvas.width-4,canvas.height-4);
-        var c=30;ctx.strokeStyle=wld.corner;ctx.lineWidth=2;
-        ctx.beginPath();ctx.moveTo(0,c);ctx.lineTo(0,0);ctx.lineTo(c,0);ctx.stroke();
-        ctx.beginPath();ctx.moveTo(canvas.width-c,0);ctx.lineTo(canvas.width,0);ctx.lineTo(canvas.width,c);ctx.stroke();
-        ctx.beginPath();ctx.moveTo(0,canvas.height-c);ctx.lineTo(0,canvas.height);ctx.lineTo(c,canvas.height);ctx.stroke();
-        ctx.beginPath();ctx.moveTo(canvas.width-c,canvas.height);ctx.lineTo(canvas.width,canvas.height);ctx.lineTo(canvas.width,canvas.height-c);ctx.stroke();
-        var wi=getWorldIdx();
-        if(wi===1){for(var ei=0;ei<5;ei++){var ex=Math.random()*canvas.width,ey=canvas.height-Math.random()*100;ctx.globalAlpha=Math.random()*0.3;ctx.beginPath();ctx.arc(ex,ey,Math.random()*3+1,0,Math.PI*2);ctx.fillStyle='#f60';ctx.fill()}ctx.globalAlpha=1}
-        if(wi===2){for(var si=0;si<8;si++){var sx2=Math.random()*canvas.width,sy2=Math.random()*canvas.height;ctx.globalAlpha=Math.random()*0.15;ctx.beginPath();ctx.arc(sx2,sy2,Math.random()*2+1,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill()}ctx.globalAlpha=1}
-        if(wi===4){for(var vi=0;vi<10;vi++){var vx=Math.random()*canvas.width,vy=Math.random()*canvas.height;ctx.globalAlpha=Math.random()*0.4+0.1;ctx.beginPath();ctx.arc(vx,vy,Math.random()*1.5+0.5,0,Math.PI*2);ctx.fillStyle=Math.random()>0.5?'#c0f':'#f0f';ctx.fill()}ctx.globalAlpha=1}
+    var wld=getWorld(),wi=getWorldIdx(),t=Date.now();
+    
+    // Gradient background
+    var grad=ctx.createLinearGradient(0,0,0,canvas.height);
+    grad.addColorStop(0,wld.bg);
+    grad.addColorStop(1,wld.bg2);
+    ctx.fillStyle=grad;
+    ctx.fillRect(0,0,canvas.width,canvas.height);
+    
+    // Diamond grid
+    ctx.strokeStyle=wld.grid;ctx.lineWidth=1;
+    var gs=50;
+    for(var x=-gs;x<canvas.width+gs;x+=gs){
+        for(var y=-gs;y<canvas.height+gs;y+=gs){
+            ctx.beginPath();
+            ctx.moveTo(x,y-gs/2);ctx.lineTo(x+gs/2,y);
+            ctx.lineTo(x,y+gs/2);ctx.lineTo(x-gs/2,y);
+            ctx.closePath();ctx.stroke();
+        }
     }
+    
+    // Floating particles
+    for(var i=0;i<bgF.length;i++){
+        var f=bgF[i];
+        ctx.globalAlpha=f.o;
+        ctx.beginPath();ctx.arc(f.x,f.y,f.s,0,Math.PI*2);
+        ctx.fillStyle=f.t===0?wld.accent:(f.t===1?'#fff':wld.bg2);
+        ctx.fill();
+        f.y-=0.3;if(f.y<-30)f.y=canvas.height+30;
+        f.x+=Math.sin(t*0.001+i)*0.3;
+    }
+    ctx.globalAlpha=1;
+    
+    // ===== WORLD DECORATIONS =====
+    if(wi===0){ // WASTELAND
+        ctx.strokeStyle='rgba(160,140,60,0.2)';ctx.lineWidth=1;
+        for(var i=0;i<10;i++){var cx=Math.random()*canvas.width,cy=Math.random()*canvas.height;ctx.beginPath();ctx.moveTo(cx,cy);ctx.lineTo(cx+(Math.random()-0.5)*60,cy+(Math.random()-0.5)*60);ctx.stroke();}
+        for(var i=0;i<8;i++){ctx.fillStyle='rgba(140,120,60,0.35)';ctx.beginPath();ctx.arc(Math.random()*canvas.width,Math.random()*canvas.height,4+Math.random()*10,0,Math.PI*2);ctx.fill();}
+    }
+    if(wi===1){ // INFERNO
+        for(var i=0;i<5;i++){var ex=Math.random()*canvas.width,ey=canvas.height-Math.random()*100;ctx.globalAlpha=Math.random()*0.3;ctx.beginPath();ctx.arc(ex,ey,Math.random()*3+1,0,Math.PI*2);ctx.fillStyle='#f60';ctx.fill();}ctx.globalAlpha=1;
+        for(var i=0;i<4;i++){var lx=Math.random()*canvas.width,ly=Math.random()*canvas.height,lr=20+Math.random()*40;var lg=ctx.createRadialGradient(lx,ly,lr*0.3,lx,ly,lr);lg.addColorStop(0,'rgba(255,200,50,0.6)');lg.addColorStop(1,'rgba(255,50,0,0)');ctx.fillStyle=lg;ctx.beginPath();ctx.arc(lx,ly,lr,0,Math.PI*2);ctx.fill();}
+    }
+    if(wi===2){ // GLACIER
+        for(var i=0;i<8;i++){var sx2=Math.random()*canvas.width,sy2=Math.random()*canvas.height;ctx.globalAlpha=Math.random()*0.15;ctx.beginPath();ctx.arc(sx2,sy2,Math.random()*2+1,0,Math.PI*2);ctx.fillStyle='#fff';ctx.fill();}ctx.globalAlpha=1;
+        for(var i=0;i<6;i++){ctx.fillStyle='rgba(220,235,255,0.35)';ctx.beginPath();ctx.ellipse(Math.random()*canvas.width,Math.random()*canvas.height,18+Math.random()*25,8+Math.random()*10,0,0,Math.PI*2);ctx.fill();}
+    }
+    if(wi===3){ // JUNGLE
+        ctx.strokeStyle='rgba(40,160,40,0.2)';ctx.lineWidth=2;
+        for(var i=0;i<5;i++){var vx2=Math.random()*canvas.width;ctx.beginPath();ctx.moveTo(vx2,canvas.height);ctx.quadraticCurveTo(vx2+(Math.random()-0.5)*100,canvas.height*0.5,vx2+(Math.random()-0.5)*150,0);ctx.stroke();}
+        for(var i=0;i<15;i++){ctx.strokeStyle='rgba(40,200,40,0.4)';ctx.lineWidth=2;var gx=Math.random()*canvas.width,gy=Math.random()*canvas.height;for(var j=0;j<4;j++){ctx.beginPath();ctx.moveTo(gx,gy);ctx.lineTo(gx+(Math.random()-0.5)*16,gy-(Math.random()*12+3));ctx.stroke();}}
+    }
+    if(wi===4){ // THE VOID
+        for(var i=0;i<10;i++){var vx=Math.random()*canvas.width,vy=Math.random()*canvas.height;ctx.globalAlpha=Math.random()*0.4+0.1;ctx.beginPath();ctx.arc(vx,vy,Math.random()*1.5+0.5,0,Math.PI*2);ctx.fillStyle=Math.random()>0.5?'#c0f':'#f0f';ctx.fill();}ctx.globalAlpha=1;
+        for(var i=0;i<6;i++){ctx.fillStyle='rgba(180,60,220,0.35)';var cx4=Math.random()*canvas.width,cy4=Math.random()*canvas.height;ctx.beginPath();ctx.moveTo(cx4-7,cy4+12);ctx.lineTo(cx4,cy4-16);ctx.lineTo(cx4+7,cy4+12);ctx.closePath();ctx.fill();}
+    }
+    
+    // Border & corners
+    ctx.strokeStyle=wld.border;ctx.lineWidth=4;ctx.strokeRect(2,2,canvas.width-4,canvas.height-4);
+    var c=30;ctx.strokeStyle=wld.corner;ctx.lineWidth=2;
+    ctx.beginPath();ctx.moveTo(0,c);ctx.lineTo(0,0);ctx.lineTo(c,0);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(canvas.width-c,0);ctx.lineTo(canvas.width,0);ctx.lineTo(canvas.width,c);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(0,canvas.height-c);ctx.lineTo(0,canvas.height);ctx.lineTo(c,canvas.height);ctx.stroke();
+    ctx.beginPath();ctx.moveTo(canvas.width-c,canvas.height);ctx.lineTo(canvas.width,canvas.height);ctx.lineTo(canvas.width,canvas.height-c);ctx.stroke();
+}
 
     function addCoins(n){coins+=n;if(n>0)coinsThisRun+=n;coinCountEl.textContent=coins;updateShop()}
     function addDiamonds(n){diamonds+=n;if(n>0)diamondsThisRun+=n;diamondCountEl.textContent=diamonds;updateShop()}

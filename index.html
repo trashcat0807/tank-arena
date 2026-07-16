@@ -72,7 +72,7 @@
         .ammo-count.low{color:#e74c3c;animation:blink .5s ease-in-out infinite alternate}
         .ammo-count.infinite{color:#2ecc71}
         @keyframes blink{from{opacity:1}to{opacity:.4}}
-        #shopBtn{position:fixed;top:20px;right:110px;padding:8px 14px;background:rgba(20,20,20,0.8);border:1px solid #f1c40f;border-radius:4px;z-index:10;cursor:pointer;user-select:none;color:#f1c40f;font-size:13px;text-shadow:0 0 5px rgba(241,196,15,0.5)}
+        #shopBtn{position:fixed;top:20px;right:20px;padding:8px 14px;background:rgba(20,20,20,0.8);border:1px solid #f1c40f;border-radius:4px;z-index:10;cursor:pointer;user-select:none;color:#f1c40f;font-size:13px;text-shadow:0 0 5px rgba(241,196,15,0.5)}
         #shopBtn:hover{background:rgba(241,196,15,0.15)}
         #shopModal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:none;justify-content:center;align-items:center;z-index:250;overflow-y:auto}
         .shop-panel{background:#111;border:2px solid #f1c40f;border-radius:10px;padding:20px;width:340px;max-width:92vw;max-height:90vh;overflow-y:auto;box-shadow:0 0 30px rgba(241,196,15,0.15)}
@@ -109,10 +109,8 @@
         .go-btn:hover{background:#4a49b7}
         .go-btn.secondary{background:transparent;border:1px solid #555;font-size:14px;color:#888}
         .go-btn.secondary:hover{border-color:#aaa;color:#fff}
-        #ownerBtn{position:fixed;top:20px;right:20px;padding:8px 14px;background:rgba(20,20,20,0.8);border:1px solid #ff0;border-radius:4px;z-index:10;cursor:pointer;user-select:none;color:#ff0;font-size:13px;display:none}
-        #ownerBtn:hover{background:rgba(255,255,0,0.15)}
-        #settingsBtn{position:fixed;top:20px;right:190px;padding:8px 14px;background:rgba(20,20,20,0.8);border:1px solid #aaa;border-radius:4px;z-index:10;cursor:pointer;user-select:none;color:#aaa;font-size:13px}
-        #settingsBtn:hover{background:rgba(170,170,170,0.15)}
+        #ownerBtn{position:fixed;top:20px;right:90px;padding:8px 14px;background:rgba(20,20,20,0.8);border:1px solid #ff0;border-radius:4px;z-index:10;cursor:pointer;user-select:none;color:#ff0;font-size:13px;display:none}
+        #settingsBtn{position:fixed;top:20px;right:170px;padding:8px 14px;background:rgba(20,20,20,0.8);border:1px solid #aaa;border-radius:4px;z-index:10;cursor:pointer;user-select:none;color:#aaa;font-size:13px}
         #settingsScreen{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:none;justify-content:center;align-items:center;z-index:260}
         .settings-panel{background:#111;border:2px solid #aaa;border-radius:10px;padding:20px;width:320px;max-width:90vw;color:#fff}
         .settings-panel h2{color:#ccc;text-align:center;margin-bottom:15px;font-size:20px}
@@ -210,12 +208,8 @@
         </div>
     </div>
     <script>
-    // ===== COMPLETE TANK ARENA =====
-          // ===== DARK MODE =====
-    if(window.matchMedia&&window.matchMedia('(prefers-color-scheme:dark)').matches)document.documentElement.classList.add('dark');
-    window.matchMedia('(prefers-color-scheme:dark)').addEventListener('change',function(e){e.matches?document.documentElement.classList.add('dark'):document.documentElement.classList.remove('dark')});
-
-    // ===== USER SYSTEM (localStorage + Owner) =====
+    console.log('SCRIPT STARTED - Tank Arena');
+            // ===== USER SYSTEM (localStorage + Owner) =====
     var userDB={};
     var currentUser=null;
     var isOwner=false;
@@ -350,19 +344,19 @@
     }
 
     // ===== SETTINGS UI =====
-    document.getElementById('settingsBtn').addEventListener('click',function(){settingsScreen.style.display='flex';updateSettingsUI();});
-    document.getElementById('closeSettings').addEventListener('click',function(){settingsScreen.style.display='none';});
-    function updateSettingsUI(){
+    document.getElementById('settingsBtn').addEventListener('click',function(){
+        settingsScreen.style.display='flex';
         document.getElementById('togAim').textContent=settings.aimAssist?'ON':'OFF';
         document.getElementById('togAim').className='toggle-btn '+(settings.aimAssist?'on':'off');
         document.getElementById('togAuto').textContent=settings.autoShoot?'ON':'OFF';
         document.getElementById('togAuto').className='toggle-btn '+(settings.autoShoot?'on':'off');
         document.getElementById('togShake').textContent=settings.screenShake?'ON':'OFF';
         document.getElementById('togShake').className='toggle-btn '+(settings.screenShake?'on':'off');
-    }
-    document.getElementById('togAim').addEventListener('click',function(){settings.aimAssist=!settings.aimAssist;updateSettingsUI();saveSettings();});
-    document.getElementById('togAuto').addEventListener('click',function(){settings.autoShoot=!settings.autoShoot;updateSettingsUI();saveSettings();});
-    document.getElementById('togShake').addEventListener('click',function(){settings.screenShake=!settings.screenShake;updateSettingsUI();saveSettings();});
+    });
+    document.getElementById('closeSettings').addEventListener('click',function(){settingsScreen.style.display='none';});
+    document.getElementById('togAim').addEventListener('click',function(){settings.aimAssist=!settings.aimAssist;saveSettings();settingsScreen.style.display='none';});
+    document.getElementById('togAuto').addEventListener('click',function(){settings.autoShoot=!settings.autoShoot;saveSettings();settingsScreen.style.display='none';});
+    document.getElementById('togShake').addEventListener('click',function(){settings.screenShake=!settings.screenShake;saveSettings();settingsScreen.style.display='none';});
 
     // ===== OWNER BUTTON =====
     ownerBtn.addEventListener('click',function(){
@@ -377,7 +371,7 @@
         else if(opt==='7'){for(var wi2=enemies.length-1;wi2>=0;wi2--){handleKill(enemies[wi2]);enemies.splice(wi2,1);}wave.inProg=false;wave.between=true;wave.nextT=Date.now()+500;}
         else if(opt==='8'){tank.godMode=!tank.godMode;alert('God Mode: '+(tank.godMode?'ON':'OFF'));}
     });
-          // ===== WEAPONS =====
+            // ===== WEAPONS =====
     var weapons={
         'handgun':{name:'Handgun',damage:25,cd:400,bs:8,bsz:5,bc:1,range:1000,hr:0,cr:0,icon:'🔫',color:'#f1c40f',maxAmmo:45,unlocked:true},
         'shotgun':{name:'Shotgun',damage:15,cd:800,bs:7,bsz:4,bc:6,spread:0.3,range:400,hr:0,cr:0,icon:'🔫',color:'#e67e22',maxAmmo:20,unlocked:true},
@@ -408,8 +402,7 @@
     var tank={x:0,y:0,angle:0,spd:3,sz:30,hp:1000,maxHp:1000,curW:'handgun',heat:0,godMode:false};
     var bullets=[],enemies=[],eBullets=[],drops=[],particles=[],floatTexts=[];
     var score=0,activeKeys={},gameActive=false,lastFire=0;
-    var aimBot=false,autoShoot=false,gamePaused=false;
-    var animId=null,spinnerAngle=0,screenShakeAmount=0;
+    var gamePaused=false,animId=null,spinnerAngle=0,screenShakeAmount=0;
     var joystickVec={x:0,y:0},jTouchId=null,fTouchId=null,jActive=false,jStart={x:0,y:0};
 
     function initAmmo(){var k=Object.keys(weapons);for(var i=0;i<k.length;i++)ammo[k[i]]=weapons[k[i]].maxAmmo}
@@ -550,7 +543,9 @@
             case'forceShield':upgrades.forceShield=true;break;
             case'spinners':upgrades.spinners=true;break;
         }
-          // ===== KEYBOARD =====
+        updateShop();
+    }
+            // ===== KEYBOARD =====
     window.addEventListener('keydown',function(e){
         if(!gameActive||shopModal.style.display==='flex'||settingsScreen.style.display==='flex')return;
         switch(e.key){
@@ -898,6 +893,3 @@
     </script>
 </body>
 </html>
-        updateShop();
-    }
-    

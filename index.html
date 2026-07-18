@@ -88,8 +88,6 @@ var userDB={},currentUser=null,isOwner=false;
 const OW='trashowner',OP='cnpopcatx';
 try{var sv=localStorage.getItem('tankArenaDB');if(sv)userDB=JSON.parse(sv);}catch(e){}
 function saveDB(){try{localStorage.setItem('tankArenaDB',JSON.stringify(userDB));}catch(e){}}
-function encode(p){var r='';for(var i=0;i<p.length;i++)r+=String.fromCharCode(p.charCodeAt(i)+5);return r;}
-function decode(p){var r='';for(var i=0;i<p.length;i++)r+=String.fromCharCode(p.charCodeAt(i)-5);return r;}
 
 var settings={aimAssist:true,autoShoot:true,screenShake:true,darkMode:true,fireLocked:true,keyUp:'w',keyDown:'s',keyLeft:'a',keyRight:'d',keyFire:' ',keyDash:'Shift'};
 try{var ss=localStorage.getItem('ta_settings');if(ss)settings=JSON.parse(ss);}catch(e){}

@@ -107,14 +107,14 @@ function registerUser(u,p){
     if(u.length<2)return{ok:false,msg:'Username too short'};
     if(p.length<3)return{ok:false,msg:'Password too short'};
     if(userDB[u])return{ok:false,msg:'Username taken'};
-    userDB[u]={password:encode(p),deaths:0,totalCoins:0,totalDiamonds:0,bestWave:0,bestScore:0,gamesPlayed:0,normalBest:0,normalWorst:999999,endlessBest:0,endlessWorst:999999};
+    userDB[u]={password:p,deaths:0,totalCoins:0,totalDiamonds:0,bestWave:0,bestScore:0,gamesPlayed:0,normalBest:0,normalWorst:999999,endlessBest:0,endlessWorst:999999};
     saveDB();return{ok:true,msg:'Account created!'};
 }
 function loginUser(u,p){
     if(!u||!p)return{ok:false,msg:'Enter username and password'};
     if(u===OW&&p===OP){isOwner=true;currentUser=OW;return{ok:true,owner:true};}
     if(!userDB[u])return{ok:false,msg:'User not found'};
-    if(decode(userDB[u].password)!==p)return{ok:false,msg:'Wrong password'};
+    if(userDB[u].password!==p)return{ok:false,msg:'Wrong password'};
     isOwner=false;currentUser=u;return{ok:true};
 }
 function updateUserStats(won){

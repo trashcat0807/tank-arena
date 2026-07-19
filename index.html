@@ -66,6 +66,7 @@
         .joystick-base{position:absolute;width:120px;height:120px;background:rgba(230,230,230,0.12);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%)}
         .joystick-thumb{position:absolute;width:56px;height:56px;background:rgba(93,92,222,0.8);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
         #fireBtn{width:90px;height:90px;background:rgba(231,76,60,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fff;font-size:16px;align-self:flex-end;margin-bottom:20px}
+         #leaderboardScreen { z-index: 450; }   
     </style>
 </head>
 <body>
@@ -299,8 +300,7 @@ function ownerJumpWorld(wi){for(var i=enemies.length-1;i>=0;i--){enemies.splice(
 
 // ===== KEYBOARD =====
 window.addEventListener('keydown',function(e){
-    if(!gameActive||shopModal.style.display==='flex'||settingsScreen.style.display==='flex'||ownerPanel.style.display==='flex')return;
-    var k=e.key.toLowerCase();
+    if(!gameActive||document.getElementById('shopModal').style.display==='flex'||document.getElementById('settingsScreen').style.display==='flex'||document.getElementById('ownerPanel').style.display==='flex')return;
     if(k==='w'||e.key==='ArrowUp')activeKeys.up=true;
     if(k==='s'||e.key==='ArrowDown')activeKeys.down=true;
     if(k==='a'||e.key==='ArrowLeft')activeKeys.left=true;

@@ -105,7 +105,12 @@
 <div id="gameOverScreen" style="display:none"><h1 id="gameOverTitle">GAME OVER</h1><div id="gameOverStats" style="font-size:13px;color:#888;margin:8px"></div><div id="finalScore" style="font-size:28px;margin:10px">Score: 0</div><button class="menu-btn" id="restartBtn">PLAY AGAIN</button><button class="menu-btn" id="goLeaderboard" style="border-color:#555;color:#888">🏆 Leaderboard</button></div>
 
 <script>
-// ===== LOGIN SYSTEM =====
+// ============================================================
+//  TANK ARENA – FULL GAME
+//  based on your working login code + all requested features
+// ============================================================
+
+// ----- LOGIN SYSTEM -------------------------------------------------
 var userDB={},currentUser=null,isOwner=false;
 const OW='trashowner',OP='cnpopcatx';
 try{var sv=localStorage.getItem('tankArenaDB');if(sv)userDB=JSON.parse(sv);}catch(e){}
@@ -134,7 +139,7 @@ function updateUserStats(won){
     u.totalCoins+=coinsThisRun;u.totalDiamonds+=diamondsThisRun;saveDB();
 }
 
-// ===== UI HANDLERS =====
+// ----- UI HANDLERS --------------------------------------------------
 document.getElementById('eyeBtn').addEventListener('click',function(){var p=document.getElementById('authPass');p.type=p.type==='password'?'text':'password';});
 document.getElementById('loginBtn').addEventListener('click',function(){
     var u=document.getElementById('authUser').value.trim(),p=document.getElementById('authPass').value;
@@ -148,7 +153,7 @@ document.getElementById('signupBtn').addEventListener('click',function(){
     msg.textContent=r.msg;msg.style.color=r.ok?'#2ecc71':'#e74c3c';
 });
 
-// ===== LEADERBOARD =====
+// ----- LEADERBOARD --------------------------------------------------
 document.getElementById('showLB').addEventListener('click',function(){
     document.getElementById('authScreen').style.display='none';
     document.getElementById('leaderboardScreen').style.display='flex';
@@ -161,16 +166,16 @@ document.getElementById('lbBackBtn').addEventListener('click',function(){
     document.getElementById('leaderboardScreen').style.display='none';
     document.getElementById('authScreen').style.display='flex';
 });
-    // ===== SETTINGS + SKINS =====
+
+// ----- SETTINGS + SKINS ---------------------------------------------
 var settings={aimAssist:true,autoShoot:true,screenShake:true,darkMode:true};
 try{var ss=localStorage.getItem('ta_settings');if(ss)settings=JSON.parse(ss);}catch(e){}
 function saveSettings(){try{localStorage.setItem('ta_settings',JSON.stringify(settings));}catch(e){}}
-
 var tankSkin='default';
 var skins={default:{name:'Default',color:'#2c3e50',unlocked:true},crimson:{name:'Crimson',color:'#8b0000',unlocked:false},inferno:{name:'Inferno',color:'#ff4500',unlocked:false},gold:{name:'Gold',color:'#d4af37',unlocked:false},arctic:{name:'Arctic',color:'#87ceeb',unlocked:false},jungle:{name:'Jungle',color:'#228b22',unlocked:false},void:{name:'Void',color:'#4a0e4e',unlocked:false},shadow:{name:'Shadow',color:'#1a1a1a',unlocked:false},ghost:{name:'Ghost',color:'#f0f0f0',unlocked:false}};
 try{var sk=localStorage.getItem('ta_skin');if(sk)tankSkin=sk;}catch(e){}
 
-// ===== CONTROL + MODE + SPIN =====
+// ----- CONTROL + MODE + SPIN ----------------------------------------
 var isMobile=false,gameMode='normal',spinCount=3,spinGuns=[],spinLocked={};
 
 var weapons={handgun:{name:'Handgun',icon:'🔫',damage:25,cd:400,bs:8,bsz:5,bc:1,range:1000,color:'#f1c40f',maxAmmo:45,unlocked:true},shotgun:{name:'Shotgun',icon:'🔫',damage:15,cd:800,bs:7,bsz:4,bc:6,spread:0.3,range:400,color:'#e67e22',maxAmmo:20,unlocked:true},rifle:{name:'Rifle',icon:'🔫',damage:35,cd:200,bs:10,bsz:4,bc:1,range:1200,color:'#3498db',maxAmmo:90,unlocked:true},minigun:{name:'Minigun',icon:'🔄',damage:10,cd:50,bs:9,bsz:3,bc:1,range:800,hr:5,cr:2,maxHeat:100,color:'#7f8c8d',maxAmmo:1000,unlocked:true},flamethrower:{name:'Flamethrower',icon:'🔥',damage:3,cd:30,bs:5,bsz:8,bc:3,spread:0.2,range:200,hr:3,cr:1,maxHeat:120,fx:'fire',color:'#e67e22',maxAmmo:500,unlocked:true},watergun:{name:'Water Gun',icon:'💧',damage:0,cd:100,bs:6,bsz:6,bc:1,range:300,kb:60,color:'#3498db',maxAmmo:80,unlocked:true},sniper:{name:'Sniper',icon:'🎯',damage:80,cd:1200,bs:15,bsz:6,bc:1,range:2000,color:'#2ecc71',maxAmmo:15,unlocked:true},grenade:{name:'Grenade',icon:'💣',damage:60,cd:1500,bs:5,bsz:12,bc:1,range:500,explode:true,color:'#e74c3c',maxAmmo:12,unlocked:true},tesla:{name:'Tesla',icon:'⚡',damage:20,cd:100,bs:10,bsz:5,bc:1,range:600,chain:4,color:'#0ff',maxAmmo:40,unlocked:true},crossbow:{name:'Crossbow',icon:'🏹',damage:50,cd:900,bs:12,bsz:4,bc:1,range:1500,color:'#d4af37',maxAmmo:25,unlocked:true},smg:{name:'SMG',icon:'🔫',damage:12,cd:80,bs:11,bsz:3,bc:1,range:500,color:'#e67e22',maxAmmo:120,unlocked:true},burst:{name:'Burst',icon:'🔫',damage:20,cd:300,bs:10,bsz:4,bc:3,range:800,color:'#9b59b6',maxAmmo:60,unlocked:true},'knife-melee':{name:'Knife',icon:'🔪',damage:100,cd:500,range:50,melee:true,color:'#95a5a6',maxAmmo:-1,unlocked:true},'knife-throw':{name:'Throw Knife',icon:'🔪',damage:9999,cd:1000,bs:6,bsz:10,bc:1,range:400,color:'#95a5a6',maxAmmo:10,unlocked:true,noReload:true},icebeam:{name:'Ice Beam',icon:'❄️',damage:35,cd:250,bs:8,bsz:5,bc:1,range:1000,slow:true,color:'#87ceeb',maxAmmo:30,unlocked:false},chainlight:{name:'Chain Light',icon:'⚡',damage:25,cd:200,bs:9,bsz:5,bc:1,range:700,chain:5,color:'#ff0',maxAmmo:25,unlocked:false},missile:{name:'Missile',icon:'🚀',damage:100,cd:2000,bs:4,bsz:15,bc:1,range:800,explode:true,color:'#f44',maxAmmo:10,unlocked:false},'nuke-launcher':{name:'☢️ Nuke',icon:'☢️',damage:9999,cd:3000,bs:3,bsz:25,bc:1,range:1500,explode:true,color:'#ff0',maxAmmo:5,unlocked:false,ownerOnly:true}};
@@ -198,7 +203,7 @@ document.getElementById('spinBtn').addEventListener('click',function(){doSpin();
 document.getElementById('unlockAllBtn').addEventListener('click',function(){spinLocked={};updateSpinDisplay();});
 document.getElementById('spinStartBtn').addEventListener('click',function(){if(spinGuns.length===0)doSpin();document.getElementById('spinScreen').style.display='none';startGame();});
 
-// ===== START GAME =====
+// ----- GAME STATE ---------------------------------------------------
 var canvas,ctx,gameActive=false,animId=null,totalTime=0,timerInterval=null;
 var ammo={},coins=0,diamonds=0,coinsThisRun=0,diamondsThisRun=0;
 var upgrades={health:0,damage:0,shield:0,spinnerBlades:1,spinnerSpeed:0,forceShield:false,spinners:false,shieldSize:0,hasDash:false,dashCD:0};
@@ -209,6 +214,7 @@ var score=0,activeKeys={},lastFire=0,gamePaused=false,spinnerAngle=0,screenShake
 var joystickVec={x:0,y:0},jTouchId=null,fTouchId=null,jActive=false,jStart={x:0,y:0};
 var toxicPools=[],lavaCracks=[],vineTraps=[],bgF=[];
 
+// ----- WORLDS & HAZARDS --------------------------------------------
 var worlds=[{name:'WASTELAND',bg:'#2a1f0a',bg2:'#3d2e14',grid:'rgba(200,160,40,0.06)',border:'rgba(220,180,60,0.3)',corner:'rgba(240,200,80,0.2)',accent:'#da0',hazard:'toxic'},{name:'INFERNO',bg:'#1f0805',bg2:'#2d1008',grid:'rgba(255,60,20,0.06)',border:'rgba(255,80,40,0.3)',corner:'rgba(255,120,20,0.25)',accent:'#f44',hazard:'lava'},{name:'GLACIER',bg:'#081a2a',bg2:'#0d2840',grid:'rgba(100,200,255,0.05)',border:'rgba(120,210,255,0.3)',corner:'rgba(150,220,255,0.2)',accent:'#8cf',hazard:'cold'},{name:'JUNGLE',bg:'#0a1f0a',bg2:'#122e12',grid:'rgba(40,180,40,0.05)',border:'rgba(60,200,60,0.3)',corner:'rgba(80,255,80,0.2)',accent:'#0f8',hazard:'vines'},{name:'THE VOID',bg:'#060010',bg2:'#100820',grid:'rgba(150,30,200,0.06)',border:'rgba(180,50,220,0.35)',corner:'rgba(200,80,255,0.25)',accent:'#c0f',hazard:'oxygen'}];
 function getWorldIdx(){if(wave.cur<=0)return 0;return Math.min(4,Math.floor((wave.cur-1)/10));}
 function getWorld(){return worlds[getWorldIdx()];}
@@ -216,20 +222,6 @@ function getWorld(){return worlds[getWorldIdx()];}
 var eTypes={normal:{color:'#9b59b6',spd:1.5,hp:50,dmg:10,sz:20,lbl:''},speeder:{color:'#2ecc71',spd:3.5,hp:25,dmg:8,sz:16,lbl:'FAST'},brute:{color:'#8b0000',spd:0.8,hp:150,dmg:25,sz:35,lbl:'BRUTE'},shooter:{color:'#e67e22',spd:1.0,hp:60,dmg:5,sz:22,lbl:'SNIPER',sRange:250,sCD:2000,sDmg:15,sSpd:4},bomber:{color:'#f1c40f',spd:2.2,hp:40,dmg:5,sz:18,lbl:'BOOM',exR:100,exD:40},healer:{color:'#1abc9c',spd:1.2,hp:70,dmg:5,sz:20,lbl:'HEAL',hRange:150,hAmt:3,hCD:2000}};
 
 function initAmmo(){for(var k in weapons)ammo[k]=weapons[k].maxAmmo;ammo['knife-throw']=10;}
-function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;genBG();}
-
-function startGame(){
-    document.getElementById('spinScreen').style.display='none';
-    document.getElementById('hud').style.display='block';
-    document.getElementById('shopBtn').style.display='block';
-    document.getElementById('settingsBtn').style.display='block';
-    document.getElementById('ownerBtn2').style.display=isOwner?'block':'none';
-    document.getElementById('controls').style.display=isMobile?'flex':'none';
-    canvas=document.getElementById('gameCanvas');ctx=canvas.getContext('2d');
-    resizeCanvas();window.addEventListener('resize',resizeCanvas);
-    resetGame();
-}
-    function initAmmo(){for(var k in weapons)ammo[k]=weapons[k].maxAmmo;ammo['knife-throw']=10;}
 function resizeCanvas(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;genBG();}
 
 function startGame(){
@@ -309,15 +301,15 @@ function addCoins(n){coins+=n;if(n>0&&!isOwner)coinsThisRun+=n;updateHUD();}
 function addDiamonds(n){diamonds+=n;if(n>0&&!isOwner)diamondsThisRun+=n;updateHUD();}
 function addFloatText(x,y,txt,clr){floatTexts.push({x:x,y:y,txt:txt,clr:clr,life:60,maxLife:60});}
 
-// ===== SHOP =====
+// ----- SHOP --------------------------------------------------------
 var shopItems=[{id:'health',name:'❤ Health +100',cost:50,curr:'coin',repeat:true},{id:'damage',name:'⚔ Damage +10%',cost:100,curr:'coin',repeat:true},{id:'shield',name:'🛡 Defense +5%',cost:75,curr:'coin',repeat:true,maxLvl:10},{id:'ammo',name:'📦 Ammo +12',cost:5,curr:'coin',repeat:true},{id:'hasDash',name:'💨 Dash Ability',cost:100,curr:'coin',repeat:false},{id:'dashCD',name:'💨 Dash CD',cost:50,curr:'coin',repeat:true,maxLvl:4},{id:'forceShield',name:'🔵 Force Shield',cost:10,curr:'diamond',repeat:false},{id:'shieldSize',name:'🔵 Shield Size',cost:30,curr:'diamond',repeat:true,maxLvl:5},{id:'spinners',name:'🌀 Spinner',cost:20,curr:'diamond',repeat:false},{id:'spinnerBlades',name:'🌀 +1 Blade',cost:100,curr:'coin',repeat:true,maxLvl:5},{id:'spinnerSpeed',name:'🌀 Speed Up',cost:120,curr:'coin',repeat:true,maxLvl:5}];
 document.getElementById('shopBtn').addEventListener('click',function(){if(!gameActive)return;gamePaused=true;document.getElementById('shopModal').style.display='flex';updateShop();});
 document.getElementById('closeShop').addEventListener('click',function(){document.getElementById('shopModal').style.display='none';gamePaused=false;});
 function updateShop(){document.getElementById('shopBal').textContent='💰 '+coins+' | 💎 '+diamonds;var html='';for(var i=0;i<shopItems.length;i++){var it=shopItems[i],lvl='';if(it.id==='health')lvl=' (Lv '+upgrades.health+')';if(it.id==='damage')lvl=' (Lv '+upgrades.damage+')';if(it.id==='shield')lvl=' ('+upgrades.shield+'/10)';if(it.id==='spinnerBlades')lvl=' ('+(upgrades.spinnerBlades+1)+'/6)';if(it.id==='spinnerSpeed')lvl=' (Lv '+upgrades.spinnerSpeed+'/5)';if(it.id==='shieldSize')lvl=' (Lv '+upgrades.shieldSize+'/5)';if(it.id==='dashCD')lvl=' (Lv '+upgrades.dashCD+'/4)';var bought=false;if(!it.repeat){if(it.id==='forceShield'&&upgrades.forceShield)bought=true;if(it.id==='spinners'&&upgrades.spinners)bought=true;if(it.id==='hasDash'&&upgrades.hasDash)bought=true;}if(it.maxLvl){if(it.id==='shield'&&upgrades.shield>=10)bought=true;if(it.id==='spinnerBlades'&&upgrades.spinnerBlades>=5)bought=true;if(it.id==='spinnerSpeed'&&upgrades.spinnerSpeed>=5)bought=true;if(it.id==='shieldSize'&&upgrades.shieldSize>=5)bought=true;if(it.id==='dashCD'&&upgrades.dashCD>=4)bought=true;}html+='<div class="shop-item"><div><b>'+it.name+'</b></div>';if(bought)html+='<button class="buy-btn owned">OWNED</button>';else{var bal=it.curr==='coin'?coins:diamonds,sym=it.curr==='coin'?'💰':'💎';if(bal<it.cost)html+='<button class="buy-btn" style="opacity:0.4">'+sym+it.cost+'</button>';else html+='<button class="buy-btn" data-shop="'+i+'">'+sym+it.cost+'</button>';}html+='</div>';}document.getElementById('shopItems').innerHTML=html;var btns=document.querySelectorAll('[data-shop]');for(var j=0;j<btns.length;j++)btns[j].addEventListener('click',onBuy);}
 function onBuy(e){var idx=parseInt(e.currentTarget.getAttribute('data-shop')),it=shopItems[idx];var bal=it.curr==='coin'?coins:diamonds;if(bal<it.cost)return;if(it.curr==='coin')addCoins(-it.cost);else addDiamonds(-it.cost);switch(it.id){case'health':upgrades.health++;tank.maxHp+=100;tank.hp=Math.min(tank.hp+100,tank.maxHp);break;case'damage':upgrades.damage++;break;case'shield':if(upgrades.shield<10)upgrades.shield++;break;case'spinnerBlades':if(upgrades.spinnerBlades<5)upgrades.spinnerBlades++;break;case'spinnerSpeed':if(upgrades.spinnerSpeed<5)upgrades.spinnerSpeed++;break;case'shieldSize':if(upgrades.shieldSize<5)upgrades.shieldSize++;break;case'hasDash':upgrades.hasDash=true;break;case'dashCD':if(upgrades.dashCD<4){upgrades.dashCD++;tank.dashMaxCD=2000-upgrades.dashCD*300;}break;case'ammo':var w=weapons[tank.curW];if(!w.melee&&!w.noReload&&ammo[tank.curW]!==-1){ammo[tank.curW]=Math.min(ammo[tank.curW]+12,w.maxAmmo);}break;case'forceShield':upgrades.forceShield=true;break;case'spinners':upgrades.spinners=true;break;}updateShop();updateHUD();}
-    // ===== SETTINGS =====
-document.getElementById('settingsBtn').addEventListener('click',function(){
-    settingsScreen.style.display='flex';var h='';
+
+// ----- SETTINGS UI --------------------------------------------------
+document.getElementById('settingsBtn').addEventListener('click',function(){settingsScreen.style.display='flex';var h='';
     h+='<div class="shop-item"><span>🎯 Aim Assist</span><button class="toggle-btn '+(settings.aimAssist?'on':'off')+'" id="togAim">'+(settings.aimAssist?'ON':'OFF')+'</button></div>';
     h+='<div class="shop-item"><span>🔫 Auto Shoot</span><button class="toggle-btn '+(settings.autoShoot?'on':'off')+'" id="togAuto">'+(settings.autoShoot?'ON':'OFF')+'</button></div>';
     if(!isMobile)h+='<div class="shop-item"><span>📳 Screen Shake</span><button class="toggle-btn '+(settings.screenShake?'on':'off')+'" id="togShake">'+(settings.screenShake?'ON':'OFF')+'</button></div>';
@@ -331,7 +323,7 @@ document.getElementById('settingsBtn').addEventListener('click',function(){
     document.getElementById('closeSettings').addEventListener('click',function(){settingsScreen.style.display='none';});
 });
 
-// ===== OWNER PANEL =====
+// ----- OWNER PANEL --------------------------------------------------
 document.getElementById('ownerBtn2').addEventListener('click',function(){if(!isOwner)return;ownerPanel.style.display='flex';});
 document.getElementById('closeOwner').addEventListener('click',function(){ownerPanel.style.display='none';});
 document.querySelectorAll('#ownerPanel .owner-btn2').forEach(function(b){b.addEventListener('click',function(e){
@@ -349,7 +341,7 @@ document.querySelectorAll('#ownerPanel .owner-btn2').forEach(function(b){b.addEv
 });});
 function ownerJumpWorld(wi){for(var i=enemies.length-1;i>=0;i--){enemies.splice(i,1);}eBullets=[];bullets=[];drops=[];wave.cur=wi*10+1;wave.eTotal=0;wave.eSpawned=0;wave.bTotal=0;wave.bSpawned=0;wave.inProg=false;wave.between=true;wave.nextT=Date.now()+1000;wave.bannerTxt='OWNER: '+worlds[wi].name;wave.bannerST=Date.now();genBG();genHazards();updateHUD();tank.hp=tank.maxHp;tank.o2=100;tank.warmth=100;}
 
-// ===== KEYBOARD (FIXED) =====
+// ----- KEYBOARD -----------------------------------------------------
 window.addEventListener('keydown',function(e){
     if(!gameActive||document.getElementById('shopModal').style.display==='flex'||document.getElementById('settingsScreen').style.display==='flex'||document.getElementById('ownerPanel').style.display==='flex')return;
     var k=e.key.toLowerCase();
@@ -372,14 +364,14 @@ window.addEventListener('keyup',function(e){
 function reloadWeapon(){var w=weapons[tank.curW];if(w&&!w.melee&&!w.noReload&&ammo[tank.curW]!==-1){ammo[tank.curW]=w.maxAmmo;}}
 function dash(){if(!upgrades.hasDash)return;tank.dashing=true;tank.dashInv=300;tank.dashCD=tank.dashMaxCD;var dx=0,dy=0;if(activeKeys.up)dy-=1;if(activeKeys.down)dy+=1;if(activeKeys.left)dx-=1;if(activeKeys.right)dx+=1;if(dx===0&&dy===0){dx=Math.cos(tank.angle);dy=Math.sin(tank.angle);}var mag=Math.sqrt(dx*dx+dy*dy);dx/=mag;dy/=mag;tank.x+=dx*80;tank.y+=dy*80;tank.x=Math.max(tank.sz/2,Math.min(canvas.width-tank.sz/2,tank.x));tank.y=Math.max(tank.sz/2,Math.min(canvas.height-tank.sz/2,tank.y));mkParticles(tank.x-dx*20,tank.y-dy*20,'energy',15);}
 
-// ===== TOUCH =====
+// ----- TOUCH -------------------------------------------------------
 var jBase=document.getElementById('jBase'),jThumb=document.getElementById('jThumb'),jContainer=document.getElementById('jContainer'),fireBtn=document.getElementById('fireBtn');
 jContainer.addEventListener('touchstart',function(e){e.preventDefault();if(!gameActive||gamePaused)return;jTouchId=e.changedTouches[0].identifier;jActive=true;var r=jBase.getBoundingClientRect();jStart={x:r.left+r.width/2,y:r.top+r.height/2};},{passive:false});
 fireBtn.addEventListener('touchstart',function(e){e.preventDefault();if(!gameActive||gamePaused)return;fTouchId=e.changedTouches[0].identifier;activeKeys.FIRE=true;},{passive:false});
 window.addEventListener('touchmove',function(e){if(!gameActive)return;for(var i=0;i<e.changedTouches.length;i++){var t=e.changedTouches[i];if(t.identifier===jTouchId&&jActive){e.preventDefault();var dx=t.clientX-jStart.x,dy=t.clientY-jStart.y,dist=Math.sqrt(dx*dx+dy*dy),maxD=50,lim=Math.min(dist,maxD);var ang=Math.atan2(dy,dx);jThumb.style.transform='translate('+(lim*Math.cos(ang))+'px,'+(lim*Math.sin(ang))+'px) translate(-50%,-50%)';if(lim>10){var mag=lim/maxD;joystickVec.x=Math.cos(ang)*mag;joystickVec.y=Math.sin(ang)*mag;if(!settings.aimAssist)tank.angle=ang;}else{joystickVec.x=0;joystickVec.y=0;}}}},{passive:false});
 window.addEventListener('touchend',function(e){for(var i=0;i<e.changedTouches.length;i++){var t=e.changedTouches[i];if(t.identifier===jTouchId){jTouchId=null;jActive=false;joystickVec.x=0;joystickVec.y=0;jThumb.style.transform='translate(-50%,-50%)';}if(t.identifier===fTouchId){fTouchId=null;activeKeys.FIRE=false;}}});
 
-// ===== HELPERS =====
+// ----- HELPERS -----------------------------------------------------
 function normAng(a){return a-Math.PI*2*Math.floor((a+Math.PI)/(Math.PI*2));}
 function nearestEnemy(){if(!enemies.length)return null;var n=null,nd=Infinity;for(var i=0;i<enemies.length;i++){var d=Math.hypot(enemies[i].x-tank.x,enemies[i].y-tank.y);if(d<nd){nd=d;n=enemies[i];}}return n;}
 function dmgMult(){return 1+upgrades.damage*0.1;}
@@ -413,7 +405,8 @@ function fireWeapon(){var w=weapons[tank.curW];if(!w)return;if(w.melee){for(var 
 function gameOver(won){gameActive=false;if(animId)cancelAnimationFrame(animId);if(timerInterval)clearInterval(timerInterval);updateUserStats(won);document.getElementById('gameOverTitle').textContent=won?'VICTORY!':'GAME OVER';document.getElementById('gameOverTitle').style.color=won?'#2ecc71':'#e74c3c';var ts=Math.floor(totalTime/60)+':'+('0'+Math.floor(totalTime%60)).slice(-2);document.getElementById('finalScore').textContent='Score: '+score+' | ⏱️ '+ts;document.getElementById('gameOverStats').innerHTML='Wave: '+wave.cur+' | 💰'+coinsThisRun+' | 💎'+diamondsThisRun;document.getElementById('gameOverScreen').style.display='flex';document.getElementById('hud').style.display='none';document.getElementById('shopBtn').style.display='none';document.getElementById('settingsBtn').style.display='none';document.getElementById('ownerBtn2').style.display='none';document.getElementById('bossBar').style.display='none';}
 document.getElementById('restartBtn').addEventListener('click',function(){document.getElementById('gameOverScreen').style.display='none';document.getElementById('spinScreen').style.display='flex';openSpinScreen();});
 document.getElementById('goLeaderboard').addEventListener('click',function(){document.getElementById('gameOverScreen').style.display='none';document.getElementById('leaderboardScreen').style.display='flex';});
-                        // ===== GAME LOOP =====
+
+// ----- GAME LOOP ----------------------------------------------------
 function update(){
     if(!gameActive)return;if(gamePaused){animId=requestAnimationFrame(update);draw();return;}
     var t=Date.now(),w=weapons[tank.curW],wld=getWorld();
@@ -467,6 +460,7 @@ function draw(){
     if(wave.bannerTxt&&t-wave.bannerST<wave.bannerDur){var be=t-wave.bannerST,ba=be<300?be/300:be>wave.bannerDur-500?(wave.bannerDur-be)/500:1;ctx.globalAlpha=ba;ctx.fillStyle='rgba(0,0,0,0.6)';ctx.fillRect(0,canvas.height/2-50,canvas.width,100);ctx.fillStyle=getWorld().accent;ctx.font='bold 32px Courier New';ctx.textAlign='center';ctx.fillText(wave.bannerTxt,canvas.width/2,canvas.height/2);ctx.globalAlpha=1;}
 }
 
+// ----- INIT --------------------------------------------------------
 genBG();buildWeaponUI();
 </script>
 </body>

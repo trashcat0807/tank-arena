@@ -106,8 +106,8 @@
 
 <script>
 // ============================================================
-//  TANK ARENA – FULL GAME
-//  based on your working login code + all requested features
+//  TANK ARENA – FULL GAME (FIXED)
+//  Fixed: settingsScreen reference, spinGuns length, game flow
 // ============================================================
 
 // ----- LOGIN SYSTEM -------------------------------------------------
@@ -308,8 +308,11 @@ document.getElementById('closeShop').addEventListener('click',function(){documen
 function updateShop(){document.getElementById('shopBal').textContent='💰 '+coins+' | 💎 '+diamonds;var html='';for(var i=0;i<shopItems.length;i++){var it=shopItems[i],lvl='';if(it.id==='health')lvl=' (Lv '+upgrades.health+')';if(it.id==='damage')lvl=' (Lv '+upgrades.damage+')';if(it.id==='shield')lvl=' ('+upgrades.shield+'/10)';if(it.id==='spinnerBlades')lvl=' ('+(upgrades.spinnerBlades+1)+'/6)';if(it.id==='spinnerSpeed')lvl=' (Lv '+upgrades.spinnerSpeed+'/5)';if(it.id==='shieldSize')lvl=' (Lv '+upgrades.shieldSize+'/5)';if(it.id==='dashCD')lvl=' (Lv '+upgrades.dashCD+'/4)';var bought=false;if(!it.repeat){if(it.id==='forceShield'&&upgrades.forceShield)bought=true;if(it.id==='spinners'&&upgrades.spinners)bought=true;if(it.id==='hasDash'&&upgrades.hasDash)bought=true;}if(it.maxLvl){if(it.id==='shield'&&upgrades.shield>=10)bought=true;if(it.id==='spinnerBlades'&&upgrades.spinnerBlades>=5)bought=true;if(it.id==='spinnerSpeed'&&upgrades.spinnerSpeed>=5)bought=true;if(it.id==='shieldSize'&&upgrades.shieldSize>=5)bought=true;if(it.id==='dashCD'&&upgrades.dashCD>=4)bought=true;}html+='<div class="shop-item"><div><b>'+it.name+'</b></div>';if(bought)html+='<button class="buy-btn owned">OWNED</button>';else{var bal=it.curr==='coin'?coins:diamonds,sym=it.curr==='coin'?'💰':'💎';if(bal<it.cost)html+='<button class="buy-btn" style="opacity:0.4">'+sym+it.cost+'</button>';else html+='<button class="buy-btn" data-shop="'+i+'">'+sym+it.cost+'</button>';}html+='</div>';}document.getElementById('shopItems').innerHTML=html;var btns=document.querySelectorAll('[data-shop]');for(var j=0;j<btns.length;j++)btns[j].addEventListener('click',onBuy);}
 function onBuy(e){var idx=parseInt(e.currentTarget.getAttribute('data-shop')),it=shopItems[idx];var bal=it.curr==='coin'?coins:diamonds;if(bal<it.cost)return;if(it.curr==='coin')addCoins(-it.cost);else addDiamonds(-it.cost);switch(it.id){case'health':upgrades.health++;tank.maxHp+=100;tank.hp=Math.min(tank.hp+100,tank.maxHp);break;case'damage':upgrades.damage++;break;case'shield':if(upgrades.shield<10)upgrades.shield++;break;case'spinnerBlades':if(upgrades.spinnerBlades<5)upgrades.spinnerBlades++;break;case'spinnerSpeed':if(upgrades.spinnerSpeed<5)upgrades.spinnerSpeed++;break;case'shieldSize':if(upgrades.shieldSize<5)upgrades.shieldSize++;break;case'hasDash':upgrades.hasDash=true;break;case'dashCD':if(upgrades.dashCD<4){upgrades.dashCD++;tank.dashMaxCD=2000-upgrades.dashCD*300;}break;case'ammo':var w=weapons[tank.curW];if(!w.melee&&!w.noReload&&ammo[tank.curW]!==-1){ammo[tank.curW]=Math.min(ammo[tank.curW]+12,w.maxAmmo);}break;case'forceShield':upgrades.forceShield=true;break;case'spinners':upgrades.spinners=true;break;}updateShop();updateHUD();}
 
-// ----- SETTINGS UI --------------------------------------------------
-document.getElementById('settingsBtn').addEventListener('click',function(){settingsScreen.style.display='flex';var h='';
+// ----- SETTINGS UI (FIXED: settingsScreen is a DOM element) --------
+var settingsScreen = document.getElementById('settingsScreen');
+document.getElementById('settingsBtn').addEventListener('click',function(){
+    if(!settingsScreen) return;
+    settingsScreen.style.display='flex';var h='';
     h+='<div class="shop-item"><span>🎯 Aim Assist</span><button class="toggle-btn '+(settings.aimAssist?'on':'off')+'" id="togAim">'+(settings.aimAssist?'ON':'OFF')+'</button></div>';
     h+='<div class="shop-item"><span>🔫 Auto Shoot</span><button class="toggle-btn '+(settings.autoShoot?'on':'off')+'" id="togAuto">'+(settings.autoShoot?'ON':'OFF')+'</button></div>';
     if(!isMobile)h+='<div class="shop-item"><span>📳 Screen Shake</span><button class="toggle-btn '+(settings.screenShake?'on':'off')+'" id="togShake">'+(settings.screenShake?'ON':'OFF')+'</button></div>';
@@ -324,8 +327,8 @@ document.getElementById('settingsBtn').addEventListener('click',function(){setti
 });
 
 // ----- OWNER PANEL --------------------------------------------------
-document.getElementById('ownerBtn2').addEventListener('click',function(){if(!isOwner)return;ownerPanel.style.display='flex';});
-document.getElementById('closeOwner').addEventListener('click',function(){ownerPanel.style.display='none';});
+document.getElementById('ownerBtn2').addEventListener('click',function(){if(!isOwner)return;document.getElementById('ownerPanel').style.display='flex';});
+document.getElementById('closeOwner').addEventListener('click',function(){document.getElementById('ownerPanel').style.display='none';});
 document.querySelectorAll('#ownerPanel .owner-btn2').forEach(function(b){b.addEventListener('click',function(e){
     var act=e.currentTarget.getAttribute('data-ow');
     if(act==='w1')ownerJumpWorld(0);if(act==='w2')ownerJumpWorld(1);if(act==='w3')ownerJumpWorld(2);if(act==='w4')ownerJumpWorld(3);if(act==='w5')ownerJumpWorld(4);

@@ -50,8 +50,8 @@
         #weaponSelector{position:fixed;top:115px;left:10px;display:flex;flex-direction:column;gap:5px;z-index:10;max-height:calc(100vh-300px);overflow-y:auto}
         .weapon-btn{padding:5px 8px;background:rgba(60,60,60,0.7);border-radius:5px;font-size:11px;display:flex;align-items:center;cursor:pointer;color:#ccc;border:2px solid transparent}
         .weapon-btn.active{border-color:#5D5CDE;background:rgba(93,92,222,0.35);box-shadow:0 0 8px rgba(93,92,222,0.6)}
-        .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.9);display:none;justify-content:center;align-items:center;z-index:250}
-        .panel{background:#111;border:2px solid #f1c40f;border-radius:10px;padding:20px;width:360px;max-width:92vw;max-height:85vh;overflow-y:auto;color:#fff;box-shadow:0 0 30px rgba(241,196,15,0.3)}
+        .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center;z-index:250}
+        .panel{background:#111;border:2px solid #f1c40f;border-radius:10px;padding:20px;width:360px;max-width:92vw;max-height:85vh;overflow-y:auto;color:#fff;box-shadow:0 0 30px rgba(241,196,15,0.4),0 0 60px rgba(241,196,15,0.15)}
         .panel h2{color:#f1c40f;text-align:center;margin-bottom:10px}
         .shop-item{display:flex;justify-content:space-between;align-items:center;padding:8px;margin:4px 0;background:rgba(255,255,255,0.03);border-radius:5px;border:1px solid #222;font-size:12px}
         .shop-item.coin{border-left:3px solid #f1c40f}
@@ -98,12 +98,18 @@
         .shape-btn{width:44px;height:44px;border:2px solid #2a2a4a;border-radius:8px;background:rgba(255,255,255,0.03);color:#ccc;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:0.15s}
         .shape-btn:hover{border-color:#5D5CDE;transform:translateY(-2px)}
         .shape-btn.active{border-color:#0ff;color:#0ff;box-shadow:0 0 12px rgba(0,255,255,0.5)}
+        .keybind-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+        .keybind-btn{padding:10px 8px;border:2px solid #2a2a4a;border-radius:8px;background:rgba(255,255,255,0.03);color:#ccc;font-size:11px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:0.15s;font-family:'Courier New',monospace;text-align:left}
+        .keybind-btn:hover{border-color:#5D5CDE}
+        .keybind-btn.listening{border-color:#0ff;box-shadow:0 0 12px rgba(0,255,255,0.5);background:rgba(0,255,255,0.1)}
+        .keybind-btn .key-val{color:#0ff;font-weight:bold;min-width:44px;text-align:right}
         .home-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
         .home-btn{padding:12px 22px;border:2px solid #5D5CDE;border-radius:10px;background:rgba(93,92,222,0.15);color:#fff;font-size:14px;cursor:pointer;font-family:'Courier New',monospace;min-width:150px}
         .home-btn:hover{background:rgba(93,92,222,0.4);border-color:#0ff;box-shadow:0 0 15px rgba(0,255,255,0.4)}
         #timeIcon{position:fixed;top:20px;left:200px;z-index:10;font-size:20px;color:#fff;text-shadow:0 0 10px currentColor;display:none;pointer-events:none}
         #timeIcon .time-arc{position:absolute;top:28px;left:-8px;width:40px;height:3px;background:rgba(255,255,255,0.15);border-radius:2px;overflow:hidden}
         #timeIcon .time-arc-fill{height:100%;background:#fff;width:0%;transition:width 0.3s}
+        .reset-binds{width:100%;padding:8px;margin-top:8px;background:rgba(231,76,60,0.15);border:1px solid #e74c3c;color:#e74c3c;border-radius:6px;font-size:11px;cursor:pointer;font-family:'Courier New',monospace}
     </style>
 </head>
 <body>
@@ -158,6 +164,12 @@
     <div class="skin-section">
         <h3>🔷 TANK SHAPE</h3>
         <div class="shape-picker" id="shapePicker"></div>
+    </div>
+
+    <div class="skin-section" id="keybindSection" style="display:none">
+        <h3>⌨️ KEY BINDINGS</h3>
+        <div class="keybind-grid" id="keybindGrid"></div>
+        <button class="reset-binds" id="resetBinds">RESET TO DEFAULT</button>
     </div>
 
     <div class="home-actions">
@@ -306,7 +318,7 @@
 
 <script>
 // ============================================================
-//  TANK ARENA – FULL PATCH
+//  TANK ARENA – FULL PATCH (night vision + keybinds + modals)
 // ============================================================
 
 // ----- LOGIN SYSTEM -------------------------------------------------
@@ -378,6 +390,83 @@ var shapes = ['square','circle','hexagon','triangle','diamond','cross','star'];
 try { var sk = localStorage.getItem('ta_skin'); if (sk) tankSkin = sk; } catch(e) {}
 try { var sh = localStorage.getItem('ta_shape'); if (sh) tankShape = sh; } catch(e) {}
 
+// ----- KEYBINDS ----------------------------------------------------
+var keybinds = {up:'w', down:'s', left:'a', right:'d', fire:' ', reload:'r', dash:'shift'};
+try { var kb = localStorage.getItem('ta_keybinds'); if (kb) keybinds = Object.assign(keybinds, JSON.parse(kb)); } catch(e) {}
+function saveKeybinds() { try { localStorage.setItem('ta_keybinds', JSON.stringify(keybinds)); } catch(e) {} }
+var keybindLabels = {up:'Move Up', down:'Move Down', left:'Move Left', right:'Move Right', fire:'Fire', reload:'Reload', dash:'Dash'};
+var keybindOrder = ['up','down','left','right','fire','reload','dash'];
+var listeningBind = null;
+
+function keyDisplay(k) {
+    if (k === ' ') return 'SPACE';
+    if (k === 'shift') return 'SHIFT';
+    if (k === 'control') return 'CTRL';
+    if (k === 'alt') return 'ALT';
+    return k.toUpperCase();
+}
+
+function isKeyConflict(action, key) {
+    for (var a in keybinds) {
+        if (a === action) continue;
+        if (keybinds[a] === key) return a;
+    }
+    return null;
+}
+
+function renderKeybinds() {
+    var grid = document.getElementById('keybindGrid');
+    if (!grid) return;
+    grid.innerHTML = '';
+    for (var i = 0; i < keybindOrder.length; i++) {
+        var a = keybindOrder[i];
+        var btn = document.createElement('button');
+        btn.className = 'keybind-btn' + (listeningBind === a ? ' listening' : '');
+        btn.setAttribute('data-bind', a);
+        var display = listeningBind === a ? 'Press any key…' : keyDisplay(keybinds[a]);
+        btn.innerHTML = '<span>' + keybindLabels[a] + '</span><span class="key-val">' + display + '</span>';
+        btn.addEventListener('click', function() {
+            listeningBind = this.getAttribute('data-bind');
+            renderKeybinds();
+        });
+        grid.appendChild(btn);
+    }
+}
+
+document.addEventListener('keydown', function(e) {
+    if (listeningBind) {
+        e.preventDefault();
+        if (e.key === 'Escape') {
+            listeningBind = null;
+            renderKeybinds();
+            return;
+        }
+        var newKey = e.key.toLowerCase();
+        if (newKey === ' ') newKey = ' ';
+        var conflict = isKeyConflict(listeningBind, newKey);
+        if (conflict) {
+            var btn = document.querySelector('[data-bind="' + listeningBind + '"]');
+            if (btn) {
+                btn.style.borderColor = '#e74c3c';
+                btn.innerHTML = '<span>⚠ Used: ' + keybindLabels[conflict] + '</span>';
+                setTimeout(renderKeybinds, 900);
+            }
+            return;
+        }
+        keybinds[listeningBind] = newKey;
+        saveKeybinds();
+        listeningBind = null;
+        renderKeybinds();
+    }
+}, true);
+
+document.getElementById('resetBinds').addEventListener('click', function() {
+    keybinds = {up:'w', down:'s', left:'a', right:'d', fire:' ', reload:'r', dash:'shift'};
+    saveKeybinds();
+    renderKeybinds();
+});
+
+// ----- PROFILE RENDER ---------------------------------------------
 function isSkinUnlocked(skinKey, u) {
     if (!u) return skinKey === 'default';
     if (skinKey === 'default') return true;
@@ -393,9 +482,7 @@ function checkSkinUnlocks(u) {
     if (!u.unlockedSkins) u.unlockedSkins = ['default'];
     for (var k in skins) {
         if (k === 'default') continue;
-        if (u.unlockedSkins.indexOf(k) === -1 && isSkinUnlocked(k, u)) {
-            u.unlockedSkins.push(k);
-        }
+        if (u.unlockedSkins.indexOf(k) === -1 && isSkinUnlocked(k, u)) u.unlockedSkins.push(k);
     }
 }
 function getRank(u) {
@@ -408,8 +495,6 @@ function getRank(u) {
     if (u.bestWave >= 5) return 'FIGHTER';
     return 'ROOKIE';
 }
-
-// ----- PROFILE RENDER ---------------------------------------------
 function openProfile() {
     document.getElementById('authScreen').style.display = 'none';
     document.getElementById('controlScreen').style.display = 'none';
@@ -474,9 +559,15 @@ function renderProfile() {
         });
         sp.appendChild(btn);
     }
+
+    var kbSec = document.getElementById('keybindSection');
+    if (kbSec) {
+        if (isMobile) kbSec.style.display = 'none';
+        else { kbSec.style.display = 'block'; renderKeybinds(); }
+    }
 }
 
-// ----- UI HANDLERS (runs immediately) -----------------------------
+// ----- UI HANDLERS -------------------------------------------------
 document.getElementById('eyeBtn').addEventListener('click', function() {
     var p = document.getElementById('authPass');
     p.type = p.type === 'password' ? 'text' : 'password';
@@ -539,10 +630,7 @@ document.getElementById('modeEndless').addEventListener('click', function() {
 function updateLeaderboard() {
     var users = Object.keys(userDB);
     var lb = document.getElementById('lbContent');
-    if (users.length === 0) {
-        lb.innerHTML = '<p style="color:#555">No players yet.</p>';
-        return;
-    }
+    if (users.length === 0) { lb.innerHTML = '<p style="color:#555">No players yet.</p>'; return; }
     users.sort(function(a, b) { return (userDB[b].bestScore || 0) - (userDB[a].bestScore || 0); });
     var h = '<h3>🏆 TOP SCORES</h3>';
     for (var i = 0; i < Math.min(users.length, 10); i++) {
@@ -567,27 +655,27 @@ function updateLeaderboard() {
         var n = slowest[i], tt = userDB[n].normalWorst;
         h += '<p>' + (i+1) + '. <b>' + n + '</b> | ' + Math.floor(tt/60) + ':' + ('0' + Math.floor(tt%60)).slice(-2) + '</p>';
     }
-    var endlessBest = users.slice().filter(function(n){return userDB[n].endlessBest > 0;});
-    endlessBest.sort(function(a,b){return userDB[b].endlessBest - userDB[a].endlessBest;});
+    var eb = users.slice().filter(function(n){return userDB[n].endlessBest > 0;});
+    eb.sort(function(a,b){return userDB[b].endlessBest - userDB[a].endlessBest;});
     h += '<h3>♾️ ENDLESS - MOST WAVES</h3>';
-    if (endlessBest.length === 0) h += '<p style="color:#555">None yet</p>';
-    for (var i = 0; i < Math.min(endlessBest.length, 5); i++) {
-        var n = endlessBest[i];
+    if (eb.length === 0) h += '<p style="color:#555">None yet</p>';
+    for (var i = 0; i < Math.min(eb.length, 5); i++) {
+        var n = eb[i];
         h += '<p>' + (i+1) + '. <b>' + n + '</b> | Wave ' + userDB[n].endlessBest + '</p>';
     }
-    var endlessTime = users.slice().filter(function(n){return userDB[n].endlessBestTime > 0;});
-    endlessTime.sort(function(a,b){return userDB[b].endlessBestTime - userDB[a].endlessBestTime;});
+    var et = users.slice().filter(function(n){return userDB[n].endlessBestTime > 0;});
+    et.sort(function(a,b){return userDB[b].endlessBestTime - userDB[a].endlessBestTime;});
     h += '<h3>⏱️ ENDLESS - LONGEST TIME</h3>';
-    if (endlessTime.length === 0) h += '<p style="color:#555">None yet</p>';
-    for (var i = 0; i < Math.min(endlessTime.length, 5); i++) {
-        var n = endlessTime[i], tt = userDB[n].endlessBestTime;
+    if (et.length === 0) h += '<p style="color:#555">None yet</p>';
+    for (var i = 0; i < Math.min(et.length, 5); i++) {
+        var n = et[i], tt = userDB[n].endlessBestTime;
         h += '<p>' + (i+1) + '. <b>' + n + '</b> | ' + Math.floor(tt/60) + ':' + ('0' + Math.floor(tt%60)).slice(-2) + '</p>';
     }
     lb.innerHTML = h;
 }
 
 // ----- SETTINGS -----------------------------------------------------
-var settings = {aimAssist: true, autoShoot: true, screenShake: true, darkMode: true, dayNight: true, cycleSpeed: 'normal', nightBoost: true};
+var settings = {aimAssist: true, autoShoot: true, screenShake: true, darkMode: true, cycleSpeed: 'normal'};
 try { var ss = localStorage.getItem('ta_settings'); if (ss) settings = Object.assign(settings, JSON.parse(ss)); } catch(e) {}
 function saveSettings() { try { localStorage.setItem('ta_settings', JSON.stringify(settings)); } catch(e) {} }
 
@@ -629,9 +717,7 @@ function doSpin() {
     if (spinCount <= 0) return;
     spinCount--;
     var pool = [];
-    for (var k in weapons) {
-        if (weapons[k].unlocked && !weapons[k].melee && !weapons[k].ownerOnly) pool.push(k);
-    }
+    for (var k in weapons) if (weapons[k].unlocked && !weapons[k].melee && !weapons[k].ownerOnly) pool.push(k);
     var locked = [];
     for (var i = 0; i < spinGuns.length; i++) if (spinLocked[spinGuns[i]]) locked.push(spinGuns[i]);
     var needed = 3 - locked.length, temp = [];
@@ -645,9 +731,7 @@ function doSpin() {
     updateSpinDisplay(); updateSpinCount();
     if (spinCount <= 0) document.getElementById('spinBtn').style.opacity = '0.4';
 }
-function updateSpinCount() {
-    document.getElementById('spinCount').textContent = 'Spins left: ' + spinCount;
-}
+function updateSpinCount() { document.getElementById('spinCount').textContent = 'Spins left: ' + spinCount; }
 function updateSpinDisplay() {
     var html = '';
     for (var i = 0; i < spinGuns.length; i++) {
@@ -660,9 +744,7 @@ function updateSpinDisplay() {
 function toggleLock(g) { spinLocked[g] = !spinLocked[g]; updateSpinDisplay(); }
 
 document.getElementById('spinBtn').addEventListener('click', doSpin);
-document.getElementById('unlockAllBtn').addEventListener('click', function() {
-    spinLocked = {}; updateSpinDisplay();
-});
+document.getElementById('unlockAllBtn').addEventListener('click', function() { spinLocked = {}; updateSpinDisplay(); });
 document.getElementById('spinStartBtn').addEventListener('click', function() {
     if (spinGuns.length === 0) doSpin();
     document.getElementById('spinScreen').style.display = 'none';
@@ -674,42 +756,30 @@ var canvas, ctx, gameActive = false, animId = null, totalTime = 0, timerInterval
 var ammo = {}, coins = 0, diamonds = 0, coinsThisRun = 0, diamondsThisRun = 0;
 var upgrades = {health: 0, damage: 0, shield: 0, spinnerBlades: 1, spinnerSpeed: 0, forceShield: false, spinners: false, shieldSize: 0, hasDash: false, dashCD: 0};
 var wave = {cur: 0, maxW: 50, eTotal: 0, eSpawned: 0, bTotal: 0, bSpawned: 0, inProg: false, between: true, nextT: 0, lastSpT: 0, bannerTxt: '', bannerST: 0, bannerDur: 2500, won: false};
-var tank = {x: 0, y: 0, angle: 0, spd: 3, sz: 30, hp: 1000, maxHp: 1000, curW: 'handgun', heat: 0, dashCD: 0, dashMaxCD: 2000, dashing: false, dashInv: 0, godMode: false, o2: 100, warmth: 100};
+var tank = {x: 0, y: 0, angle: 0, spd: 3, sz: 30, hp: 1000, maxHp: 1000, curW: 'handgun', heat: 0, dashCD: 0, dashMaxCD: 2000, dashing: false, dashInv: 0, godMode: false, o2: 100, warmth: 100, hitBy: 0};
 var bullets = [], enemies = [], eBullets = [], drops = [], particles = [], floatTexts = [];
 var score = 0, activeKeys = {}, lastFire = 0, gamePaused = false, spinnerAngle = 0, screenShakeAmount = 0;
-var joystickVec = {x: 0, y: 0}, jTouchId = null, fTouchId = null, rTouchId = null, jActive = false, jStart = {x: 0, y: 0};
+var joystickVec = {x: 0, y: 0}, jTouchId = null, fTouchId = null, jActive = false, jStart = {x: 0, y: 0};
 var toxicPools = [], lavaCracks = [], vineTraps = [], bgF = [];
 
 // ----- DAY/NIGHT ---------------------------------------------------
 var cycleTime = 0;
 var CYCLE_LEN = {slow: 240, normal: 180, fast: 120};
-var currentPhase = 'day';
+var nightBannerShown = false;
 function getCyclePhase() {
-    if (!settings.dayNight) return {phase:'day', tint:'rgba(255,255,255,0)', vig:0, arc:0, icon:'☀️'};
     var len = CYCLE_LEN[settings.cycleSpeed] || 180;
     var p = (cycleTime % len) / len;
-    var phase, tint, vig, icon;
-    if (p < 0.25) { phase='day'; tint='rgba(255,255,255,0)'; vig=0; icon='☀️'; }
-    else if (p < 0.5) {
+    if (p < 0.25) return {phase:'day', tint:null, vig:0, arc:p, icon:'☀️'};
+    if (p < 0.5) {
         var t = (p - 0.25) / 0.25;
-        phase='dusk';
-        tint = 'rgba(255,140,60,' + (0.25 * t) + ')';
-        vig = 0.15 * t;
-        icon='🌅';
-    } else if (p < 0.75) {
-        phase='night';
-        var t = (p - 0.5) / 0.25;
-        tint = 'rgba(20,20,80,' + (0.25 + 0.2 * t) + ')';
-        vig = 0.15 + 0.25 * t;
-        icon='🌙';
-    } else {
-        var t = (p - 0.75) / 0.25;
-        phase='dawn';
-        tint = 'rgba(255,160,200,' + (0.4 * (1 - t)) + ')';
-        vig = 0.4 * (1 - t);
-        icon='🌄';
+        return {phase:'dusk', tint:'rgba(255,140,60,' + (0.25 * t) + ')', vig:0.15 * t, arc:p, icon:'🌅'};
     }
-    return {phase:phase, tint:tint, vig:vig, arc:p, icon:icon};
+    if (p < 0.75) {
+        var t = (p - 0.5) / 0.25;
+        return {phase:'night', tint:'rgba(10,10,40,' + (0.55 + 0.1 * t) + ')', vig:0.5, arc:p, icon:'🌙'};
+    }
+    var t = (p - 0.75) / 0.25;
+    return {phase:'dawn', tint:'rgba(255,160,200,' + (0.4 * (1 - t)) + ')', vig:0.4 * (1 - t), arc:p, icon:'🌄'};
 }
 
 // ----- WORLDS ------------------------------------------------------
@@ -742,7 +812,7 @@ function startGame() {
     document.getElementById('settingsBtn').style.display = 'block';
     document.getElementById('ownerBtn2').style.display = isOwner ? 'block' : 'none';
     document.getElementById('controls').style.display = isMobile ? 'flex' : 'none';
-    document.getElementById('timeIcon').style.display = settings.dayNight ? 'block' : 'none';
+    document.getElementById('timeIcon').style.display = 'block';
     canvas = document.getElementById('gameCanvas');
     ctx = canvas.getContext('2d');
     resizeCanvas();
@@ -753,7 +823,7 @@ function startGame() {
 function resetGame() {
     if (animId) cancelAnimationFrame(animId);
     if (timerInterval) clearInterval(timerInterval);
-    totalTime = 0; cycleTime = 0;
+    totalTime = 0; cycleTime = 0; nightBannerShown = false;
     timerInterval = setInterval(function() {
         if (gameActive && !gamePaused) { totalTime++; cycleTime++; }
     }, 1000);
@@ -761,7 +831,7 @@ function resetGame() {
     tank.maxHp = 1000 + upgrades.health * 100; tank.hp = tank.maxHp; tank.heat = 0;
     tank.dashCD = 0; tank.dashMaxCD = 2000 - upgrades.dashCD * 300;
     tank.dashing = false; tank.dashInv = 0; tank.godMode = false;
-    tank.o2 = 100; tank.warmth = 100;
+    tank.o2 = 100; tank.warmth = 100; tank.hitBy = 0;
     tank.curW = spinGuns.length > 0 ? spinGuns[0] : 'handgun';
     bullets = []; enemies = []; eBullets = []; drops = []; particles = []; floatTexts = [];
     score = 0; lastFire = 0; gamePaused = false; coinsThisRun = 0; diamondsThisRun = 0;
@@ -814,12 +884,10 @@ function updateHUD() {
     document.getElementById('timerDisplay').textContent = '⏱️ ' + Math.floor(totalTime / 60) + ':' + ('0' + Math.floor(totalTime % 60)).slice(-2);
     document.getElementById('coinCount').textContent = coins;
     document.getElementById('diamondCount').textContent = diamonds;
-    if (settings.dayNight) {
-        var cp = getCyclePhase();
-        document.getElementById('timeIcon').firstChild.textContent = cp.icon;
-        document.getElementById('timeArcFill').style.width = (cp.arc * 100) + '%';
-        document.getElementById('timeArcFill').style.background = cp.icon === '☀️' ? '#f1c40f' : cp.icon === '🌙' ? '#8fd6ff' : '#ff9a3c';
-    }
+    var cp = getCyclePhase();
+    document.getElementById('timeIcon').firstChild.textContent = cp.icon;
+    document.getElementById('timeArcFill').style.width = (cp.arc * 100) + '%';
+    document.getElementById('timeArcFill').style.background = cp.icon === '☀️' ? '#f1c40f' : cp.icon === '🌙' ? '#8fd6ff' : '#ff9a3c';
 }
 
 function genBG() {
@@ -858,16 +926,13 @@ function drawBG() {
             var cx = Math.random() * canvas.width, cy = Math.random() * canvas.height;
             ctx.strokeStyle = 'rgba(255,200,80,0.35)'; ctx.lineWidth = 1;
             ctx.beginPath(); ctx.moveTo(cx, cy);
-            ctx.lineTo(cx + (Math.random() - 0.5) * 70, cy + (Math.random() - 0.5) * 70);
-            ctx.stroke();
+            ctx.lineTo(cx + (Math.random() - 0.5) * 70, cy + (Math.random() - 0.5) * 70); ctx.stroke();
         }
     }
     if (wi === 2) {
         for (var i = 0; i < 25; i++) {
             ctx.fillStyle = 'rgba(255,255,255,' + (0.15 + Math.random() * 0.4) + ')';
-            ctx.beginPath();
-            ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, Math.random()*2+0.5, 0, Math.PI*2);
-            ctx.fill();
+            ctx.beginPath(); ctx.arc(Math.random()*canvas.width, Math.random()*canvas.height, Math.random()*2+0.5, 0, Math.PI*2); ctx.fill();
         }
     }
     if (wi === 4) {
@@ -907,18 +972,14 @@ function drawBG() {
 function genHazards() {
     toxicPools = []; lavaCracks = []; vineTraps = [];
     var wld = getWorld();
-    if (wld.hazard === 'toxic') {
-        for (var i = 0; i < 8; i++) toxicPools.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: 25+Math.random()*45});
-    }
+    if (wld.hazard === 'toxic') for (var i = 0; i < 8; i++) toxicPools.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, r: 25+Math.random()*45});
     if (wld.hazard === 'lava') {
         for (var i = 0; i < 6; i++) {
             var x1 = Math.random()*canvas.width, y1 = Math.random()*canvas.height;
             lavaCracks.push({x1: x1, y1: y1, x2: x1+(Math.random()-0.5)*200, y2: y1+(Math.random()-0.5)*200});
         }
     }
-    if (wld.hazard === 'vines') {
-        for (var i = 0; i < 8; i++) vineTraps.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, cd: 0});
-    }
+    if (wld.hazard === 'vines') for (var i = 0; i < 8; i++) vineTraps.push({x: Math.random()*canvas.width, y: Math.random()*canvas.height, cd: 0});
 }
 function addCoins(n) { coins += n; if (n > 0 && !isOwner) coinsThisRun += n; updateHUD(); }
 function addDiamonds(n) { diamonds += n; if (n > 0 && !isOwner) diamondsThisRun += n; updateHUD(); }
@@ -1015,15 +1076,12 @@ document.getElementById('settingsBtn').addEventListener('click', function() {
     h += '<div class="shop-item"><span>🔫 Auto Shoot</span><button class="toggle-btn ' + (settings.autoShoot?'on':'off') + '" id="togAuto">' + (settings.autoShoot?'ON':'OFF') + '</button></div>';
     if (!isMobile) h += '<div class="shop-item"><span>📳 Screen Shake</span><button class="toggle-btn ' + (settings.screenShake?'on':'off') + '" id="togShake">' + (settings.screenShake?'ON':'OFF') + '</button></div>';
     h += '<div class="shop-item"><span>🌗 Dark Mode</span><button class="toggle-btn ' + (settings.darkMode?'on':'off') + '" id="togDark">' + (settings.darkMode?'ON':'OFF') + '</button></div>';
-    h += '<div class="shop-item"><span>☀️🌙 Day/Night Cycle</span><button class="toggle-btn ' + (settings.dayNight?'on':'off') + '" id="togDN">' + (settings.dayNight?'ON':'OFF') + '</button></div>';
     h += '<div class="shop-item"><span>⏱️ Cycle Speed</span><button class="toggle-btn on" id="togSpeed">' + (settings.cycleSpeed||'normal').toUpperCase() + '</button></div>';
-    h += '<div class="shop-item"><span>👁️ Night Visibility</span><button class="toggle-btn ' + (settings.nightBoost?'on':'off') + '" id="togNight">' + (settings.nightBoost?'ON':'OFF') + '</button></div>';
     document.getElementById('settingsContent').innerHTML = h;
     document.getElementById('togAim').addEventListener('click', function(){ settings.aimAssist = !settings.aimAssist; saveSettings(); settingsScreen.style.display='none'; });
     document.getElementById('togAuto').addEventListener('click', function(){ settings.autoShoot = !settings.autoShoot; saveSettings(); settingsScreen.style.display='none'; });
     if (!isMobile) document.getElementById('togShake').addEventListener('click', function(){ settings.screenShake = !settings.screenShake; saveSettings(); settingsScreen.style.display='none'; });
     document.getElementById('togDark').addEventListener('click', function(){ settings.darkMode = !settings.darkMode; saveSettings(); settingsScreen.style.display='none'; });
-    document.getElementById('togDN').addEventListener('click', function(){ settings.dayNight = !settings.dayNight; saveSettings(); document.getElementById('timeIcon').style.display = settings.dayNight ? 'block' : 'none'; settingsScreen.style.display='none'; });
     document.getElementById('togSpeed').addEventListener('click', function(){
         var order = ['slow','normal','fast'];
         var idx = order.indexOf(settings.cycleSpeed||'normal');
@@ -1031,11 +1089,8 @@ document.getElementById('settingsBtn').addEventListener('click', function() {
         saveSettings();
         settingsScreen.style.display='none';
     });
-    document.getElementById('togNight').addEventListener('click', function(){ settings.nightBoost = !settings.nightBoost; saveSettings(); settingsScreen.style.display='none'; });
 });
-document.getElementById('closeSettings').addEventListener('click', function() {
-    settingsScreen.style.display = 'none';
-});
+document.getElementById('closeSettings').addEventListener('click', function() { settingsScreen.style.display = 'none'; });
 
 // ----- OWNER PANEL --------------------------------------------------
 document.getElementById('ownerBtn2').addEventListener('click', function() {
@@ -1043,9 +1098,7 @@ document.getElementById('ownerBtn2').addEventListener('click', function() {
     document.getElementById('ownerPanel').style.display = 'flex';
     refreshOwnerPanel();
 });
-document.getElementById('closeOwner').addEventListener('click', function() {
-    document.getElementById('ownerPanel').style.display = 'none';
-});
+document.getElementById('closeOwner').addEventListener('click', function() { document.getElementById('ownerPanel').style.display = 'none'; });
 function refreshOwnerPanel() {
     document.getElementById('godToggle').textContent = 'GOD:' + (tank.godMode ? 'ON' : 'OFF');
     document.getElementById('infAmmoToggle').textContent = '∞ AMMO:' + (infAmmo ? 'ON' : 'OFF');
@@ -1060,13 +1113,13 @@ document.querySelectorAll('#ownerPanel .owner-btn2').forEach(function(b) {
         if (act === 'w3') ownerJumpWorld(2);
         if (act === 'w4') ownerJumpWorld(3);
         if (act === 'w5') ownerJumpWorld(4);
-        if (act === 'spawn') { for (var i = 0; i < 10; i++) { var p = spawnEdge(); enemies.push(mkEnemy(p.x, p.y, 'normal', null, null)); } }
+        if (act === 'spawn') for (var i = 0; i < 10; i++) { var p = spawnEdge(); enemies.push(mkEnemy(p.x, p.y, 'normal', null, null)); }
         if (act === 'boss') { var p2 = spawnEdge(); enemies.push(mkEnemy(p2.x, p2.y, 'normal', 'mini', null)); }
         if (act === 'nuke') {
             screenShakeAmount = 30;
             for (var ni = enemies.length - 1; ni >= 0; ni--) { enemies[ni].hp -= 9999; if (enemies[ni].hp <= 0) { handleKill(enemies[ni]); enemies.splice(ni, 1); } }
         }
-        if (act === 'killall') { for (var ki = enemies.length - 1; ki >= 0; ki--) { handleKill(enemies[ki]); enemies.splice(ki, 1); } }
+        if (act === 'killall') for (var ki = enemies.length - 1; ki >= 0; ki--) { handleKill(enemies[ki]); enemies.splice(ki, 1); }
         if (act === 'coins') addCoins(1000);
         if (act === 'diamonds') addDiamonds(100);
         if (act === 'heal') { tank.hp = tank.maxHp; updateHUD(); }
@@ -1102,27 +1155,31 @@ function ownerJumpWorld(wi) {
     tank.hp = tank.maxHp; tank.o2 = 100; tank.warmth = 100;
 }
 
-// ----- KEYBOARD -----------------------------------------------------
+// ----- KEYBOARD (reads from keybinds) ------------------------------
+function isKeyDown(e, action) {
+    var k = e.key.toLowerCase();
+    if (k === ' ') k = ' ';
+    return k === keybinds[action] || k.toLowerCase() === keybinds[action];
+}
 window.addEventListener('keydown', function(e) {
+    if (listeningBind) return;
     if (!gameActive || document.getElementById('shopModal').style.display === 'flex' ||
         document.getElementById('settingsScreen').style.display === 'flex' ||
         document.getElementById('ownerPanel').style.display === 'flex') return;
-    var k = e.key.toLowerCase();
-    if (k === 'w' || e.key === 'ArrowUp') activeKeys.up = true;
-    if (k === 's' || e.key === 'ArrowDown') activeKeys.down = true;
-    if (k === 'a' || e.key === 'ArrowLeft') activeKeys.left = true;
-    if (k === 'd' || e.key === 'ArrowRight') activeKeys.right = true;
-    if (k === ' ' || e.key === 'e') { activeKeys.FIRE = true; e.preventDefault(); }
-    if (k === 'r') reloadWeapon();
-    if (k === 'shift' && upgrades.hasDash && tank.dashCD <= 0 && !tank.dashing) dash();
+    if (isKeyDown(e, 'up')) activeKeys.up = true;
+    if (isKeyDown(e, 'down')) activeKeys.down = true;
+    if (isKeyDown(e, 'left')) activeKeys.left = true;
+    if (isKeyDown(e, 'right')) activeKeys.right = true;
+    if (isKeyDown(e, 'fire')) { activeKeys.FIRE = true; e.preventDefault(); }
+    if (isKeyDown(e, 'reload')) reloadWeapon();
+    if (isKeyDown(e, 'dash') && upgrades.hasDash && tank.dashCD <= 0 && !tank.dashing) dash();
 });
 window.addEventListener('keyup', function(e) {
-    var k = e.key.toLowerCase();
-    if (k === 'w' || e.key === 'ArrowUp') activeKeys.up = false;
-    if (k === 's' || e.key === 'ArrowDown') activeKeys.down = false;
-    if (k === 'a' || e.key === 'ArrowLeft') activeKeys.left = false;
-    if (k === 'd' || e.key === 'ArrowRight') activeKeys.right = false;
-    if (k === ' ' || e.key === 'e') activeKeys.FIRE = false;
+    if (isKeyDown(e, 'up')) activeKeys.up = false;
+    if (isKeyDown(e, 'down')) activeKeys.down = false;
+    if (isKeyDown(e, 'left')) activeKeys.left = false;
+    if (isKeyDown(e, 'right')) activeKeys.right = false;
+    if (isKeyDown(e, 'fire')) activeKeys.FIRE = false;
 });
 function reloadWeapon() {
     var w = weapons[tank.curW];
@@ -1450,6 +1507,12 @@ function drawTankShape(ctx, shape, size) {
     }
 }
 
+function isModalOpen() {
+    return document.getElementById('shopModal').style.display === 'flex' ||
+           document.getElementById('settingsScreen').style.display === 'flex' ||
+           document.getElementById('ownerPanel').style.display === 'flex';
+}
+
 // ----- GAME LOOP ----------------------------------------------------
 function update() {
     if (!gameActive) return;
@@ -1461,8 +1524,24 @@ function update() {
     if (wave.inProg) { spawnWaveE(t); checkWaveDone(); }
     updateHUD();
     if (w && w.hr && tank.heat > 0) tank.heat = Math.max(0, tank.heat - w.cr);
+
     var cp = getCyclePhase();
-    var nightActive = cp.phase === 'night';
+    var night = cp.phase === 'night';
+    var nightMult = night ? 1.3 : (cp.phase === 'dusk' ? 1.0 : 1.0);
+    var nightSpd = night ? 1.2 : (cp.phase === 'dusk' ? 1.05 : 1.0);
+    var nightCD = night ? 1430 : 2000;
+    var nightRegen = night ? 0.01 : 0;
+    var nightHeal = night ? 1.5 : 1.0;
+    var nightBomber = night ? 1.25 : 1.0;
+    var nightSpawn = night ? 1.15 : 1.0;
+
+    if (night && !nightBannerShown) {
+        nightBannerShown = true;
+        wave.bannerTxt = '🌙 NIGHT — ENEMIES BUFFED';
+        wave.bannerST = Date.now();
+    }
+    if (!night) nightBannerShown = false;
+
     if (wld.hazard === 'oxygen') {
         document.getElementById('o2Bar').style.display = 'block';
         document.getElementById('warmthBar').style.display = 'none';
@@ -1620,21 +1699,21 @@ function update() {
     collectDrops();
     for (var eni = enemies.length - 1; eni >= 0; eni--) {
         var en = enemies[eni];
+        if (nightRegen > 0) en.hp = Math.min(en.maxHp, en.hp + en.maxHp * nightRegen * 0.016);
         var atx = Math.atan2(tank.y - en.y, tank.x - en.x);
         var dtx = Math.hypot(tank.x - en.x, tank.y - en.y);
         en.moveAng = atx;
-        var eSpd = en.spd * (cp.phase === 'dusk' ? 1.05 : 1);
+        var eSpd = en.spd * nightSpd;
         switch (en.type) {
             case 'speeder':
                 var zz = Math.sin(t*0.008 + eni*2) * 0.4;
                 en.x += Math.cos(atx+zz)*eSpd; en.y += Math.sin(atx+zz)*eSpd; break;
             case 'shooter':
-                var sRange = nightActive ? en.sRange * 0.85 : en.sRange;
-                if (dtx > sRange) { en.x += Math.cos(atx)*eSpd; en.y += Math.sin(atx)*eSpd; }
-                else if (dtx < sRange*0.5) { en.x -= Math.cos(atx)*eSpd*0.5; en.y -= Math.sin(atx)*eSpd*0.5; }
-                if (t - en.lastShot > en.sCD) {
+                if (dtx > en.sRange) { en.x += Math.cos(atx)*eSpd; en.y += Math.sin(atx)*eSpd; }
+                else if (dtx < en.sRange*0.5) { en.x -= Math.cos(atx)*eSpd*0.5; en.y -= Math.sin(atx)*eSpd*0.5; }
+                if (t - en.lastShot > nightCD) {
                     en.lastShot = t;
-                    eBullets.push({x: en.x, y: en.y, a: atx, spd: en.sSpd, sz: 5, dmg: en.sDmg, life: 150});
+                    eBullets.push({x: en.x, y: en.y, a: atx, spd: en.sSpd, sz: 5, dmg: en.sDmg * nightMult, life: 150});
                 }
                 break;
             case 'healer':
@@ -1643,7 +1722,7 @@ function update() {
                     en.lastHeal = t; en.flash = t + 300;
                     for (var hi = 0; hi < enemies.length; hi++) {
                         if (hi === eni) continue;
-                        if (Math.hypot(enemies[hi].x - en.x, enemies[hi].y - en.y) < en.hRange) enemies[hi].hp = Math.min(enemies[hi].maxHp, enemies[hi].hp + en.hAmt);
+                        if (Math.hypot(enemies[hi].x - en.x, enemies[hi].y - en.y) < en.hRange) enemies[hi].hp = Math.min(enemies[hi].maxHp, enemies[hi].hp + en.hAmt * nightHeal);
                     }
                 }
                 break;
@@ -1654,8 +1733,9 @@ function update() {
                 en.x += Math.cos(atx)*eSpd; en.y += Math.sin(atx)*eSpd; break;
         }
         if (tank.dashInv <= 0 && Math.hypot(tank.x - en.x, tank.y - en.y) < tank.sz/2 + en.sz/2) {
-            if (!tank.godMode) tank.hp -= Math.floor(en.dmg * shieldMult() * (cp.phase === 'night' ? 1.05 : 1));
+            if (!tank.godMode) tank.hp -= Math.floor(en.dmg * shieldMult() * nightMult);
             en.x += (en.x - tank.x) * 0.5; en.y += (en.y - tank.y) * 0.5;
+            tank.hitBy = t;
             if (tank.hp <= 0) { gameOver(false); return; }
         }
     }
@@ -1673,6 +1753,16 @@ function update() {
     animId = requestAnimationFrame(update);
 }
 
+function isInVisionCone(px, py) {
+    var dx = px - tank.x, dy = py - tank.y;
+    var dist = Math.hypot(dx, dy);
+    if (dist < 120) return true;
+    if (dist > 350) return false;
+    var ang = Math.atan2(dy, dx);
+    var diff = normAng(ang - tank.angle);
+    return Math.abs(diff) < Math.PI / 6;
+}
+
 function draw() {
     var t = Date.now();
     ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -1686,7 +1776,8 @@ function draw() {
     drawBG();
 
     var cp = getCyclePhase();
-    if (cp.tint && cp.tint !== 'rgba(255,255,255,0)') {
+    var modalOpen = isModalOpen();
+    if (!modalOpen && cp.tint) {
         ctx.fillStyle = cp.tint;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
@@ -1705,7 +1796,7 @@ function draw() {
         var fo = el > d.life - 3000 ? (d.life - el) / 3000 : 1;
         var bob = Math.sin(t*0.005 + di) * 3;
         ctx.globalAlpha = fo;
-        if (cp.phase === 'night') { ctx.shadowColor = d.type === 'health' ? '#2ecc71' : d.type === 'ammo' ? '#e67e22' : '#4dc9f6'; ctx.shadowBlur = 15; }
+        if (!modalOpen && cp.phase === 'night') { ctx.shadowColor = d.type === 'health' ? '#2ecc71' : d.type === 'ammo' ? '#e67e22' : '#4dc9f6'; ctx.shadowBlur = 15; }
         if (d.type === 'health') {
             ctx.fillStyle = '#2ecc71';
             ctx.fillRect(d.x - 3, d.y - 8 + bob, 6, 16);
@@ -1727,18 +1818,14 @@ function draw() {
         var b = bullets[bi];
         if (b.trail) {
             ctx.beginPath();
-            ctx.fillStyle = b.trail;
-            ctx.globalAlpha = 0.35;
-            ctx.arc(b.x, b.y, b.sz/2 + 3, 0, Math.PI * 2);
-            ctx.fill();
+            ctx.fillStyle = b.trail; ctx.globalAlpha = 0.35;
+            ctx.arc(b.x, b.y, b.sz/2 + 3, 0, Math.PI * 2); ctx.fill();
             ctx.globalAlpha = 1;
         }
         ctx.beginPath();
         ctx.fillStyle = b.color || '#f1c40f';
-        ctx.shadowColor = b.color || '#f1c40f';
-        ctx.shadowBlur = 10;
-        ctx.arc(b.x, b.y, b.sz/2, 0, Math.PI * 2);
-        ctx.fill();
+        ctx.shadowColor = b.color || '#f1c40f'; ctx.shadowBlur = 10;
+        ctx.arc(b.x, b.y, b.sz/2, 0, Math.PI * 2); ctx.fill();
         ctx.shadowBlur = 0;
     }
     for (var ei = 0; ei < eBullets.length; ei++) {
@@ -1746,13 +1833,18 @@ function draw() {
         ctx.beginPath();
         ctx.arc(eb.x, eb.y, eb.sz/2, 0, Math.PI * 2);
         ctx.fillStyle = '#ff4444';
-        ctx.shadowColor = '#ff4444';
-        ctx.shadowBlur = 8;
-        ctx.fill();
-        ctx.shadowBlur = 0;
+        ctx.shadowColor = '#ff4444'; ctx.shadowBlur = 8;
+        ctx.fill(); ctx.shadowBlur = 0;
     }
     for (var eni = 0; eni < enemies.length; eni++) {
         var en = enemies[eni];
+        var visible = true;
+        if (!modalOpen && cp.phase === 'night') {
+            visible = isInVisionCone(en.x, en.y);
+            if (!visible && en.boss) visible = true;
+            if (!visible && t - tank.hitBy < 500 && Math.hypot(en.x - tank.x, en.y - tank.y) < 400) visible = true;
+        }
+        if (!visible) continue;
         var hpP = en.hp / en.maxHp;
         var labelY = Math.max(20, en.y - en.sz/2 - 12);
         ctx.fillStyle = '#e74c3c';
@@ -1768,9 +1860,15 @@ function draw() {
         ctx.arc(en.x, en.y, en.sz/2, 0, Math.PI * 2);
         ctx.fillStyle = en.color;
         ctx.shadowColor = en.color;
-        ctx.shadowBlur = 12;
-        ctx.fill();
-        ctx.shadowBlur = 0;
+        ctx.shadowBlur = (!modalOpen && cp.phase === 'night') ? 18 : 12;
+        ctx.fill(); ctx.shadowBlur = 0;
+        if (!modalOpen && cp.phase === 'night') {
+            ctx.beginPath();
+            ctx.arc(en.x, en.y, en.sz/2 + 4, 0, Math.PI * 2);
+            ctx.strokeStyle = 'rgba(255,80,80,' + (0.4 + Math.sin(t*0.01) * 0.3) + ')';
+            ctx.lineWidth = 2;
+            ctx.stroke();
+        }
     }
     if (upgrades.forceShield) {
         var shieldRad = tank.sz * (1.3 + upgrades.shieldSize * 0.6);
@@ -1778,10 +1876,8 @@ function draw() {
         ctx.arc(tank.x, tank.y, shieldRad, 0, Math.PI * 2);
         ctx.strokeStyle = 'rgba(0,255,255,' + (0.4 + Math.sin(t*0.005)*0.2) + ')';
         ctx.lineWidth = 3;
-        ctx.shadowColor = '#0ff';
-        ctx.shadowBlur = 15;
-        ctx.stroke();
-        ctx.shadowBlur = 0;
+        ctx.shadowColor = '#0ff'; ctx.shadowBlur = 15;
+        ctx.stroke(); ctx.shadowBlur = 0;
     }
 
     ctx.save();
@@ -1798,8 +1894,7 @@ function draw() {
     var cw = weapons[tank.curW];
     if (cw) {
         ctx.fillStyle = cw.color || '#e74c3c';
-        ctx.shadowColor = cw.color || '#e74c3c';
-        ctx.shadowBlur = 8;
+        ctx.shadowColor = cw.color || '#e74c3c'; ctx.shadowBlur = 8;
         ctx.fillRect(0, -4, tank.sz/2 + 15, 8);
         ctx.shadowBlur = 0;
     }
@@ -1813,10 +1908,8 @@ function draw() {
             ctx.beginPath();
             ctx.arc(sx2, sy2, 8, 0, Math.PI * 2);
             ctx.fillStyle = 'rgba(93,92,222,0.9)';
-            ctx.shadowColor = '#5D5CDE';
-            ctx.shadowBlur = 10;
-            ctx.fill();
-            ctx.shadowBlur = 0;
+            ctx.shadowColor = '#5D5CDE'; ctx.shadowBlur = 10;
+            ctx.fill(); ctx.shadowBlur = 0;
         }
     }
     if (settings.aimAssist) {
@@ -1837,11 +1930,26 @@ function draw() {
         ctx.fillText(ft.txt, ft.x, ft.y);
     }
     ctx.globalAlpha = 1;
-    if (cp.vig > 0) {
-        var vigAlpha = cp.vig * (settings.nightBoost && cp.phase === 'night' ? 0.5 : 1);
+
+    if (!modalOpen && cp.phase === 'night') {
+        var visionR = 350;
+        var nearR = 120;
+        ctx.save();
+        var vigGrad = ctx.createRadialGradient(tank.x, tank.y, nearR * 0.6, tank.x, tank.y, visionR);
+        vigGrad.addColorStop(0, 'rgba(10,10,40,0)');
+        vigGrad.addColorStop(0.5, 'rgba(10,10,40,0.3)');
+        vigGrad.addColorStop(1, 'rgba(10,10,40,0.85)');
+        ctx.fillStyle = vigGrad;
+        ctx.beginPath();
+        ctx.arc(tank.x, tank.y, visionR, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    }
+
+    if (!modalOpen && cp.vig > 0) {
         var vigGrad = ctx.createRadialGradient(tank.x, tank.y, canvas.width * 0.35, tank.x, tank.y, canvas.width * 0.85);
         vigGrad.addColorStop(0, 'rgba(0,0,0,0)');
-        vigGrad.addColorStop(1, 'rgba(10,10,40,' + vigAlpha + ')');
+        vigGrad.addColorStop(1, 'rgba(5,5,20,' + cp.vig + ')');
         ctx.fillStyle = vigGrad;
         ctx.fillRect(-sx, -sy, canvas.width, canvas.height);
     }
@@ -1864,8 +1972,7 @@ function draw() {
         ctx.fillRect(0, canvas.height/2 - 50, canvas.width, 100);
         ctx.fillStyle = getWorld().accent;
         ctx.font = 'bold 32px Courier New'; ctx.textAlign = 'center';
-        ctx.shadowColor = getWorld().accent;
-        ctx.shadowBlur = 20;
+        ctx.shadowColor = getWorld().accent; ctx.shadowBlur = 20;
         ctx.fillText(wave.bannerTxt, canvas.width/2, canvas.height/2);
         ctx.shadowBlur = 0;
         ctx.globalAlpha = 1;
@@ -1877,8 +1984,7 @@ genBG();
 buildWeaponUI();
 
 console.log('Tank Arena loaded!');
-console.log('Owner login: trashowner / cnpopcatx');
-console.log('Create a new account with SIGN UP, then login.');
+console.log('Owner: trashowner / cnpopcatx');
 </script>
 </body>
 </html>

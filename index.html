@@ -5,70 +5,132 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Tank Arena</title>
     <style>
-        *{margin:0;padding:0;box-sizing:border-box;touch-action:none}
+        *{margin:0;padding:0;box-sizing:border-box;touch-action:manipulation}
         html,body{overflow:hidden;font-family:'Courier New',monospace;background:#1a1a2e;height:100%}
         canvas{display:block}
-        #authScreen,#leaderboardScreen,#controlScreen,#modeScreen,#spinScreen,#gameOverScreen,#settingsScreen,#ownerPanel,#profileScreen{position:fixed;top:0;left:0;width:100%;height:100%;z-index:300;color:#fff;background:linear-gradient(135deg,#0a0a1e,#1a1a3e,#0a0a2e);display:flex;flex-direction:column;justify-content:center;align-items:center;overflow-y:auto;padding:20px}
-        #authScreen{z-index:400}
-        #leaderboardScreen{z-index:450}
+        
+        /* FIXED SCROLLING FOR ALL SCREENS */
+        #authScreen,#leaderboardScreen,#controlScreen,#modeScreen,#spinScreen,#gameOverScreen,#settingsScreen,#ownerPanel,#profileScreen{
+            position:fixed;top:0;left:0;width:100%;height:100%;z-index:300;color:#fff;
+            background:linear-gradient(135deg,#0a0a1e,#1a1a3e,#0a0a2e);
+            display:flex;flex-direction:column;justify-content:flex-start;align-items:center;
+            overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 80px 20px;
+        }
+        #authScreen{z-index:400;justify-content:center;padding-bottom:20px}
+        #leaderboardScreen{z-index:450;justify-content:center;padding-bottom:20px}
         #profileScreen{z-index:460}
-        h1{font-size:36px;color:#0ff;margin-bottom:5px;text-shadow:0 0 20px rgba(0,255,255,0.6)}
-        h2{font-size:28px;color:#0ff;margin-bottom:10px;text-shadow:0 0 15px rgba(0,255,255,0.4)}
-        .sub{font-size:12px;color:#888;margin-bottom:20px}
-        .auth-box{width:300px;display:flex;flex-direction:column;gap:10px}
+        
+        h1{font-size:36px;color:#0ff;margin-bottom:5px;text-shadow:0 0 20px rgba(0,255,255,0.6);flex-shrink:0}
+        h2{font-size:28px;color:#0ff;margin-bottom:10px;text-shadow:0 0 15px rgba(0,255,255,0.4);flex-shrink:0}
+        .sub{font-size:12px;color:#888;margin-bottom:20px;flex-shrink:0}
+        .auth-box{width:300px;display:flex;flex-direction:column;gap:10px;flex-shrink:0}
+        
         input{width:100%;padding:12px;background:#111;border:2px solid #333;border-radius:8px;color:#fff;font-size:16px;font-family:'Courier New',monospace;outline:none}
         input:focus{border-color:#5D5CDE;box-shadow:0 0 12px rgba(93,92,222,0.6)}
         .pw-box{position:relative}
         .eye-btn{position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;font-size:18px;color:#888;background:transparent;border:none}
-        .btns{display:flex;gap:10px;margin-top:10px}
+        
+        .btns{display:flex;gap:10px;margin-top:10px;flex-shrink:0}
         button{flex:1;padding:12px;border:2px solid #5D5CDE;border-radius:8px;background:rgba(93,92,222,0.15);color:#fff;font-size:16px;cursor:pointer;font-family:'Courier New',monospace;transition:0.15s}
         button:hover{background:rgba(93,92,222,0.4);border-color:#0ff;box-shadow:0 0 15px rgba(0,255,255,0.5)}
-        .menu-btn{padding:14px 28px;margin:8px;border:2px solid #5D5CDE;border-radius:10px;background:linear-gradient(135deg,rgba(93,92,222,0.15),rgba(0,255,255,0.08));color:#fff;font-size:16px;cursor:pointer;text-align:center;width:280px;transition:0.15s}
+        
+        .menu-btn{padding:14px 28px;margin:8px;border:2px solid #5D5CDE;border-radius:10px;background:linear-gradient(135deg,rgba(93,92,222,0.15),rgba(0,255,255,0.08));color:#fff;font-size:16px;cursor:pointer;text-align:center;width:280px;transition:0.15s;flex-shrink:0}
         .menu-btn:hover{background:linear-gradient(135deg,rgba(93,92,222,0.4),rgba(0,255,255,0.2));border-color:#0ff;box-shadow:0 0 20px rgba(0,255,255,0.5)}
-        #msg{font-size:12px;min-height:18px;margin:8px 0;text-align:center;color:#ff6b6b}
-        .link{color:#888;font-size:12px;cursor:pointer;margin-top:10px;text-align:center}
+        
+        #msg{font-size:12px;min-height:18px;margin:8px 0;text-align:center;color:#ff6b6b;flex-shrink:0}
+        .link{color:#888;font-size:12px;cursor:pointer;margin-top:10px;text-align:center;flex-shrink:0}
         .link:hover{color:#0ff}
-        .spin-gun{padding:10px;margin:5px;border:2px solid #333;border-radius:8px;cursor:pointer;text-align:center;font-size:14px;width:220px;user-select:none;transition:0.15s}
-        .spin-gun.locked{border-color:#ff0;box-shadow:0 0 15px rgba(255,255,0,0.6);background:rgba(255,255,0,0.08)}
-        #lbContent{font-size:12px;max-height:300px;overflow-y:auto;text-align:left;width:380px}
+        
+        /* BRAWL STARS STYLE CAROUSEL */
+        #spinGuns {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            padding: 10px 0 20px 0;
+            width: 100%;
+            max-width: 95vw;
+            -webkit-overflow-scrolling: touch;
+            flex-shrink: 0;
+        }
+        #spinGuns::-webkit-scrollbar { display: none; }
+        #spinGuns { -ms-overflow-style: none; scrollbar-width: none; }
+
+        .spin-gun {
+            flex: 0 0 200px;
+            height: 260px;
+            scroll-snap-align: center;
+            border: 3px solid #333;
+            border-radius: 20px;
+            background: linear-gradient(180deg, #1a1a2e, #0a0a1e);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            user-select: none;
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+        .spin-gun.locked {
+            border-color: #ff0;
+            box-shadow: 0 0 25px rgba(255, 255, 0, 0.4), inset 0 0 15px rgba(255, 255, 0, 0.2);
+            transform: scale(1.02);
+        }
+        .spin-gun .gun-icon { font-size: 60px; margin-bottom: 15px; }
+        .spin-gun .gun-name { font-size: 16px; font-weight: bold; color: #fff; text-align: center; padding: 0 10px; }
+        .spin-gun .gun-ammo { font-size: 11px; color: #0ff; margin-top: 10px; }
+        .spin-gun .lock-icon { position: absolute; top: 15px; right: 15px; font-size: 24px; opacity: 0; transition: opacity 0.2s; }
+        .spin-gun.locked .lock-icon { opacity: 1; }
+
+        #lbContent{font-size:12px;max-height:300px;overflow-y:auto;text-align:left;width:380px;flex-shrink:0}
         #lbContent p{padding:3px 0;border-bottom:1px solid #222}
         #lbContent h3{color:#f1c40f;margin:10px 0 5px;font-size:13px;letter-spacing:2px}
         .back-sm{padding:6px 16px;font-size:11px;margin-top:12px;width:auto;flex:none;border:1px solid #555;background:transparent;color:#888;cursor:pointer;font-family:'Courier New',monospace;border-radius:4px}
+        
         #hud{position:fixed;top:20px;left:20px;z-index:10;color:#fff;font-size:13px;display:none}
         #healthBar{width:180px;height:18px;background:rgba(255,255,255,0.1);border-radius:9px;overflow:hidden;margin:4px 0}
         #healthFill{height:100%;background:#2ecc71;width:100%}
         #o2Bar,#warmthBar{width:150px;height:10px;background:rgba(255,255,255,0.1);border-radius:5px;overflow:hidden;margin:3px 0;display:none}
         #o2Fill{height:100%;background:#4dc9f6}#warmthFill{height:100%;background:#f90}
         #ammoDisplay{font-size:14px;color:#0ff;margin-top:4px;font-weight:bold}
+        
         #bossBar{position:fixed;top:0;left:0;width:100%;height:30px;background:rgba(0,0,0,0.8);z-index:50;display:none;text-align:center;color:#fff;font-size:14px;line-height:30px}
         #bossBarFill{position:absolute;top:0;left:0;height:100%;background:linear-gradient(90deg,#e74c3c,#f39c12,#e74c3c);background-size:200% 100%;animation:bossPulse 2s linear infinite}
         @keyframes bossPulse{0%{background-position:0% 50%}100%{background-position:200% 50%}}
+        
         .top-btn{position:fixed;top:20px;padding:8px 14px;background:rgba(20,20,20,0.85);border-radius:4px;z-index:20;cursor:pointer;font-size:12px;font-family:'Courier New',monospace;transition:0.15s}
         .top-btn:hover{box-shadow:0 0 12px currentColor}
         #shopBtn{right:20px;border:1px solid #f1c40f;color:#f1c40f;display:none}
         #settingsBtn{right:100px;border:1px solid #aaa;color:#aaa;display:none}
         #ownerBtn2{right:180px;border:1px solid #ff0;color:#ff0;display:none}
+        
         #weaponSelector{position:fixed;top:115px;left:10px;display:flex;flex-direction:column;gap:5px;z-index:10;max-height:calc(100vh-300px);overflow-y:auto}
         .weapon-btn{padding:5px 8px;background:rgba(60,60,60,0.7);border-radius:5px;font-size:11px;display:flex;align-items:center;cursor:pointer;color:#ccc;border:2px solid transparent}
         .weapon-btn.active{border-color:#5D5CDE;background:rgba(93,92,222,0.35);box-shadow:0 0 8px rgba(93,92,222,0.6)}
-        .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.55);backdrop-filter:blur(4px);display:none;justify-content:center;align-items:center;z-index:250}
+        
+        /* FIXED MODAL Z-INDEX */
+        .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);backdrop-filter:blur(5px);display:none;justify-content:center;align-items:center;z-index:9999}
         .panel{background:#111;border:2px solid #f1c40f;border-radius:10px;padding:20px;width:360px;max-width:92vw;max-height:85vh;overflow-y:auto;color:#fff;box-shadow:0 0 30px rgba(241,196,15,0.4),0 0 60px rgba(241,196,15,0.15)}
         .panel h2{color:#f1c40f;text-align:center;margin-bottom:10px}
+        
         .shop-item{display:flex;justify-content:space-between;align-items:center;padding:8px;margin:4px 0;background:rgba(255,255,255,0.03);border-radius:5px;border:1px solid #222;font-size:12px}
         .shop-item.coin{border-left:3px solid #f1c40f}
         .shop-item.diamond{border-left:3px solid #0ff}
         .buy-btn{padding:5px 12px;border:1px solid #f1c40f;background:rgba(241,196,15,0.15);color:#f1c40f;border-radius:4px;font-size:11px;cursor:pointer}
         .buy-btn.owned{border-color:#2ecc71;color:#2ecc71;pointer-events:none}
         .close-btn{display:block;width:100%;padding:10px;background:transparent;border:1px solid #555;border-radius:4px;color:#888;font-size:13px;cursor:pointer;text-align:center;margin-top:10px}
+        
         .toggle-btn{padding:5px 14px;border-radius:4px;cursor:pointer;font-size:12px;font-family:'Courier New',monospace}
         .toggle-btn.on{background:#1a3a1a;border:1px solid #2ecc71;color:#2ecc71}
         .toggle-btn.off{background:#3a1a1a;border:1px solid #e74c3c;color:#e74c3c}
-        #ownerPanel{background:rgba(0,0,0,0.92);display:none;z-index:500}
-        .owner-box{background:#0a0a0a;border:3px solid #ff0;border-radius:12px;padding:20px;width:400px;max-width:94vw;max-height:90vh;overflow-y:auto;box-shadow:0 0 40px rgba(255,255,0,0.4)}
+        
+        #ownerPanel{background:rgba(0,0,0,0.92);display:none;z-index:500;justify-content:center}
+        .owner-box{background:#0a0a0a;border:3px solid #ff0;border-radius:12px;padding:20px;width:400px;max-width:94vw;max-height:90vh;overflow-y:auto;box-shadow:0 0 40px rgba(255,255,0,0.4);flex-shrink:0}
         .owner-row{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0;justify-content:center;align-items:center}
         .owner-btn2{padding:8px 14px;background:#1a1a0a;border:1px solid #ff0;color:#ff0;border-radius:6px;cursor:pointer;font-size:12px}
         .owner-btn2.danger{border-color:#f44;color:#f44}
         .owner-section{color:#888;font-size:11px;text-align:center;margin:8px 0 4px;letter-spacing:2px}
+        
         #controls{position:fixed;bottom:20px;left:0;width:100%;display:none;justify-content:space-between;padding:0 20px;z-index:10}
         .joystick-container{position:relative;width:150px;height:150px}
         .joystick-base{position:absolute;width:120px;height:120px;background:rgba(230,230,230,0.12);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%)}
@@ -76,7 +138,8 @@
         #fireBtn{width:90px;height:90px;background:rgba(231,76,60,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fff;font-size:16px;align-self:flex-end;margin-bottom:20px;cursor:pointer}
         #reloadBtn{width:56px;height:56px;background:rgba(241,196,15,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fff;font-size:14px;align-self:flex-end;margin-bottom:10px;margin-right:10px;cursor:pointer}
         #dashBtn{width:56px;height:56px;background:rgba(93,92,222,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fff;font-size:14px;align-self:flex-end;margin-bottom:10px;margin-right:10px;cursor:pointer}
-        .profile-card{background:linear-gradient(145deg,#141432,#0a0a1e);border:2px solid #5D5CDE;border-radius:20px;padding:24px 30px;width:400px;max-width:95vw;box-shadow:0 0 40px rgba(93,92,222,0.4),inset 0 1px 2px rgba(255,255,255,0.05);text-align:center;margin-bottom:18px}
+        
+        .profile-card{background:linear-gradient(145deg,#141432,#0a0a1e);border:2px solid #5D5CDE;border-radius:20px;padding:24px 30px;width:400px;max-width:95vw;box-shadow:0 0 40px rgba(93,92,222,0.4),inset 0 1px 2px rgba(255,255,255,0.05);text-align:center;margin-bottom:18px;flex-shrink:0}
         .profile-avatar{width:90px;height:90px;border-radius:50%;margin:0 auto 12px;border:3px solid #0ff;background:#1a1a3e;display:flex;align-items:center;justify-content:center;font-size:44px;box-shadow:0 0 25px rgba(0,255,255,0.5)}
         .profile-name{font-size:22px;color:#0ff;font-weight:bold;letter-spacing:1px;text-shadow:0 0 12px rgba(0,255,255,0.6)}
         .profile-rank{font-size:12px;color:#f1c40f;margin:4px 0 14px;letter-spacing:2px}
@@ -84,7 +147,8 @@
         .stat-box{background:rgba(255,255,255,0.04);border:1px solid #2a2a4a;border-radius:8px;padding:8px 12px}
         .stat-lbl{font-size:10px;color:#7a7aa0;letter-spacing:1px}
         .stat-val{font-size:15px;color:#fff;font-weight:bold}
-        .skin-section{width:460px;max-width:96vw;background:rgba(0,0,0,0.4);border:1px solid #2a2a4a;border-radius:16px;padding:16px;margin-bottom:14px}
+        
+        .skin-section{width:460px;max-width:96vw;background:rgba(0,0,0,0.4);border:1px solid #2a2a4a;border-radius:16px;padding:16px;margin-bottom:14px;flex-shrink:0}
         .skin-section h3{color:#c0f;font-size:14px;text-align:center;letter-spacing:3px;margin-bottom:12px}
         .skin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
         .skin-card{background:rgba(255,255,255,0.03);border:2px solid #2a2a4a;border-radius:10px;padding:10px 6px;text-align:center;cursor:pointer;transition:0.15s;position:relative}
@@ -96,18 +160,22 @@
         .skin-status{font-size:9px;color:#f1c40f;margin-top:3px}
         .skin-card.equipped .skin-status{color:#0ff}
         .skin-card.locked .skin-status{color:#e74c3c}
+        
         .shape-picker{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
         .shape-btn{width:44px;height:44px;border:2px solid #2a2a4a;border-radius:8px;background:rgba(255,255,255,0.03);color:#ccc;font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:0.15s}
         .shape-btn:hover{border-color:#5D5CDE;transform:translateY(-2px)}
         .shape-btn.active{border-color:#0ff;color:#0ff;box-shadow:0 0 12px rgba(0,255,255,0.5)}
+        
         .keybind-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
         .keybind-btn{padding:10px 8px;border:2px solid #2a2a4a;border-radius:8px;background:rgba(255,255,255,0.03);color:#ccc;font-size:11px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:0.15s;font-family:'Courier New',monospace;text-align:left}
         .keybind-btn:hover{border-color:#5D5CDE}
         .keybind-btn.listening{border-color:#0ff;box-shadow:0 0 12px rgba(0,255,255,0.5);background:rgba(0,255,255,0.1)}
         .keybind-btn .key-val{color:#0ff;font-weight:bold;min-width:44px;text-align:right}
-        .home-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
-        .home-btn{padding:8px 16px;border:2px solid #5D5CDE;border-radius:8px;background:rgba(93,92,222,0.15);color:#fff;font-size:13px;cursor:pointer;font-family:'Courier New',monospace;min-width:110px}
+        
+        .home-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px;margin-bottom:30px;flex-shrink:0}
+        .home-btn{padding:10px 20px;border:2px solid #5D5CDE;border-radius:8px;background:rgba(93,92,222,0.15);color:#fff;font-size:14px;cursor:pointer;font-family:'Courier New',monospace;min-width:130px}
         .home-btn:hover{background:rgba(93,92,222,0.4);border-color:#0ff;box-shadow:0 0 15px rgba(0,255,255,0.4)}
+        
         #timeIcon{position:fixed;top:20px;left:200px;z-index:10;font-size:20px;color:#fff;text-shadow:0 0 10px currentColor;display:none;pointer-events:none}
         #timeIcon .time-arc{position:absolute;top:28px;left:-8px;width:40px;height:3px;background:rgba(255,255,255,0.15);border-radius:2px;overflow:hidden}
         #timeIcon .time-arc-fill{height:100%;background:#fff;width:0%;transition:width 0.3s}
@@ -175,36 +243,40 @@
     </div>
 
     <div class="home-actions">
-        <button class="home-btn" id="pfPlay">▶ PLAY</button>
+        <button class="home-btn" id="pfPlay" style="border-color:#2ecc71; color:#2ecc71; font-weight:bold;">▶ PLAY</button>
         <button class="home-btn" id="pfLogout" style="border-color:#555;color:#888">LOGOUT</button>
     </div>
 </div>
 
 <!-- CONTROL -->
-<div id="controlScreen" style="display:none">
+<div id="controlScreen" style="display:none; justify-content:center;">
     <h2>CHOOSE CONTROL</h2>
     <div class="menu-btn" id="ctrlPhone">📱 MOBILE</div>
     <div class="menu-btn" id="ctrlPC">⌨️ PC</div>
 </div>
 
 <!-- MODE -->
-<div id="modeScreen" style="display:none">
+<div id="modeScreen" style="display:none; justify-content:center;">
     <h2>CHOOSE MODE</h2>
     <div class="menu-btn" id="modeNormal">🎮 NORMAL (50 Waves)</div>
     <div class="menu-btn" id="modeEndless">♾️ ENDLESS (Infinite)</div>
 </div>
 
 <!-- SPIN -->
-<div id="spinScreen" style="display:none">
+<div id="spinScreen" style="display:none; justify-content:center;">
     <h2>🎰 SPIN WHEEL</h2>
-    <p style="color:#888;font-size:11px;margin-bottom:8px">Click gun to 🔒 lock | 🔄 SPIN to re-roll</p>
+    <p style="color:#888;font-size:11px;margin-bottom:8px">Tap a card to 🔒 lock it</p>
+    
     <div id="spinGuns"></div>
-    <div id="spinCount" style="color:#ff0;font-size:12px;margin:8px 0"></div>
-    <div style="margin:10px">
-        <button class="menu-btn" id="spinBtn" style="width:auto;padding:10px 20px;display:inline;margin:5px">🔄 SPIN</button>
-        <button class="menu-btn" id="unlockAllBtn" style="width:auto;padding:10px 20px;display:inline;margin:5px;font-size:12px">🔓 UNLOCK</button>
+    
+    <div id="spinCount" style="color:#ff0;font-size:14px;margin:10px 0;font-weight:bold"></div>
+    
+    <div style="margin:10px; display:flex; gap:10px; justify-content:center;">
+        <button class="menu-btn" id="spinBtn" style="width:140px; padding:12px;">🔄 SPIN</button>
+        <button class="menu-btn" id="unlockAllBtn" style="width:140px; padding:12px; font-size:12px;">🔓 UNLOCK ALL</button>
     </div>
-    <button class="menu-btn" id="spinStartBtn">🎮 START GAME</button>
+    
+    <button class="menu-btn" id="spinStartBtn" style="width:280px; background:rgba(46, 204, 113, 0.2); border-color:#2ecc71; color:#2ecc71; font-weight:bold; margin-top:5px;">▶ START GAME</button>
 </div>
 
 <!-- START CONFIRM MODAL -->
@@ -338,7 +410,7 @@
 
 <script>
 // ============================================================
-//  TANK ARENA – FINAL FULL BUILD
+//  TANK ARENA – FINAL FULL BUILD (MOBILE SCROLL FIX)
 // ============================================================
 
 // ----- LOGIN SYSTEM -------------------------------------------------
@@ -737,49 +809,39 @@ function doSpin() {
     if (spinCount <= 0) document.getElementById('spinBtn').style.opacity = '0.4';
 }
 function updateSpinCount() { document.getElementById('spinCount').textContent = 'Spins left: ' + spinCount; }
+
 function updateSpinDisplay() {
     var html = '';
+    html += '<div style="width:100%; text-align:center; color:#555; font-size:10px; margin-bottom:10px; flex-shrink:0;">← SWIPE TO VIEW →</div>';
+
     for (var i = 0; i < spinGuns.length; i++) {
-        var g = spinGuns[i], w = weapons[g], locked = spinLocked[g];
-        html += '<div class="spin-gun' + (locked ? ' locked' : '') + '" onclick="toggleLock(\'' + g + '\')">' +
-                (locked ? '🔒 ' : '') + w.icon + ' ' + w.name + '</div>';
+        var g = spinGuns[i];
+        var w = weapons[g];
+        var locked = spinLocked[g];
+        
+        html += '<div class="spin-gun' + (locked ? ' locked' : '') + '" onclick="toggleLock(\'' + g + '\')">';
+        html += '<div class="lock-icon">🔒</div>';
+        html += '<div class="gun-icon">' + w.icon + '</div>';
+        html += '<div class="gun-name">' + w.name + '</div>';
+        html += '<div class="gun-ammo">AMMO: ' + (w.maxAmmo === -1 ? '∞' : w.maxAmmo) + '</div>';
+        html += '</div>';
     }
+    
     document.getElementById('spinGuns').innerHTML = html;
 }
+
 function toggleLock(g) { spinLocked[g] = !spinLocked[g]; updateSpinDisplay(); }
 
 document.getElementById('spinBtn').addEventListener('click', doSpin);
 document.getElementById('unlockAllBtn').addEventListener('click', function() { spinLocked = {}; updateSpinDisplay(); });
-document.getElementById('spinStartBtn').addEventListener('click', function() {
-    if (spinGuns.length === 0) doSpin();
-    showStartConfirm();
-});
-document.getElementById('confirmStartBtn').addEventListener('click', function() {
-    document.getElementById('startConfirmModal').style.display = 'none';
-    document.getElementById('spinScreen').style.display = 'none';
-    startGame();
-});
-document.getElementById('cancelStartBtn').addEventListener('click', function() {
-    document.getElementById('startConfirmModal').style.display = 'none';
-});
-document.getElementById('startConfirmModal').addEventListener('click', function(e) {
-    if (e.target === this) this.style.display = 'none';
-});
-window.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape' && document.getElementById('startConfirmModal').style.display === 'flex') {
-        document.getElementById('startConfirmModal').style.display = 'none';
-    }
-});
 
-function showStartConfirm() {
-    var pool = [];
-    for (var k in weapons) if (weapons[k].unlocked && !weapons[k].melee && !weapons[k].ownerOnly) pool.push(k);
-    while (spinGuns.length < 3 && pool.length > 0) {
-        var idx = Math.floor(Math.random() * pool.length);
-        spinGuns.push(pool[idx]);
-        pool.splice(idx, 1);
-    }
-    updateSpinDisplay();
+document.getElementById('spinStartBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    if (spinGuns.length === 0) doSpin();
+    
+    var modal = document.getElementById('startConfirmModal');
+    modal.style.display = 'flex'; 
+    
     var listHtml = '';
     for (var i = 0; i < spinGuns.length; i++) {
         var w = weapons[spinGuns[i]];
@@ -790,10 +852,19 @@ function showStartConfirm() {
             '</div>';
     }
     document.getElementById('confirmLoadout').innerHTML = listHtml;
-    if (spinGuns.length < 3) document.getElementById('confirmNote').textContent = '⚠ Some slots were filled randomly';
-    else document.getElementById('confirmNote').textContent = '';
-    document.getElementById('startConfirmModal').style.display = 'flex';
-}
+    document.getElementById('confirmNote').textContent = spinGuns.length < 3 ? '⚠ Some slots were filled randomly' : '';
+});
+
+document.getElementById('confirmStartBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('startConfirmModal').style.display = 'none';
+    document.getElementById('spinScreen').style.display = 'none';
+    startGame();
+});
+document.getElementById('cancelStartBtn').addEventListener('click', function(e) {
+    e.preventDefault();
+    document.getElementById('startConfirmModal').style.display = 'none';
+});
 
 // ----- GAME STATE --------------------------------------------------
 var canvas, ctx, gameActive = false, animId = null, totalTime = 0, timerInterval = null;
@@ -1077,9 +1148,9 @@ function updateShop() {
         }
         if (it.maxLvl) {
             if (it.id === 'shield' && upgrades.shield >= 10) bought = true;
-            if (it.id === 'spinnerBlades' && upgrades.spinnerBlades >= 5) bought = true; // legacy safety
+            if (it.id === 'spinnerBlades' && upgrades.spinnerBlades >= 5) bought = true; 
             if (it.id === 'spinnerSpeed' && upgrades.spinnerSpeed >= 5) bought = true;
-            if (it.id === 'shieldSize' && upgrades.shieldSize >= 5) bought = true; // legacy safety
+            if (it.id === 'shieldSize' && upgrades.shieldSize >= 5) bought = true; 
             if (it.id === 'dashCD' && upgrades.dashCD >= 4) bought = true;
             if (it.id === 'dashDist' && upgrades.dashDist >= 4) bought = true;
             if (it.id === 'spinnerLvl' && upgrades.spinnerLvl >= 5) bought = true;
@@ -1111,17 +1182,14 @@ function onBuy(e) {
         case 'damage': upgrades.damage++; break;
         case 'shield': if (upgrades.shield < 10) upgrades.shield++; break;
         
-        // Dash
         case 'hasDash': upgrades.hasDash = true; break;
         case 'dashDist': if (upgrades.dashDist < 4) upgrades.dashDist++; break;
         case 'dashCD': if (upgrades.dashCD < 4) { upgrades.dashCD++; tank.dashMaxCD = 2000 - upgrades.dashCD * 300; } break;
         
-        // Spinner
         case 'spinners': upgrades.spinners = true; upgrades.spinnerLvl = 1; break;
         case 'spinnerLvl': if (upgrades.spinnerLvl < 5) upgrades.spinnerLvl++; break;
         case 'spinnerSpeed': if (upgrades.spinnerSpeed < 5) upgrades.spinnerSpeed++; break;
         
-        // Force Shield
         case 'forceShield': upgrades.forceShield = true; upgrades.forceShieldLvl = 1; break;
         case 'forceShieldLvl': if (upgrades.forceShieldLvl < 5) upgrades.forceShieldLvl++; break;
         

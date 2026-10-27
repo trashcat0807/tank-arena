@@ -39,6 +39,7 @@
         #healthFill{height:100%;background:#2ecc71;width:100%}
         #o2Bar,#warmthBar{width:150px;height:10px;background:rgba(255,255,255,0.1);border-radius:5px;overflow:hidden;margin:3px 0;display:none}
         #o2Fill{height:100%;background:#4dc9f6}#warmthFill{height:100%;background:#f90}
+        #ammoDisplay{font-size:14px;color:#0ff;margin-top:4px;font-weight:bold}
         #bossBar{position:fixed;top:0;left:0;width:100%;height:30px;background:rgba(0,0,0,0.8);z-index:50;display:none;text-align:center;color:#fff;font-size:14px;line-height:30px}
         #bossBarFill{position:absolute;top:0;left:0;height:100%;background:linear-gradient(90deg,#e74c3c,#f39c12,#e74c3c);background-size:200% 100%;animation:bossPulse 2s linear infinite}
         @keyframes bossPulse{0%{background-position:0% 50%}100%{background-position:200% 50%}}
@@ -73,7 +74,8 @@
         .joystick-base{position:absolute;width:120px;height:120px;background:rgba(230,230,230,0.12);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%)}
         .joystick-thumb{position:absolute;width:56px;height:56px;background:rgba(93,92,222,0.8);border-radius:50%;top:50%;left:50%;transform:translate(-50%,-50%);pointer-events:none}
         #fireBtn{width:90px;height:90px;background:rgba(231,76,60,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fff;font-size:16px;align-self:flex-end;margin-bottom:20px;cursor:pointer}
-        #reloadBtn{width:56px;height:56px;background:rgba(241,196,15,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fff;font-size:14px;align-self:flex-end;margin-bottom:40px;margin-right:10px;cursor:pointer}
+        #reloadBtn{width:56px;height:56px;background:rgba(241,196,15,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fff;font-size:14px;align-self:flex-end;margin-bottom:10px;margin-right:10px;cursor:pointer}
+        #dashBtn{width:56px;height:56px;background:rgba(93,92,222,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fff;font-size:14px;align-self:flex-end;margin-bottom:10px;margin-right:10px;cursor:pointer}
         .profile-card{background:linear-gradient(145deg,#141432,#0a0a1e);border:2px solid #5D5CDE;border-radius:20px;padding:24px 30px;width:400px;max-width:95vw;box-shadow:0 0 40px rgba(93,92,222,0.4),inset 0 1px 2px rgba(255,255,255,0.05);text-align:center;margin-bottom:18px}
         .profile-avatar{width:90px;height:90px;border-radius:50%;margin:0 auto 12px;border:3px solid #0ff;background:#1a1a3e;display:flex;align-items:center;justify-content:center;font-size:44px;box-shadow:0 0 25px rgba(0,255,255,0.5)}
         .profile-name{font-size:22px;color:#0ff;font-weight:bold;letter-spacing:1px;text-shadow:0 0 12px rgba(0,255,255,0.6)}
@@ -104,7 +106,7 @@
         .keybind-btn.listening{border-color:#0ff;box-shadow:0 0 12px rgba(0,255,255,0.5);background:rgba(0,255,255,0.1)}
         .keybind-btn .key-val{color:#0ff;font-weight:bold;min-width:44px;text-align:right}
         .home-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px}
-        .home-btn{padding:12px 22px;border:2px solid #5D5CDE;border-radius:10px;background:rgba(93,92,222,0.15);color:#fff;font-size:14px;cursor:pointer;font-family:'Courier New',monospace;min-width:150px}
+        .home-btn{padding:8px 16px;border:2px solid #5D5CDE;border-radius:8px;background:rgba(93,92,222,0.15);color:#fff;font-size:13px;cursor:pointer;font-family:'Courier New',monospace;min-width:110px}
         .home-btn:hover{background:rgba(93,92,222,0.4);border-color:#0ff;box-shadow:0 0 15px rgba(0,255,255,0.4)}
         #timeIcon{position:fixed;top:20px;left:200px;z-index:10;font-size:20px;color:#fff;text-shadow:0 0 10px currentColor;display:none;pointer-events:none}
         #timeIcon .time-arc{position:absolute;top:28px;left:-8px;width:40px;height:3px;background:rgba(255,255,255,0.15);border-radius:2px;overflow:hidden}
@@ -205,6 +207,22 @@
     <button class="menu-btn" id="spinStartBtn">🎮 START GAME</button>
 </div>
 
+<!-- START CONFIRM MODAL -->
+<div class="modal" id="startConfirmModal">
+    <div class="panel" style="border-color:#0ff;width:340px">
+        <h2 style="color:#0ff">⚔️ ARE YOU SURE?</h2>
+        <div style="font-size:11px;color:#aaa;text-align:center;margin-bottom:12px;line-height:1.5">
+            Starting the game will lock in your loadout.<br>You won't be able to change weapons after this.
+        </div>
+        <div id="confirmLoadout" style="margin-bottom:14px"></div>
+        <div id="confirmNote" style="font-size:10px;color:#f1c40f;text-align:center;margin-bottom:12px"></div>
+        <div style="display:flex;gap:10px">
+            <button id="confirmStartBtn" style="flex:1;padding:10px;border:2px solid #2ecc71;border-radius:8px;background:rgba(46,204,113,0.15);color:#2ecc71;font-size:13px;cursor:pointer;font-family:'Courier New',monospace;font-weight:bold">✅ YES, START</button>
+            <button id="cancelStartBtn" style="flex:1;padding:10px;border:2px solid #e74c3c;border-radius:8px;background:rgba(231,76,60,0.15);color:#e74c3c;font-size:13px;cursor:pointer;font-family:'Courier New',monospace;font-weight:bold">❌ CANCEL</button>
+        </div>
+    </div>
+</div>
+
 <canvas id="gameCanvas"></canvas>
 <div id="bossBar"><div id="bossBarFill"></div><span id="bossBarText"></span></div>
 <div id="timeIcon">☀️<div class="time-arc"><div class="time-arc-fill" id="timeArcFill"></div></div></div>
@@ -217,6 +235,7 @@
     <div style="font-size:11px;color:#888">Wave: <span id="waveNum">0</span> | Enemies: <span id="enemyCnt">0</span></div>
     <div id="timerDisplay" style="color:#ff0;font-size:12px">⏱️ 00:00</div>
     <div><span style="color:#f1c40f">💰 <span id="coinCount">0</span></span> <span style="color:#0ff">💎 <span id="diamondCount">0</span></span></div>
+    <div id="ammoDisplay">🔫 AMMO: ∞</div>
 </div>
 
 <div id="weaponSelector"></div>
@@ -231,6 +250,7 @@
         <div class="joystick-thumb" id="jThumb"></div>
     </div>
     <div style="display:flex;flex-direction:column;align-items:flex-end">
+        <div id="dashBtn">DASH</div>
         <div id="reloadBtn">R</div>
         <div id="fireBtn">FIRE</div>
     </div>
@@ -318,7 +338,7 @@
 
 <script>
 // ============================================================
-//  TANK ARENA – FULL PATCH (night vision + keybinds + modals)
+//  TANK ARENA – FINAL FULL BUILD
 // ============================================================
 
 // ----- LOGIN SYSTEM -------------------------------------------------
@@ -405,15 +425,10 @@ function keyDisplay(k) {
     if (k === 'alt') return 'ALT';
     return k.toUpperCase();
 }
-
 function isKeyConflict(action, key) {
-    for (var a in keybinds) {
-        if (a === action) continue;
-        if (keybinds[a] === key) return a;
-    }
+    for (var a in keybinds) { if (a === action) continue; if (keybinds[a] === key) return a; }
     return null;
 }
-
 function renderKeybinds() {
     var grid = document.getElementById('keybindGrid');
     if (!grid) return;
@@ -425,22 +440,14 @@ function renderKeybinds() {
         btn.setAttribute('data-bind', a);
         var display = listeningBind === a ? 'Press any key…' : keyDisplay(keybinds[a]);
         btn.innerHTML = '<span>' + keybindLabels[a] + '</span><span class="key-val">' + display + '</span>';
-        btn.addEventListener('click', function() {
-            listeningBind = this.getAttribute('data-bind');
-            renderKeybinds();
-        });
+        btn.addEventListener('click', function() { listeningBind = this.getAttribute('data-bind'); renderKeybinds(); });
         grid.appendChild(btn);
     }
 }
-
 document.addEventListener('keydown', function(e) {
     if (listeningBind) {
         e.preventDefault();
-        if (e.key === 'Escape') {
-            listeningBind = null;
-            renderKeybinds();
-            return;
-        }
+        if (e.key === 'Escape') { listeningBind = null; renderKeybinds(); return; }
         var newKey = e.key.toLowerCase();
         if (newKey === ' ') newKey = ' ';
         var conflict = isKeyConflict(listeningBind, newKey);
@@ -459,11 +466,9 @@ document.addEventListener('keydown', function(e) {
         renderKeybinds();
     }
 }, true);
-
 document.getElementById('resetBinds').addEventListener('click', function() {
     keybinds = {up:'w', down:'s', left:'a', right:'d', fire:' ', reload:'r', dash:'shift'};
-    saveKeybinds();
-    renderKeybinds();
+    saveKeybinds(); renderKeybinds();
 });
 
 // ----- PROFILE RENDER ---------------------------------------------
@@ -747,18 +752,57 @@ document.getElementById('spinBtn').addEventListener('click', doSpin);
 document.getElementById('unlockAllBtn').addEventListener('click', function() { spinLocked = {}; updateSpinDisplay(); });
 document.getElementById('spinStartBtn').addEventListener('click', function() {
     if (spinGuns.length === 0) doSpin();
+    showStartConfirm();
+});
+document.getElementById('confirmStartBtn').addEventListener('click', function() {
+    document.getElementById('startConfirmModal').style.display = 'none';
     document.getElementById('spinScreen').style.display = 'none';
     startGame();
 });
+document.getElementById('cancelStartBtn').addEventListener('click', function() {
+    document.getElementById('startConfirmModal').style.display = 'none';
+});
+document.getElementById('startConfirmModal').addEventListener('click', function(e) {
+    if (e.target === this) this.style.display = 'none';
+});
+window.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape' && document.getElementById('startConfirmModal').style.display === 'flex') {
+        document.getElementById('startConfirmModal').style.display = 'none';
+    }
+});
+
+function showStartConfirm() {
+    var pool = [];
+    for (var k in weapons) if (weapons[k].unlocked && !weapons[k].melee && !weapons[k].ownerOnly) pool.push(k);
+    while (spinGuns.length < 3 && pool.length > 0) {
+        var idx = Math.floor(Math.random() * pool.length);
+        spinGuns.push(pool[idx]);
+        pool.splice(idx, 1);
+    }
+    updateSpinDisplay();
+    var listHtml = '';
+    for (var i = 0; i < spinGuns.length; i++) {
+        var w = weapons[spinGuns[i]];
+        if (!w) continue;
+        listHtml += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;margin:4px 0;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid #2a2a4a;font-size:13px">' +
+            '<span>' + w.icon + ' <b style="color:' + (w.color || '#fff') + '">' + w.name + '</b></span>' +
+            '<span style="color:#0ff;font-size:11px">AMMO: ' + (w.maxAmmo === -1 ? '∞' : w.maxAmmo) + '</span>' +
+            '</div>';
+    }
+    document.getElementById('confirmLoadout').innerHTML = listHtml;
+    if (spinGuns.length < 3) document.getElementById('confirmNote').textContent = '⚠ Some slots were filled randomly';
+    else document.getElementById('confirmNote').textContent = '';
+    document.getElementById('startConfirmModal').style.display = 'flex';
+}
 
 // ----- GAME STATE --------------------------------------------------
 var canvas, ctx, gameActive = false, animId = null, totalTime = 0, timerInterval = null;
 var ammo = {}, coins = 0, diamonds = 0, coinsThisRun = 0, diamondsThisRun = 0;
-var upgrades = {health: 0, damage: 0, shield: 0, spinnerBlades: 1, spinnerSpeed: 0, forceShield: false, spinners: false, shieldSize: 0, hasDash: false, dashCD: 0};
+var upgrades = {health: 0, damage: 0, shield: 0, spinnerBlades: 0, spinnerSpeed: 0, forceShield: false, spinners: false, shieldSize: 0, hasDash: false, dashCD: 0, dashDist: 0, spinnerLvl: 0, forceShieldLvl: 0};
 var wave = {cur: 0, maxW: 50, eTotal: 0, eSpawned: 0, bTotal: 0, bSpawned: 0, inProg: false, between: true, nextT: 0, lastSpT: 0, bannerTxt: '', bannerST: 0, bannerDur: 2500, won: false};
 var tank = {x: 0, y: 0, angle: 0, spd: 3, sz: 30, hp: 1000, maxHp: 1000, curW: 'handgun', heat: 0, dashCD: 0, dashMaxCD: 2000, dashing: false, dashInv: 0, godMode: false, o2: 100, warmth: 100, hitBy: 0};
-var bullets = [], enemies = [], eBullets = [], drops = [], particles = [], floatTexts = [];
-var score = 0, activeKeys = {}, lastFire = 0, gamePaused = false, spinnerAngle = 0, screenShakeAmount = 0;
+var bullets = [], enemies = [], eBullets = [], drops = [], particles = [], floatTexts = [], dashTrail = [];
+var score = 0, activeKeys = {}, lastFire = 0, gamePaused = false, spinnerAngle = 0, screenShakeAmount = 0, healGlow = 0;
 var joystickVec = {x: 0, y: 0}, jTouchId = null, fTouchId = null, jActive = false, jStart = {x: 0, y: 0};
 var toxicPools = [], lavaCracks = [], vineTraps = [], bgF = [];
 
@@ -833,8 +877,8 @@ function resetGame() {
     tank.dashing = false; tank.dashInv = 0; tank.godMode = false;
     tank.o2 = 100; tank.warmth = 100; tank.hitBy = 0;
     tank.curW = spinGuns.length > 0 ? spinGuns[0] : 'handgun';
-    bullets = []; enemies = []; eBullets = []; drops = []; particles = []; floatTexts = [];
-    score = 0; lastFire = 0; gamePaused = false; coinsThisRun = 0; diamondsThisRun = 0;
+    bullets = []; enemies = []; eBullets = []; drops = []; particles = []; floatTexts = []; dashTrail = [];
+    score = 0; lastFire = 0; gamePaused = false; coinsThisRun = 0; diamondsThisRun = 0; healGlow = 0;
     infAmmo = false;
     for (var k in weapons) weapons[k].unlocked = false;
     weapons['knife-melee'].unlocked = true;
@@ -884,6 +928,17 @@ function updateHUD() {
     document.getElementById('timerDisplay').textContent = '⏱️ ' + Math.floor(totalTime / 60) + ':' + ('0' + Math.floor(totalTime % 60)).slice(-2);
     document.getElementById('coinCount').textContent = coins;
     document.getElementById('diamondCount').textContent = diamonds;
+
+    var w = weapons[tank.curW];
+    var ammoEl = document.getElementById('ammoDisplay');
+    if (ammoEl) {
+        if (!w || w.melee) { ammoEl.textContent = '🔪 MELEE: ∞'; ammoEl.style.color = '#aaa'; }
+        else if (w.ownerOnly) { ammoEl.textContent = '☢️ AMMO: ∞'; ammoEl.style.color = '#ff0'; }
+        else if (ammo[tank.curW] === -1 || infAmmo) { ammoEl.textContent = '🔫 AMMO: ∞'; ammoEl.style.color = '#0ff'; }
+        else if (w.noReload) { ammoEl.textContent = '🔪 KNIVES: ' + ammo[tank.curW] + ' / ' + w.maxAmmo; ammoEl.style.color = ammo[tank.curW] === 0 ? '#e74c3c' : '#0ff'; }
+        else { ammoEl.textContent = '🔫 AMMO: ' + ammo[tank.curW] + ' / ' + w.maxAmmo; ammoEl.style.color = ammo[tank.curW] === 0 ? '#e74c3c' : ammo[tank.curW] < w.maxAmmo * 0.25 ? '#f39c12' : '#0ff'; }
+    }
+
     var cp = getCyclePhase();
     document.getElementById('timeIcon').firstChild.textContent = cp.icon;
     document.getElementById('timeArcFill').style.width = (cp.arc * 100) + '%';
@@ -991,13 +1046,14 @@ var shopItems = [
     {id:'damage',name:'⚔ Damage +10%',cost:100,curr:'coin',repeat:true},
     {id:'shield',name:'🛡 Defense +5%',cost:75,curr:'coin',repeat:true,maxLvl:10},
     {id:'ammo',name:'📦 Ammo +12',cost:5,curr:'coin',repeat:true},
-    {id:'hasDash',name:'💨 Dash Ability',cost:100,curr:'coin',repeat:false},
-    {id:'dashCD',name:'💨 Dash CD',cost:50,curr:'coin',repeat:true,maxLvl:4},
-    {id:'forceShield',name:'🔵 Force Shield',cost:10,curr:'diamond',repeat:false},
-    {id:'shieldSize',name:'🔵 Shield Size',cost:30,curr:'diamond',repeat:true,maxLvl:5},
-    {id:'spinners',name:'🌀 Spinner',cost:20,curr:'diamond',repeat:false},
-    {id:'spinnerBlades',name:'🌀 +1 Blade',cost:100,curr:'coin',repeat:true,maxLvl:5},
-    {id:'spinnerSpeed',name:'🌀 Speed Up',cost:120,curr:'coin',repeat:true,maxLvl:5}
+    {id:'hasDash',name:'💨 Unlock Dash',cost:100,curr:'coin',repeat:false},
+    {id:'dashDist',name:'💨 Dash Distance',cost:150,curr:'coin',repeat:true,maxLvl:4},
+    {id:'dashCD',name:'💨 Dash Cooldown',cost:50,curr:'coin',repeat:true,maxLvl:4},
+    {id:'forceShield',name:'🔵 Unlock Force Shield',cost:10,curr:'diamond',repeat:false},
+    {id:'forceShieldLvl',name:'🔵 Shield Size/Dmg',cost:30,curr:'diamond',repeat:true,maxLvl:5},
+    {id:'spinners',name:'🌀 Unlock Spinner',cost:20,curr:'diamond',repeat:false},
+    {id:'spinnerLvl',name:'🌀 Spinner Range/Dmg',cost:100,curr:'coin',repeat:true,maxLvl:5},
+    {id:'spinnerSpeed',name:'🌀 Spinner Speed',cost:120,curr:'coin',repeat:true,maxLvl:5}
 ];
 document.getElementById('shopBtn').addEventListener('click', function() {
     if (!gameActive) return;
@@ -1021,10 +1077,13 @@ function updateShop() {
         }
         if (it.maxLvl) {
             if (it.id === 'shield' && upgrades.shield >= 10) bought = true;
-            if (it.id === 'spinnerBlades' && upgrades.spinnerBlades >= 5) bought = true;
+            if (it.id === 'spinnerBlades' && upgrades.spinnerBlades >= 5) bought = true; // legacy safety
             if (it.id === 'spinnerSpeed' && upgrades.spinnerSpeed >= 5) bought = true;
-            if (it.id === 'shieldSize' && upgrades.shieldSize >= 5) bought = true;
+            if (it.id === 'shieldSize' && upgrades.shieldSize >= 5) bought = true; // legacy safety
             if (it.id === 'dashCD' && upgrades.dashCD >= 4) bought = true;
+            if (it.id === 'dashDist' && upgrades.dashDist >= 4) bought = true;
+            if (it.id === 'spinnerLvl' && upgrades.spinnerLvl >= 5) bought = true;
+            if (it.id === 'forceShieldLvl' && upgrades.forceShieldLvl >= 5) bought = true;
         }
         html += '<div class="shop-item ' + it.curr + '"><div><b>' + it.name + '</b></div>';
         if (bought) html += '<button class="buy-btn owned">OWNED</button>';
@@ -1051,17 +1110,25 @@ function onBuy(e) {
         case 'health': upgrades.health++; tank.maxHp += 100; tank.hp = Math.min(tank.hp + 100, tank.maxHp); break;
         case 'damage': upgrades.damage++; break;
         case 'shield': if (upgrades.shield < 10) upgrades.shield++; break;
-        case 'spinnerBlades': if (upgrades.spinnerBlades < 5) upgrades.spinnerBlades++; break;
-        case 'spinnerSpeed': if (upgrades.spinnerSpeed < 5) upgrades.spinnerSpeed++; break;
-        case 'shieldSize': if (upgrades.shieldSize < 5) upgrades.shieldSize++; break;
+        
+        // Dash
         case 'hasDash': upgrades.hasDash = true; break;
+        case 'dashDist': if (upgrades.dashDist < 4) upgrades.dashDist++; break;
         case 'dashCD': if (upgrades.dashCD < 4) { upgrades.dashCD++; tank.dashMaxCD = 2000 - upgrades.dashCD * 300; } break;
+        
+        // Spinner
+        case 'spinners': upgrades.spinners = true; upgrades.spinnerLvl = 1; break;
+        case 'spinnerLvl': if (upgrades.spinnerLvl < 5) upgrades.spinnerLvl++; break;
+        case 'spinnerSpeed': if (upgrades.spinnerSpeed < 5) upgrades.spinnerSpeed++; break;
+        
+        // Force Shield
+        case 'forceShield': upgrades.forceShield = true; upgrades.forceShieldLvl = 1; break;
+        case 'forceShieldLvl': if (upgrades.forceShieldLvl < 5) upgrades.forceShieldLvl++; break;
+        
         case 'ammo':
             var w = weapons[tank.curW];
             if (!w.melee && !w.noReload && ammo[tank.curW] !== -1) ammo[tank.curW] = Math.min(ammo[tank.curW] + 12, w.maxAmmo);
             break;
-        case 'forceShield': upgrades.forceShield = true; break;
-        case 'spinners': upgrades.spinners = true; break;
     }
     updateShop(); updateHUD();
 }
@@ -1166,13 +1233,21 @@ window.addEventListener('keydown', function(e) {
     if (!gameActive || document.getElementById('shopModal').style.display === 'flex' ||
         document.getElementById('settingsScreen').style.display === 'flex' ||
         document.getElementById('ownerPanel').style.display === 'flex') return;
+        
+    var isDashKey = false;
+    if (keybinds.dash === 'shift' && (e.key === 'Shift' || e.code === 'ShiftLeft' || e.code === 'ShiftRight')) {
+        isDashKey = true;
+    } else if (e.key.toLowerCase() === keybinds.dash) {
+        isDashKey = true;
+    }
+
     if (isKeyDown(e, 'up')) activeKeys.up = true;
     if (isKeyDown(e, 'down')) activeKeys.down = true;
     if (isKeyDown(e, 'left')) activeKeys.left = true;
     if (isKeyDown(e, 'right')) activeKeys.right = true;
     if (isKeyDown(e, 'fire')) { activeKeys.FIRE = true; e.preventDefault(); }
     if (isKeyDown(e, 'reload')) reloadWeapon();
-    if (isKeyDown(e, 'dash') && upgrades.hasDash && tank.dashCD <= 0 && !tank.dashing) dash();
+    if (isDashKey && upgrades.hasDash && tank.dashCD <= 0 && !tank.dashing) dash();
 });
 window.addEventListener('keyup', function(e) {
     if (isKeyDown(e, 'up')) activeKeys.up = false;
@@ -1183,22 +1258,62 @@ window.addEventListener('keyup', function(e) {
 });
 function reloadWeapon() {
     var w = weapons[tank.curW];
-    if (w && !w.melee && !w.noReload && ammo[tank.curW] !== -1) ammo[tank.curW] = w.maxAmmo;
+    if (!w) return;
+    if (w.melee) return;
+    if (w.noReload) return;
+    if (w.ownerOnly) return;
+    if (ammo[tank.curW] === -1) return;
+    if (ammo[tank.curW] >= w.maxAmmo) return;
+    ammo[tank.curW] = w.maxAmmo;
 }
 function dash() {
     if (!upgrades.hasDash) return;
-    tank.dashing = true; tank.dashInv = 300; tank.dashCD = tank.dashMaxCD;
+    if (tank.dashCD > 0) return;
+    
+    tank.dashing = true;
+    tank.dashInv = 300;
+    tank.dashCD = tank.dashMaxCD;
+
     var dx = 0, dy = 0;
     if (activeKeys.up) dy -= 1;
     if (activeKeys.down) dy += 1;
     if (activeKeys.left) dx -= 1;
     if (activeKeys.right) dx += 1;
-    if (dx === 0 && dy === 0) { dx = Math.cos(tank.angle); dy = Math.sin(tank.angle); }
-    var mag = Math.sqrt(dx*dx + dy*dy); dx /= mag; dy /= mag;
-    tank.x += dx * 80; tank.y += dy * 80;
+    
+    if (Math.abs(joystickVec.x) > 0.1 || Math.abs(joystickVec.y) > 0.1) {
+        dx = joystickVec.x;
+        dy = joystickVec.y;
+    }
+
+    if (dx === 0 && dy === 0) {
+        dx = Math.cos(tank.angle);
+        dy = Math.sin(tank.angle);
+    }
+
+    var mag = Math.sqrt(dx*dx + dy*dy);
+    dx /= mag; 
+    dy /= mag;
+    
+    var dashDistance = 120 + (upgrades.dashDist * 30); 
+    
+    for (var i = 0; i < 8; i++) {
+        dashTrail.push({
+            x: tank.x + (dx * dashDistance * (i / 8)),
+            y: tank.y + (dy * dashDistance * (i / 8)),
+            angle: tank.angle,
+            alpha: 1,
+            skin: tankSkin,
+            shape: tankShape
+        });
+    }
+
+    tank.x += dx * dashDistance;
+    tank.y += dy * dashDistance;
+    
     tank.x = Math.max(tank.sz/2, Math.min(canvas.width - tank.sz/2, tank.x));
     tank.y = Math.max(tank.sz/2, Math.min(canvas.height - tank.sz/2, tank.y));
-    mkParticles(tank.x - dx*20, tank.y - dy*20, 'energy', 15);
+    
+    mkParticles(tank.x, tank.y, 'energy', 15);
 }
 
 // ----- TOUCH -------------------------------------------------------
@@ -1207,6 +1322,7 @@ var jThumb = document.getElementById('jThumb');
 var jContainer = document.getElementById('jContainer');
 var fireBtn = document.getElementById('fireBtn');
 var reloadBtn = document.getElementById('reloadBtn');
+var dashBtn = document.getElementById('dashBtn');
 
 jContainer.addEventListener('touchstart', function(e) {
     e.preventDefault();
@@ -1225,6 +1341,11 @@ reloadBtn.addEventListener('touchstart', function(e) {
     e.preventDefault();
     if (!gameActive || gamePaused) return;
     reloadWeapon();
+}, {passive: false});
+dashBtn.addEventListener('touchstart', function(e) {
+    e.preventDefault();
+    if (!gameActive || gamePaused) return;
+    if (upgrades.hasDash && tank.dashCD <= 0 && !tank.dashing) dash();
 }, {passive: false});
 window.addEventListener('touchmove', function(e) {
     if (!gameActive) return;
@@ -1374,7 +1495,7 @@ function collectDrops() {
         var d = drops[i];
         if (t - d.st > d.life) { drops.splice(i, 1); continue; }
         if (Math.hypot(tank.x - d.x, tank.y - d.y) < tank.sz/2 + d.sz/2) {
-            if (d.type === 'health') tank.hp = Math.min(tank.maxHp, tank.hp + 50);
+            if (d.type === 'health') { tank.hp = Math.min(tank.maxHp, tank.hp + 50); healGlow = 1; }
             else if (d.type === 'ammo') {
                 var el = [];
                 for (var k in weapons) if (!weapons[k].melee && !weapons[k].noReload && ammo[k] !== -1 && ammo[k] < weapons[k].maxAmmo) el.push(k);
@@ -1506,11 +1627,19 @@ function drawTankShape(ctx, shape, size) {
         ctx.fillRect(-r, -r, size, size); ctx.strokeRect(-r, -r, size, size);
     }
 }
-
 function isModalOpen() {
     return document.getElementById('shopModal').style.display === 'flex' ||
            document.getElementById('settingsScreen').style.display === 'flex' ||
            document.getElementById('ownerPanel').style.display === 'flex';
+}
+function isInVisionCone(px, py) {
+    var dx = px - tank.x, dy = py - tank.y;
+    var dist = Math.hypot(dx, dy);
+    if (dist < 120) return true;
+    if (dist > 350) return false;
+    var ang = Math.atan2(dy, dx);
+    var diff = normAng(ang - tank.angle);
+    return Math.abs(diff) < Math.PI / 6;
 }
 
 // ----- GAME LOOP ----------------------------------------------------
@@ -1527,12 +1656,11 @@ function update() {
 
     var cp = getCyclePhase();
     var night = cp.phase === 'night';
-    var nightMult = night ? 1.3 : (cp.phase === 'dusk' ? 1.0 : 1.0);
+    var nightMult = night ? 1.3 : 1.0;
     var nightSpd = night ? 1.2 : (cp.phase === 'dusk' ? 1.05 : 1.0);
     var nightCD = night ? 1430 : 2000;
     var nightRegen = night ? 0.01 : 0;
     var nightHeal = night ? 1.5 : 1.0;
-    var nightBomber = night ? 1.25 : 1.0;
     var nightSpawn = night ? 1.15 : 1.0;
 
     if (night && !nightBannerShown) {
@@ -1618,14 +1746,19 @@ function update() {
     if (upgrades.spinners) {
         var spinSpeed = 0.04 + (upgrades.spinnerSpeed * 0.015);
         spinnerAngle += spinSpeed;
-        var bladeCount = upgrades.spinnerBlades + 1;
+        
+        var bladeCount = 1 + upgrades.spinnerLvl; 
+        var spinDist = 40 + (upgrades.spinnerLvl * 10); 
+        var spinDmg = 15 + (upgrades.spinnerLvl * 15);  
+        
         for (var si = 0; si < bladeCount; si++) {
             var sa = spinnerAngle + Math.PI*2/bladeCount*si;
-            var sx = tank.x + Math.cos(sa)*55, sy = tank.y + Math.sin(sa)*55;
+            var sx = tank.x + Math.cos(sa)*spinDist;
+            var sy = tank.y + Math.sin(sa)*spinDist;
             for (var sei = enemies.length - 1; sei >= 0; sei--) {
                 if (Math.hypot(sx - enemies[sei].x, sy - enemies[sei].y) < enemies[sei].sz/2 + 8) {
-                    enemies[sei].hp -= 30 * dmgMult();
-                    var kbForce = enemies[sei].boss ? 3 : 25;
+                    enemies[sei].hp -= spinDmg * dmgMult();
+                    var kbForce = enemies[sei].boss ? 3 : 15 + (upgrades.spinnerLvl * 5);
                     enemies[sei].x += Math.cos(sa) * kbForce;
                     enemies[sei].y += Math.sin(sa) * kbForce;
                     if (enemies[sei].hp <= 0) { handleKill(enemies[sei]); enemies.splice(sei, 1); }
@@ -1634,12 +1767,13 @@ function update() {
         }
     }
     if (upgrades.forceShield) {
-        var shieldRad = tank.sz * (1.3 + upgrades.shieldSize * 0.6);
-        var shieldDmg = 20 * dmgMult();
+        var shieldRad = tank.sz * (1.0 + (upgrades.forceShieldLvl * 0.25)); 
+        var shieldDmg = 10 + (upgrades.forceShieldLvl * 10); 
+        
         for (var fi = enemies.length - 1; fi >= 0; fi--) {
             var fd = Math.hypot(tank.x - enemies[fi].x, tank.y - enemies[fi].y);
             if (fd < shieldRad && t - enemies[fi].lastShieldHit > 200) {
-                enemies[fi].hp -= shieldDmg;
+                enemies[fi].hp -= shieldDmg * dmgMult();
                 enemies[fi].lastShieldHit = t;
                 if (enemies[fi].hp <= 0) { handleKill(enemies[fi]); enemies.splice(fi, 1); }
             }
@@ -1749,18 +1883,12 @@ function update() {
     }
     if (screenShakeAmount > 0) screenShakeAmount *= 0.85;
     if (screenShakeAmount < 0.5) screenShakeAmount = 0;
+    if (healGlow > 0) {
+        healGlow -= 0.008;
+        if (healGlow < 0) healGlow = 0;
+    }
     draw();
     animId = requestAnimationFrame(update);
-}
-
-function isInVisionCone(px, py) {
-    var dx = px - tank.x, dy = py - tank.y;
-    var dist = Math.hypot(dx, dy);
-    if (dist < 120) return true;
-    if (dist > 350) return false;
-    var ang = Math.atan2(dy, dx);
-    var diff = normAng(ang - tank.angle);
-    return Math.abs(diff) < Math.PI / 6;
 }
 
 function draw() {
@@ -1871,7 +1999,7 @@ function draw() {
         }
     }
     if (upgrades.forceShield) {
-        var shieldRad = tank.sz * (1.3 + upgrades.shieldSize * 0.6);
+        var shieldRad = tank.sz * (1.0 + (upgrades.forceShieldLvl * 0.25));
         ctx.beginPath();
         ctx.arc(tank.x, tank.y, shieldRad, 0, Math.PI * 2);
         ctx.strokeStyle = 'rgba(0,255,255,' + (0.4 + Math.sin(t*0.005)*0.2) + ')';
@@ -1879,6 +2007,29 @@ function draw() {
         ctx.shadowColor = '#0ff'; ctx.shadowBlur = 15;
         ctx.stroke(); ctx.shadowBlur = 0;
     }
+
+    // Draw Dash Trail
+    for (var i = dashTrail.length - 1; i >= 0; i--) {
+        var dt = dashTrail[i];
+        dt.alpha -= 0.05;
+        if (dt.alpha <= 0) {
+            dashTrail.splice(i, 1);
+            continue;
+        }
+        
+        ctx.save();
+        ctx.translate(dt.x, dt.y);
+        ctx.rotate(dt.angle);
+        ctx.globalAlpha = dt.alpha * 0.6; 
+        
+        ctx.fillStyle = skins[dt.skin] ? skins[dt.skin].color : '#4a90c2';
+        ctx.strokeStyle = '#fff';
+        ctx.lineWidth = 2;
+        drawTankShape(ctx, dt.shape, tank.sz);
+        
+        ctx.restore();
+    }
+    ctx.globalAlpha = 1; 
 
     ctx.save();
     ctx.translate(tank.x, tank.y);
@@ -1901,10 +2052,12 @@ function draw() {
     ctx.restore();
 
     if (upgrades.spinners) {
-        var bladeCount = upgrades.spinnerBlades + 1;
+        var bladeCount = 1 + upgrades.spinnerLvl;
+        var spinDist = 40 + (upgrades.spinnerLvl * 10);
         for (var si2 = 0; si2 < bladeCount; si2++) {
             var dsa = spinnerAngle + Math.PI*2/bladeCount*si2;
-            var sx2 = tank.x + Math.cos(dsa)*55, sy2 = tank.y + Math.sin(dsa)*55;
+            var sx2 = tank.x + Math.cos(dsa)*spinDist; 
+            var sy2 = tank.y + Math.sin(dsa)*spinDist;
             ctx.beginPath();
             ctx.arc(sx2, sy2, 8, 0, Math.PI * 2);
             ctx.fillStyle = 'rgba(93,92,222,0.9)';
@@ -1930,6 +2083,15 @@ function draw() {
         ctx.fillText(ft.txt, ft.x, ft.y);
     }
     ctx.globalAlpha = 1;
+
+    if (healGlow > 0) {
+        var gGrad = ctx.createRadialGradient(tank.x, tank.y, canvas.width * 0.25, tank.x, tank.y, canvas.width * 0.75);
+        gGrad.addColorStop(0, 'rgba(0,255,100,0)');
+        gGrad.addColorStop(0.7, 'rgba(0,255,100,' + (healGlow * 0.15) + ')');
+        gGrad.addColorStop(1, 'rgba(0,255,100,' + (healGlow * 0.5) + ')');
+        ctx.fillStyle = gGrad;
+        ctx.fillRect(-sx, -sy, canvas.width, canvas.height);
+    }
 
     if (!modalOpen && cp.phase === 'night') {
         var visionR = 350;

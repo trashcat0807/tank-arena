@@ -55,9 +55,15 @@
         .spin-gun .lock-icon { position: absolute; top: 10px; right: 10px; font-size: 18px; opacity: 0; transition: opacity 0.2s; }
         .spin-gun.locked .lock-icon { opacity: 1; }
 
-        #lbContent{font-size:12px;max-height:300px;overflow-y:auto;text-align:left;width:380px;flex-shrink:0}
-        #lbContent p{padding:3px 0;border-bottom:1px solid #222}
-        #lbContent h3{color:#f1c40f;margin:10px 0 5px;font-size:13px;letter-spacing:2px}
+        #lbContent{font-size:12px;max-height:350px;overflow-y:auto;text-align:left;width:420px;flex-shrink:0}
+        .lb-row{display:flex; align-items:center; padding:8px; border-bottom:1px solid #222; gap:10px}
+        .lb-avatar{width:36px; height:36px; border-radius:50%; background:#1a1a3e; display:flex; align-items:center; justify-content:center; border:2px solid #0ff; object-fit:cover;}
+        .lb-name{font-size:14px; font-weight:bold; color:#fff;}
+        .lb-title{font-size:10px; font-weight:bold; margin-top:2px;}
+        .lb-stats{margin-left:auto; text-align:right; font-size:12px;}
+        .lb-score{color:#f1c40f; font-weight:bold;}
+        .lb-wave{color:#0ff; font-size:10px;}
+        
         .back-sm{padding:6px 16px;font-size:11px;margin-top:12px;width:auto;flex:none;border:1px solid #555;background:transparent;color:#888;cursor:pointer;font-family:'Courier New',monospace;border-radius:4px}
         
         /* HUD FIXED */
@@ -76,6 +82,7 @@
         #shopBtn{right:20px;border:1px solid #f1c40f;color:#f1c40f;display:none}
         #settingsBtn{right:100px;border:1px solid #aaa;color:#aaa;display:none}
         #ownerBtn2{right:180px;border:1px solid #ff0;color:#ff0;display:none}
+        #profileSettingsBtn{position:absolute;top:20px;right:20px;font-size:24px;color:#fff;cursor:pointer;z-index:10;text-shadow:0 0 10px #0ff}
         
         #weaponSelector{position:fixed;top:165px;left:10px;display:flex;flex-direction:column;gap:5px;z-index:10;max-height:calc(100vh-350px);overflow-y:auto}
         .weapon-btn{padding:5px 8px;background:rgba(60,60,60,0.7);border-radius:5px;font-size:11px;display:flex;align-items:center;cursor:pointer;color:#ccc;border:2px solid transparent}
@@ -111,10 +118,11 @@
         #reloadBtn{width:56px;height:56px;background:rgba(241,196,15,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fff;font-size:14px;align-self:flex-end;margin-bottom:10px;margin-right:10px;cursor:pointer}
         #dashBtn{width:56px;height:56px;background:rgba(93,92,222,0.7);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:bold;color:#fff;font-size:14px;align-self:flex-end;margin-bottom:10px;margin-right:10px;cursor:pointer}
         
-        .profile-card{background:linear-gradient(145deg,#141432,#0a0a1e);border:2px solid #5D5CDE;border-radius:20px;padding:24px 30px;width:400px;max-width:95vw;box-shadow:0 0 40px rgba(93,92,222,0.4),inset 0 1px 2px rgba(255,255,255,0.05);text-align:center;margin-bottom:18px;flex-shrink:0}
-        .profile-avatar{width:90px;height:90px;border-radius:50%;margin:0 auto 12px;border:3px solid #0ff;background:#1a1a3e;display:flex;align-items:center;justify-content:center;font-size:44px;box-shadow:0 0 25px rgba(0,255,255,0.5)}
+        .profile-card{background:linear-gradient(145deg,#141432,#0a0a1e);border:2px solid #5D5CDE;border-radius:20px;padding:24px 30px;width:400px;max-width:95vw;box-shadow:0 0 40px rgba(93,92,222,0.4),inset 0 1px 2px rgba(255,255,255,0.05);text-align:center;margin-bottom:18px;flex-shrink:0;position:relative;}
+        .profile-avatar{width:90px;height:90px;border-radius:50%;margin:0 auto 12px;border:3px solid #0ff;background:#1a1a3e;display:flex;align-items:center;justify-content:center;font-size:44px;box-shadow:0 0 25px rgba(0,255,255,0.5); object-fit: cover;}
         .profile-name{font-size:22px;color:#0ff;font-weight:bold;letter-spacing:1px;text-shadow:0 0 12px rgba(0,255,255,0.6)}
-        .profile-rank{font-size:12px;color:#f1c40f;margin:4px 0 14px;letter-spacing:2px}
+        .profile-title{font-size:12px; color:#f1c40f; margin-top:2px; font-weight:bold; letter-spacing:1px;}
+        .profile-rank{font-size:12px;color:#888;margin:4px 0 14px;letter-spacing:2px}
         .profile-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;text-align:left}
         .stat-box{background:rgba(255,255,255,0.04);border:1px solid #2a2a4a;border-radius:8px;padding:8px 12px}
         .stat-lbl{font-size:10px;color:#7a7aa0;letter-spacing:1px}
@@ -138,6 +146,12 @@
         .shape-btn:hover{border-color:#5D5CDE;transform:translateY(-2px)}
         .shape-btn.active{border-color:#0ff;color:#0ff;box-shadow:0 0 12px rgba(0,255,255,0.5)}
         
+        .title-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+        .title-btn{padding:8px;border:2px solid #2a2a4a;border-radius:8px;background:rgba(255,255,255,0.03);color:#ccc;font-size:11px;cursor:pointer;text-align:center;transition:0.15s;font-family:'Courier New',monospace;}
+        .title-btn:hover{border-color:#5D5CDE}
+        .title-btn.active{border-color:#0ff;color:#0ff;box-shadow:0 0 12px rgba(0,255,255,0.5)}
+        .title-btn.locked{opacity:0.4; pointer-events:none;}
+
         .home-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px;margin-bottom:30px;flex-shrink:0}
         .home-btn{padding:10px 20px;border:2px solid #5D5CDE;border-radius:8px;background:rgba(93,92,222,0.15);color:#fff;font-size:14px;cursor:pointer;font-family:'Courier New',monospace;min-width:130px}
         .home-btn:hover{background:rgba(93,92,222,0.4);border-color:#0ff;box-shadow:0 0 15px rgba(0,255,255,0.4)}
@@ -170,16 +184,21 @@
 
 <!-- LEADERBOARD -->
 <div id="leaderboardScreen" style="display:none">
-    <h2>🏆 LEADERBOARD</h2>
+    <h2>🏆 GLOBAL LEADERBOARD</h2>
     <div id="lbContent"></div>
     <button class="back-sm" id="lbBackBtn">⬅ BACK</button>
 </div>
 
 <!-- PROFILE / HOME -->
 <div id="profileScreen" style="display:none">
+    <div style="width:460px; max-width:96vw; display:flex; justify-content:flex-end; padding-bottom:10px; flex-shrink:0;">
+        <div id="profileSettingsBtn">⚙️</div>
+    </div>
+
     <div class="profile-card">
         <div class="profile-avatar" id="pfAvatar">🎮</div>
         <div class="profile-name" id="pfName">PLAYER</div>
+        <div class="profile-title" id="pfTitle">Rookie</div>
         <div class="profile-rank" id="pfRank">RANK: ROOKIE</div>
         <div class="profile-stats">
             <div class="stat-box"><div class="stat-lbl">BEST SCORE</div><div class="stat-val" id="pfScore">0</div></div>
@@ -201,9 +220,47 @@
         <div class="shape-picker" id="shapePicker"></div>
     </div>
 
+    <div class="skin-section" id="titleSection" style="display:block">
+        <h3>🏷️ TITLES</h3>
+        <div class="title-grid" id="titleGrid"></div>
+    </div>
+
     <div class="home-actions">
         <button class="home-btn" id="pfPlay" style="border-color:#2ecc71; color:#2ecc71; font-weight:bold;">▶ PLAY</button>
         <button class="home-btn" id="pfLogout" style="border-color:#555;color:#888">LOGOUT</button>
+    </div>
+</div>
+
+<!-- PROFILE SETTINGS MODAL -->
+<div class="modal" id="profileSettingsModal">
+    <div class="panel" style="border-color:#0ff">
+        <h2 style="color:#0ff">⚙️ ACCOUNT SETTINGS</h2>
+        
+        <div style="font-size:12px;color:#7a7aa0;margin:8px 0 4px">Display Name</div>
+        <div style="display:flex;gap:8px;">
+            <input id="accDisplayName" maxlength="20" style="flex:1;padding:10px;background:#111;border:1px solid #333;border-radius:6px;color:#fff;font-family:'Courier New',monospace;outline:none">
+            <button id="saveNameBtn" style="padding:0 15px;background:rgba(46,204,113,0.15);border:1px solid #2ecc71;color:#2ecc71;border-radius:6px;font-size:12px;cursor:pointer;">SAVE</button>
+        </div>
+
+        <div style="font-size:12px;color:#7a7aa0;margin:12px 0 4px">New Password (leave blank to keep)</div>
+        <div style="display:flex;gap:8px;">
+            <input id="accPassword" type="password" maxlength="20" style="flex:1;padding:10px;background:#111;border:1px solid #333;border-radius:6px;color:#fff;font-family:'Courier New',monospace;outline:none">
+            <button id="savePassBtn" style="padding:0 15px;background:rgba(231,76,60,0.15);border:1px solid #e74c3c;color:#e74c3c;border-radius:6px;font-size:12px;cursor:pointer;">CHANGE</button>
+        </div>
+
+        <div style="font-size:12px;color:#7a7aa0;margin:12px 0 4px">Recovery Email</div>
+        <div style="display:flex;gap:8px;">
+            <input id="accEmail" type="email" placeholder="your@email.com" style="flex:1;padding:10px;background:#111;border:1px solid #333;border-radius:6px;color:#fff;font-family:'Courier New',monospace;outline:none">
+            <button id="saveEmailBtn" style="padding:0 15px;background:rgba(93,92,222,0.15);border:1px solid #5D5CDE;color:#5D5CDE;border-radius:6px;font-size:12px;cursor:pointer;">SAVE</button>
+        </div>
+
+        <div style="font-size:12px;color:#7a7aa0;margin:12px 0 4px">Upload Avatar</div>
+        <input type="file" id="avatarUpload" accept="image/*" style="display:none">
+        <button id="uploadAvatarBtn" style="width:100%;padding:10px;background:rgba(255,255,255,0.05);border:1px solid #555;color:#ccc;border-radius:6px;font-size:12px;cursor:pointer;">📸 Choose Image</button>
+
+        <div id="accMsg" style="font-size:11px;text-align:center;margin-top:12px;min-height:14px;color:#2ecc71"></div>
+        
+        <button class="close-btn" id="closeProfileSettings">CLOSE</button>
     </div>
 </div>
 
@@ -307,7 +364,7 @@
 
 <div id="settingsScreen" style="display:none">
     <div class="panel" style="border-color:#aaa">
-        <h2 style="color:#ccc">⚙️ SETTINGS</h2>
+        <h2 style="color:#ccc">⚙️ GAME SETTINGS</h2>
         <div id="settingsContent"></div>
         <button class="close-btn" id="closeSettings">CLOSE</button>
     </div>
@@ -376,10 +433,28 @@
     <button class="menu-btn" id="goLeaderboard" style="border-color:#555;color:#888">🏆 Leaderboard</button>
 </div>
 
-<script>
-// ============================================================
-//  TANK ARENA – FINAL FULL BUILD (RARITY, AMMO, BRIGHTNESS)
-// ============================================================
+<script type="module">
+// IMPORT FIREBASE (You must add your config keys below)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getFirestore, collection, addDoc, getDocs, query, orderBy, limit } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+// PASTE YOUR FIREBASE CONFIG HERE
+const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "tank-arena-8a17e.firebaseapp.com",
+    projectId: "tank-arena-8a17e",
+    storageBucket: "tank-arena-8a17e.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+};
+
+let db = null;
+try {
+    const app = initializeApp(firebaseConfig);
+    db = getFirestore(app);
+} catch(e) {
+    console.warn("Firebase not configured. Leaderboard will be local only.");
+}
 
 // ----- LOGIN SYSTEM -------------------------------------------------
 var userDB = {};
@@ -398,7 +473,7 @@ function registerUser(u, p) {
     if (userDB[u]) return {ok:false,msg:'Username taken'};
     userDB[u] = {password:p,deaths:0,totalCoins:0,totalDiamonds:0,bestWave:0,bestScore:0,gamesPlayed:0,
         normalBest:0,normalWorst:999999,endlessBest:0,endlessWorst:999999,endlessBestTime:0,
-        unlockedSkins:['default']};
+        unlockedSkins:['default'], displayName: u, title: 'Rookie', avatar: null, email: null};
     saveDB();
     return {ok:true,msg:'Account created! You can now login.'};
 }
@@ -417,6 +492,7 @@ function updateUserStats(won) {
     u.gamesPlayed++; if (!won) u.deaths++;
     if (wave.cur > u.bestWave) u.bestWave = wave.cur;
     if (score > u.bestScore) u.bestScore = score;
+    
     if (gameMode === 'normal') {
         if (won) {
             if (u.normalBest === 0 || totalTime < u.normalBest) u.normalBest = totalTime;
@@ -428,7 +504,24 @@ function updateUserStats(won) {
         if (totalTime > u.endlessBestTime) u.endlessBestTime = totalTime;
     }
     u.totalCoins += coinsThisRun; u.totalDiamonds += diamondsThisRun;
+    
+    // Unlock titles
+    if (u.bestWave >= 5) unlockTitle('Fighter', u);
+    if (u.bestWave >= 10) unlockTitle('Soldier', u);
+    if (u.bestWave >= 20) unlockTitle('Elite', u);
+    if (u.bestWave >= 30) unlockTitle('Veteran', u);
+    if (u.bestWave >= 40) unlockTitle('Master', u);
+    if (u.bestWave >= 50) unlockTitle('Legend', u);
+    if (u.totalCoins >= 5000) unlockTitle('Rich', u);
+    if (u.totalDiamonds >= 500) unlockTitle('Diamond', u);
+    if (u.deaths >= 20) unlockTitle('Ghost', u);
+    if (u.deaths >= 50) unlockTitle('Trash', u);
+    
     saveDB();
+}
+function unlockTitle(title, u) {
+    if (!u.unlockedTitles) u.unlockedTitles = ['Rookie'];
+    if (u.unlockedTitles.indexOf(title) === -1) u.unlockedTitles.push(title);
 }
 
 // ----- SKINS + SHAPES ----------------------------------------------
@@ -446,69 +539,23 @@ var skins = {
     ghost:{name:'Ghost',color:'#f0f0f5',icon:'⚪',unlock:'deaths',deaths:10}
 };
 var shapes = ['square','circle','hexagon','triangle','diamond','cross','star'];
+var allTitles = [
+    {name:'Rookie', color:'#aaa'},
+    {name:'Fighter', color:'#2ecc71'},
+    {name:'Soldier', color:'#3498db'},
+    {name:'Elite', color:'#9b59b6'},
+    {name:'Veteran', color:'#e67e22'},
+    {name:'Master', color:'#e74c3c'},
+    {name:'Legend', color:'#f1c40f'},
+    {name:'Rich', color:'#f1c40f'},
+    {name:'Diamond', color:'#0ff'},
+    {name:'Ghost', color:'#fff'},
+    {name:'Trash', color:'#888'},
+    {name:'The Owner', color:'#ff0'}
+];
+
 try { var sk = localStorage.getItem('ta_skin'); if (sk) tankSkin = sk; } catch(e) {}
 try { var sh = localStorage.getItem('ta_shape'); if (sh) tankShape = sh; } catch(e) {}
-
-// ----- KEYBINDS ----------------------------------------------------
-var keybinds = {up:'w', down:'s', left:'a', right:'d', fire:' ', reload:'r', dash:'shift'};
-try { var kb = localStorage.getItem('ta_keybinds'); if (kb) keybinds = Object.assign(keybinds, JSON.parse(kb)); } catch(e) {}
-function saveKeybinds() { try { localStorage.setItem('ta_keybinds', JSON.stringify(keybinds)); } catch(e) {} }
-var keybindLabels = {up:'Move Up', down:'Move Down', left:'Move Left', right:'Move Right', fire:'Fire', reload:'Reload', dash:'Dash'};
-var keybindOrder = ['up','down','left','right','fire','reload','dash'];
-var listeningBind = null;
-
-function keyDisplay(k) {
-    if (k === ' ') return 'SPACE';
-    if (k === 'shift') return 'SHIFT';
-    if (k === 'control') return 'CTRL';
-    if (k === 'alt') return 'ALT';
-    return k.toUpperCase();
-}
-function isKeyConflict(action, key) {
-    for (var a in keybinds) { if (a === action) continue; if (keybinds[a] === key) return a; }
-    return null;
-}
-function renderKeybinds() {
-    var grid = document.getElementById('keybindGrid');
-    if (!grid) return;
-    grid.innerHTML = '';
-    for (var i = 0; i < keybindOrder.length; i++) {
-        var a = keybindOrder[i];
-        var btn = document.createElement('button');
-        btn.className = 'keybind-btn' + (listeningBind === a ? ' listening' : '');
-        btn.setAttribute('data-bind', a);
-        var display = listeningBind === a ? 'Press any key…' : keyDisplay(keybinds[a]);
-        btn.innerHTML = '<span>' + keybindLabels[a] + '</span><span class="key-val">' + display + '</span>';
-        btn.addEventListener('click', function() { listeningBind = this.getAttribute('data-bind'); renderKeybinds(); });
-        grid.appendChild(btn);
-    }
-}
-document.addEventListener('keydown', function(e) {
-    if (listeningBind) {
-        e.preventDefault();
-        if (e.key === 'Escape') { listeningBind = null; renderKeybinds(); return; }
-        var newKey = e.key.toLowerCase();
-        if (newKey === ' ') newKey = ' ';
-        var conflict = isKeyConflict(listeningBind, newKey);
-        if (conflict) {
-            var btn = document.querySelector('[data-bind="' + listeningBind + '"]');
-            if (btn) {
-                btn.style.borderColor = '#e74c3c';
-                btn.innerHTML = '<span>⚠ Used: ' + keybindLabels[conflict] + '</span>';
-                setTimeout(renderKeybinds, 900);
-            }
-            return;
-        }
-        keybinds[listeningBind] = newKey;
-        saveKeybinds();
-        listeningBind = null;
-        renderKeybinds();
-    }
-}, true);
-document.getElementById('resetBinds').addEventListener('click', function() {
-    keybinds = {up:'w', down:'s', left:'a', right:'d', fire:' ', reload:'r', dash:'shift'};
-    saveKeybinds(); renderKeybinds();
-});
 
 // ----- PROFILE RENDER ---------------------------------------------
 function isSkinUnlocked(skinKey, u) {
@@ -540,10 +587,22 @@ function openProfile() {
 }
 function renderProfile() {
     var u = isOwner ? null : userDB[currentUser];
-    var nm = isOwner ? '👑 OWNER' : currentUser;
+    var nm = isOwner ? '👑 OWNER' : (u.displayName || currentUser);
+    var title = isOwner ? 'The Owner' : (u.title || 'Rookie');
+    var titleColor = '#aaa';
+    for (var t of allTitles) { if (t.name === title) titleColor = t.color; }
+    
     document.getElementById('pfName').textContent = nm;
+    document.getElementById('pfTitle').textContent = '[' + title + ']';
+    document.getElementById('pfTitle').style.color = titleColor;
     document.getElementById('pfRank').textContent = 'RANK: ' + (isOwner ? 'OWNER' : getRank(u));
-    document.getElementById('pfAvatar').textContent = isOwner ? '👑' : '🎮';
+    
+    if (u && u.avatar) {
+        document.getElementById('pfAvatar').innerHTML = '<img src="' + u.avatar + '" style="width:100%;height:100%;border-radius:50%;object-fit:cover;">';
+    } else {
+        document.getElementById('pfAvatar').textContent = isOwner ? '👑' : '🎮';
+    }
+    
     document.getElementById('pfScore').textContent = u ? (u.bestScore || 0) : '∞';
     document.getElementById('pfWave').textContent = u ? (u.bestWave || 0) : '∞';
     document.getElementById('pfCoins').textContent = u ? (u.totalCoins || 0) : '∞';
@@ -551,6 +610,7 @@ function renderProfile() {
     document.getElementById('pfGames').textContent = u ? (u.gamesPlayed || 0) : '∞';
     document.getElementById('pfDeaths').textContent = u ? (u.deaths || 0) : '∞';
 
+    // Skins
     var grid = document.getElementById('skinGrid');
     grid.innerHTML = '';
     for (var key in skins) {
@@ -579,6 +639,7 @@ function renderProfile() {
         grid.appendChild(card);
     }
 
+    // Shapes
     var sp = document.getElementById('shapePicker');
     sp.innerHTML = '';
     var shapeIcons = {square:'⬛',circle:'⬤',hexagon:'⬡',triangle:'▲',diamond:'◆',cross:'✚',star:'★'};
@@ -594,6 +655,28 @@ function renderProfile() {
             renderProfile();
         });
         sp.appendChild(btn);
+    }
+
+    // Titles
+    var tg = document.getElementById('titleGrid');
+    tg.innerHTML = '';
+    if (u) {
+        for (var t of allTitles) {
+            var unlocked = (u.unlockedTitles && u.unlockedTitles.indexOf(t.name) !== -1) || isOwner;
+            if (t.name === 'The Owner' && !isOwner) unlocked = false;
+            var btn = document.createElement('div');
+            btn.className = 'title-btn' + (title === t.name ? ' active' : '') + (unlocked ? '' : ' locked');
+            btn.textContent = t.name;
+            btn.style.color = unlocked ? t.color : '#555';
+            if (unlocked) {
+                btn.addEventListener('click', function() {
+                    userDB[currentUser].title = this.textContent;
+                    saveDB();
+                    renderProfile();
+                });
+            }
+            tg.appendChild(btn);
+        }
     }
 }
 
@@ -657,19 +740,131 @@ document.getElementById('modeEndless').addEventListener('click', function() {
     openSpinScreen();
 });
 
-function updateLeaderboard() {
-    var users = Object.keys(userDB);
-    var lb = document.getElementById('lbContent');
-    if (users.length === 0) { lb.innerHTML = '<p style="color:#555">No players yet.</p>'; return; }
-    users.sort(function(a, b) { return (userDB[b].bestScore || 0) - (userDB[a].bestScore || 0); });
-    var h = '<h3>🏆 TOP SCORES</h3>';
-    for (var i = 0; i < Math.min(users.length, 10); i++) {
-        var m = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '';
-        h += '<p>' + m + ' #' + (i + 1) + ' <b>' + users[i] + '</b> | Score: ' +
-             (userDB[users[i]].bestScore || 0) + ' | Wave: ' +
-             (userDB[users[i]].bestWave || 0) + '</p>';
+// PROFILE SETTINGS
+document.getElementById('profileSettingsBtn').addEventListener('click', function() {
+    if (isOwner) return;
+    document.getElementById('profileSettingsModal').style.display = 'flex';
+    var u = userDB[currentUser];
+    document.getElementById('accDisplayName').value = u.displayName || currentUser;
+    document.getElementById('accEmail').value = u.email || '';
+    document.getElementById('accPassword').value = '';
+    document.getElementById('accMsg').textContent = '';
+});
+document.getElementById('closeProfileSettings').addEventListener('click', function() {
+    document.getElementById('profileSettingsModal').style.display = 'none';
+});
+document.getElementById('saveNameBtn').addEventListener('click', function() {
+    var newName = document.getElementById('accDisplayName').value.trim();
+    if (newName.length < 2 || newName.length > 20) {
+        var m = document.getElementById('accMsg'); m.textContent = '⚠ Name must be 2-20 characters'; m.style.color = '#e74c3c'; return;
     }
-    lb.innerHTML = h;
+    userDB[currentUser].displayName = newName; saveDB();
+    var m = document.getElementById('accMsg'); m.textContent = '✅ Display name saved!'; m.style.color = '#2ecc71';
+    setTimeout(function(){ m.textContent = ''; }, 2000);
+});
+document.getElementById('savePassBtn').addEventListener('click', function() {
+    var newPass = document.getElementById('accPassword').value;
+    if (newPass.length < 3) {
+        var m = document.getElementById('accMsg'); m.textContent = '⚠ Password must be at least 3 characters'; m.style.color = '#e74c3c'; return;
+    }
+    userDB[currentUser].password = newPass; saveDB();
+    document.getElementById('accPassword').value = '';
+    var m = document.getElementById('accMsg'); m.textContent = '✅ Password changed!'; m.style.color = '#2ecc71';
+    setTimeout(function(){ m.textContent = ''; }, 2000);
+});
+document.getElementById('saveEmailBtn').addEventListener('click', function() {
+    var newEmail = document.getElementById('accEmail').value.trim();
+    if (newEmail.length > 0 && (!newEmail.includes('@') || !newEmail.includes('.'))) {
+        var m = document.getElementById('accMsg'); m.textContent = '⚠ Invalid email address'; m.style.color = '#e74c3c'; return;
+    }
+    userDB[currentUser].email = newEmail; saveDB();
+    var m = document.getElementById('accMsg'); m.textContent = '✅ Recovery email saved!'; m.style.color = '#2ecc71';
+    setTimeout(function(){ m.textContent = ''; }, 2000);
+});
+document.getElementById('uploadAvatarBtn').addEventListener('click', function() {
+    document.getElementById('avatarUpload').click();
+});
+document.getElementById('avatarUpload').addEventListener('change', function(e) {
+    var file = e.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(evt) {
+        var img = new Image();
+        img.onload = function() {
+            var canvas = document.createElement('canvas');
+            var ctx = canvas.getContext('2d');
+            canvas.width = 128; canvas.height = 128;
+            // Draw image centered and cropped
+            var size = Math.min(img.width, img.height);
+            var x = (img.width - size) / 2;
+            var y = (img.height - size) / 2;
+            ctx.drawImage(img, x, y, size, size, 0, 0, 128, 128);
+            var dataUrl = canvas.toDataURL('image/jpeg', 0.8);
+            userDB[currentUser].avatar = dataUrl;
+            saveDB();
+            renderProfile();
+            var m = document.getElementById('accMsg'); m.textContent = '✅ Avatar updated!'; m.style.color = '#2ecc71';
+            setTimeout(function(){ m.textContent = ''; }, 2000);
+        };
+        img.src = evt.target.result;
+    };
+    reader.readAsDataURL(file);
+});
+
+// ----- LEADERBOARD (FIREBASE) -------------------------------------
+async function updateLeaderboard() {
+    var lb = document.getElementById('lbContent');
+    lb.innerHTML = 'Loading global scores...';
+    
+    if (!db) {
+        lb.innerHTML = '<p style="color:#e74c3c">Firebase not configured. Check console.</p>';
+        return;
+    }
+    
+    try {
+        const q = query(collection(db, "scores"), orderBy("score", "desc"), limit(15));
+        const snapshot = await getDocs(q);
+        
+        var h = '';
+        var rank = 1;
+        snapshot.forEach((doc) => {
+            const data = doc.data();
+            var m = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : '#' + rank;
+            var avatarHtml = data.avatar ? '<img src="' + data.avatar + '" class="lb-avatar">' : '<div class="lb-avatar">🎮</div>';
+            var titleColor = '#aaa';
+            for (var t of allTitles) { if (t.name === data.title) titleColor = t.color; }
+            
+            h += '<div class="lb-row">' +
+                 '<div style="font-size:16px; width:30px; text-align:center;">' + m + '</div>' +
+                 avatarHtml +
+                 '<div><div class="lb-name">' + data.name + '</div>' +
+                 '<div class="lb-title" style="color:' + titleColor + '">[' + (data.title || 'Rookie') + ']</div></div>' +
+                 '<div class="lb-stats"><div class="lb-score">Score: ' + data.score + '</div>' +
+                 '<div class="lb-wave">Wave: ' + data.wave + '</div></div>' +
+                 '</div>';
+            rank++;
+        });
+        
+        if (rank === 1) h = '<p style="color:#555">No scores yet. Be the first!</p>';
+        lb.innerHTML = h;
+        
+    } catch(e) {
+        console.error(e);
+        lb.innerHTML = '<p style="color:#e74c3c">Error loading leaderboard. (Check Firebase rules)</p>';
+    }
+}
+
+function sendScoreToFirebase() {
+    if (!db || !currentUser || isOwner) return;
+    var u = userDB[currentUser];
+    addDoc(collection(db, "scores"), {
+        name: u.displayName || currentUser,
+        avatar: u.avatar || null,
+        title: u.title || 'Rookie',
+        score: score,
+        wave: wave.cur,
+        timestamp: new Date()
+    }).catch(function(e) { console.error("Error saving score: ", e); });
 }
 
 // ----- SETTINGS -----------------------------------------------------
@@ -725,7 +920,6 @@ function doSpin() {
     if (spinCount <= 0) return;
     spinCount--;
     
-    // Rarity Roll
     var roll = Math.random();
     var rarity = 'common';
     if (roll < 0.02) rarity = 'mythic';
@@ -738,8 +932,6 @@ function doSpin() {
     for (var k in weapons) {
         if (weapons[k].unlocked && !weapons[k].melee && !weapons[k].ownerOnly && weapons[k].rarity === rarity) pool.push(k);
     }
-    
-    // Fallback if pool empty
     if (pool.length === 0) {
         for (var k in weapons) if (weapons[k].unlocked && !weapons[k].melee && !weapons[k].ownerOnly) pool.push(k);
     }
@@ -752,20 +944,13 @@ function doSpin() {
         if (pool.length === 0) break;
         var idx = Math.floor(Math.random() * pool.length);
         var chosen = pool[idx];
-        
-        // Prevent duplicates in the same loadout
         if (locked.indexOf(chosen) !== -1) { i--; continue; }
-        
         locked.push(chosen);
         pool.splice(idx, 1);
     }
     
     spinGuns = locked;
-    
-    // Trigger animation flash for high rarity
-    if (rarity === 'legendary' || rarity === 'mythic') {
-        screenShakeAmount = 10;
-    }
+    if (rarity === 'legendary' || rarity === 'mythic') screenShakeAmount = 10;
     
     updateSpinDisplay(); updateSpinCount();
     if (spinCount <= 0) document.getElementById('spinBtn').style.opacity = '0.4';
@@ -779,7 +964,6 @@ function updateSpinDisplay() {
         var w = weapons[g];
         var locked = spinLocked[g];
         var rar = rarities[w.rarity];
-        
         var borderColor = locked ? '#ff0' : rar.color;
         var shadowColor = locked ? 'rgba(255,255,0,0.4)' : rar.color;
         
@@ -791,7 +975,6 @@ function updateSpinDisplay() {
         html += '<div class="gun-ammo">AMMO: ' + (w.maxAmmo === -1 ? '∞' : w.maxAmmo) + '</div>';
         html += '</div>';
     }
-    
     document.getElementById('spinGuns').innerHTML = html;
 }
 
@@ -815,17 +998,13 @@ document.getElementById('ratesBtn').addEventListener('click', function() {
     }
     document.getElementById('ratesContent').innerHTML = h;
 });
-document.getElementById('closeRates').addEventListener('click', function() {
-    document.getElementById('ratesModal').style.display = 'none';
-});
+document.getElementById('closeRates').addEventListener('click', function() { document.getElementById('ratesModal').style.display = 'none'; });
 
 document.getElementById('spinStartBtn').addEventListener('click', function(e) {
     e.preventDefault();
     if (spinGuns.length === 0) doSpin();
-    
     var modal = document.getElementById('startConfirmModal');
     modal.style.display = 'flex'; 
-    
     var listHtml = '';
     for (var i = 0; i < spinGuns.length; i++) {
         var w = weapons[spinGuns[i]];
@@ -833,8 +1012,7 @@ document.getElementById('spinStartBtn').addEventListener('click', function(e) {
         var rar = rarities[w.rarity];
         listHtml += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;margin:4px 0;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid ' + rar.color + ';font-size:13px">' +
             '<span>' + w.icon + ' <b style="color:' + rar.color + '">' + w.name + '</b></span>' +
-            '<span style="color:#0ff;font-size:11px">AMMO: ' + (w.maxAmmo === -1 ? '∞' : w.maxAmmo) + '</span>' +
-            '</div>';
+            '<span style="color:#0ff;font-size:11px">AMMO: ' + (w.maxAmmo === -1 ? '∞' : w.maxAmmo) + '</span></div>';
     }
     document.getElementById('confirmLoadout').innerHTML = listHtml;
     document.getElementById('confirmNote').textContent = spinGuns.length < 3 ? '⚠ Some slots were filled randomly' : '';
@@ -967,13 +1145,12 @@ function buildWeaponUI() {
     for (var k in weapons) {
         if (weapons[k].unlocked && (!weapons[k].ownerOnly || isOwner)) available.push(k);
     }
-    
     for (var i = 0; i < available.length; i++) {
         var k = available[i];
         var w = weapons[k];
         var btn = document.createElement('div');
         btn.className = 'weapon-btn';
-        btn.textContent = (i+1) + '. ' + w.icon + ' ' + w.name; // Show hotkey
+        btn.textContent = (i+1) + '. ' + w.icon + ' ' + w.name;
         if (k === tank.curW) btn.classList.add('active');
         btn.onclick = function() { tank.curW = this.getAttribute('data-w'); buildWeaponUI(); };
         btn.setAttribute('data-w', k);
@@ -1620,6 +1797,7 @@ function gameOver(won) {
     if (animId) cancelAnimationFrame(animId);
     if (timerInterval) clearInterval(timerInterval);
     updateUserStats(won);
+    sendScoreToFirebase(); // <--- SEND SCORE TO GLOBAL LEADERBOARD
     document.getElementById('gameOverTitle').textContent = won ? 'VICTORY!' : 'GAME OVER';
     document.getElementById('gameOverTitle').style.color = won ? '#2ecc71' : '#e74c3c';
     var ts = Math.floor(totalTime/60) + ':' + ('0' + Math.floor(totalTime%60)).slice(-2);
@@ -1688,7 +1866,8 @@ function drawTankShape(ctx, shape, size) {
 function isModalOpen() {
     return document.getElementById('shopModal').style.display === 'flex' ||
            document.getElementById('settingsScreen').style.display === 'flex' ||
-           document.getElementById('ownerPanel').style.display === 'flex';
+           document.getElementById('ownerPanel').style.display === 'flex' ||
+           document.getElementById('profileSettingsModal').style.display === 'flex';
 }
 function isInVisionCone(px, py) {
     var dx = px - tank.x, dy = py - tank.y;

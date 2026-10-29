@@ -9,13 +9,22 @@
         html,body{overflow:hidden;font-family:'Courier New',monospace;background:#1a1a2e;height:100%}
         canvas{display:block}
         
-        /* FIXED SCROLLING FOR ALL SCREENS */
+        /* --- SCREENS & SCROLLING --- */
         #authScreen,#leaderboardScreen,#controlScreen,#modeScreen,#spinScreen,#gameOverScreen,#settingsScreen,#ownerPanel,#profileScreen{
             position:fixed;top:0;left:0;width:100%;height:100%;z-index:300;color:#fff;
             background:linear-gradient(135deg,#0a0a1e,#1a1a3e,#0a0a2e);
             display:flex;flex-direction:column;justify-content:flex-start;align-items:center;
-            overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 80px 20px;
+            overflow-y:auto; /* Allow scrolling */
+            padding:20px 20px 80px 20px; /* Bottom padding so buttons aren't hidden */
+            -webkit-overflow-scrolling: touch;
         }
+        
+        /* Custom Scrollbar for Profile */
+        #profileScreen::-webkit-scrollbar { width: 8px; }
+        #profileScreen::-webkit-scrollbar-track { background: #0a0a1e; }
+        #profileScreen::-webkit-scrollbar-thumb { background: #5D5CDE; border-radius: 4px; }
+        #profileScreen::-webkit-scrollbar-thumb:hover { background: #0ff; }
+
         #authScreen{z-index:400;justify-content:center;padding-bottom:20px}
         #leaderboardScreen{z-index:450;justify-content:center;padding-bottom:20px}
         #profileScreen{z-index:460}
@@ -41,27 +50,24 @@
         .link{color:#888;font-size:12px;cursor:pointer;margin-top:10px;text-align:center;flex-shrink:0}
         .link:hover{color:#0ff}
         
-        /* BRAWL STARS STYLE CAROUSEL */
+        /* Spin Cards */
         #spinGuns {
             display: flex;
-            gap: 15px;
-            overflow-x: auto;
-            scroll-snap-type: x mandatory;
-            padding: 10px 0 20px 0;
+            flex-wrap: wrap;
+            gap: 10px;
+            justify-content: center;
             width: 100%;
             max-width: 95vw;
-            -webkit-overflow-scrolling: touch;
+            padding: 10px 0;
             flex-shrink: 0;
         }
-        #spinGuns::-webkit-scrollbar { display: none; }
-        #spinGuns { -ms-overflow-style: none; scrollbar-width: none; }
 
         .spin-gun {
-            flex: 0 0 200px;
-            height: 260px;
-            scroll-snap-align: center;
+            flex: 1 1 100px;
+            max-width: 120px;
+            height: 150px;
             border: 3px solid #333;
-            border-radius: 20px;
+            border-radius: 15px;
             background: linear-gradient(180deg, #1a1a2e, #0a0a1e);
             display: flex;
             flex-direction: column;
@@ -76,10 +82,10 @@
             box-shadow: 0 0 25px rgba(255, 255, 0, 0.4), inset 0 0 15px rgba(255, 255, 0, 0.2);
             transform: scale(1.02);
         }
-        .spin-gun .gun-icon { font-size: 60px; margin-bottom: 15px; }
-        .spin-gun .gun-name { font-size: 16px; font-weight: bold; color: #fff; text-align: center; padding: 0 10px; }
-        .spin-gun .gun-ammo { font-size: 11px; color: #0ff; margin-top: 10px; }
-        .spin-gun .lock-icon { position: absolute; top: 15px; right: 15px; font-size: 24px; opacity: 0; transition: opacity 0.2s; }
+        .spin-gun .gun-icon { font-size: 40px; margin-bottom: 10px; }
+        .spin-gun .gun-name { font-size: 12px; font-weight: bold; color: #fff; text-align: center; padding: 0 5px; }
+        .spin-gun .gun-ammo { font-size: 10px; color: #0ff; margin-top: 5px; }
+        .spin-gun .lock-icon { position: absolute; top: 10px; right: 10px; font-size: 18px; opacity: 0; transition: opacity 0.2s; }
         .spin-gun.locked .lock-icon { opacity: 1; }
 
         #lbContent{font-size:12px;max-height:300px;overflow-y:auto;text-align:left;width:380px;flex-shrink:0}
@@ -108,7 +114,6 @@
         .weapon-btn{padding:5px 8px;background:rgba(60,60,60,0.7);border-radius:5px;font-size:11px;display:flex;align-items:center;cursor:pointer;color:#ccc;border:2px solid transparent}
         .weapon-btn.active{border-color:#5D5CDE;background:rgba(93,92,222,0.35);box-shadow:0 0 8px rgba(93,92,222,0.6)}
         
-        /* FIXED MODAL Z-INDEX */
         .modal{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.75);backdrop-filter:blur(5px);display:none;justify-content:center;align-items:center;z-index:9999}
         .panel{background:#111;border:2px solid #f1c40f;border-radius:10px;padding:20px;width:360px;max-width:92vw;max-height:85vh;overflow-y:auto;color:#fff;box-shadow:0 0 30px rgba(241,196,15,0.4),0 0 60px rgba(241,196,15,0.15)}
         .panel h2{color:#f1c40f;text-align:center;margin-bottom:10px}
@@ -210,7 +215,7 @@
     <button class="back-sm" id="lbBackBtn">⬅ BACK</button>
 </div>
 
-<!-- PROFILE / HOME -->
+<!-- PROFILE / HOME (WITH SCROLLBAR) -->
 <div id="profileScreen" style="display:none">
     <div class="profile-card">
         <div class="profile-avatar" id="pfAvatar">🎮</div>
@@ -400,7 +405,7 @@
     </div>
 </div>
 
-<div id="gameOverScreen" style="display:none">
+<div id="gameOverScreen" style="display:none; justify-content:center;">
     <h1 id="gameOverTitle">GAME OVER</h1>
     <div id="gameOverStats" style="font-size:13px;color:#888;margin:8px"></div>
     <div id="finalScore" style="font-size:28px;margin:10px">Score: 0</div>
@@ -410,7 +415,7 @@
 
 <script>
 // ============================================================
-//  TANK ARENA – FINAL FULL BUILD (MOBILE SCROLL FIX)
+//  TANK ARENA – FINAL FULL BUILD (SCROLLBAR & DEVICE FIX)
 // ============================================================
 
 // ----- LOGIN SYSTEM -------------------------------------------------
@@ -812,8 +817,6 @@ function updateSpinCount() { document.getElementById('spinCount').textContent = 
 
 function updateSpinDisplay() {
     var html = '';
-    html += '<div style="width:100%; text-align:center; color:#555; font-size:10px; margin-bottom:10px; flex-shrink:0;">← SWIPE TO VIEW →</div>';
-
     for (var i = 0; i < spinGuns.length; i++) {
         var g = spinGuns[i];
         var w = weapons[g];

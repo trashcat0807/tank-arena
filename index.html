@@ -9,21 +9,16 @@
         html,body{overflow:hidden;font-family:'Courier New',monospace;background:#1a1a2e;height:100%}
         canvas{display:block}
         
-        /* --- SCREENS & SCROLLING --- */
+        /* SCROLLABLE MENUS */
         #authScreen,#leaderboardScreen,#controlScreen,#modeScreen,#spinScreen,#gameOverScreen,#settingsScreen,#ownerPanel,#profileScreen{
             position:fixed;top:0;left:0;width:100%;height:100%;z-index:300;color:#fff;
             background:linear-gradient(135deg,#0a0a1e,#1a1a3e,#0a0a2e);
             display:flex;flex-direction:column;justify-content:flex-start;align-items:center;
-            overflow-y:auto; /* Allow scrolling */
-            padding:20px 20px 80px 20px; /* Bottom padding so buttons aren't hidden */
-            -webkit-overflow-scrolling: touch;
+            overflow-y:auto;-webkit-overflow-scrolling:touch;padding:20px 20px 80px 20px;
         }
-        
-        /* Custom Scrollbar for Profile */
         #profileScreen::-webkit-scrollbar { width: 8px; }
         #profileScreen::-webkit-scrollbar-track { background: #0a0a1e; }
         #profileScreen::-webkit-scrollbar-thumb { background: #5D5CDE; border-radius: 4px; }
-        #profileScreen::-webkit-scrollbar-thumb:hover { background: #0ff; }
 
         #authScreen{z-index:400;justify-content:center;padding-bottom:20px}
         #leaderboardScreen{z-index:450;justify-content:center;padding-bottom:20px}
@@ -50,38 +45,10 @@
         .link{color:#888;font-size:12px;cursor:pointer;margin-top:10px;text-align:center;flex-shrink:0}
         .link:hover{color:#0ff}
         
-        /* Spin Cards */
-        #spinGuns {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            justify-content: center;
-            width: 100%;
-            max-width: 95vw;
-            padding: 10px 0;
-            flex-shrink: 0;
-        }
-
-        .spin-gun {
-            flex: 1 1 100px;
-            max-width: 120px;
-            height: 150px;
-            border: 3px solid #333;
-            border-radius: 15px;
-            background: linear-gradient(180deg, #1a1a2e, #0a0a1e);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            user-select: none;
-            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
-            position: relative;
-        }
-        .spin-gun.locked {
-            border-color: #ff0;
-            box-shadow: 0 0 25px rgba(255, 255, 0, 0.4), inset 0 0 15px rgba(255, 255, 0, 0.2);
-            transform: scale(1.02);
-        }
+        /* SPIN CARDS */
+        #spinGuns { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; width: 100%; max-width: 95vw; padding: 10px 0; flex-shrink: 0; }
+        .spin-gun { flex: 1 1 100px; max-width: 120px; height: 150px; border: 3px solid #333; border-radius: 15px; background: linear-gradient(180deg, #1a1a2e, #0a0a1e); display: flex; flex-direction: column; justify-content: center; align-items: center; user-select: none; transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s; position: relative; }
+        .spin-gun.locked { transform: scale(1.02); }
         .spin-gun .gun-icon { font-size: 40px; margin-bottom: 10px; }
         .spin-gun .gun-name { font-size: 12px; font-weight: bold; color: #fff; text-align: center; padding: 0 5px; }
         .spin-gun .gun-ammo { font-size: 10px; color: #0ff; margin-top: 5px; }
@@ -93,12 +60,12 @@
         #lbContent h3{color:#f1c40f;margin:10px 0 5px;font-size:13px;letter-spacing:2px}
         .back-sm{padding:6px 16px;font-size:11px;margin-top:12px;width:auto;flex:none;border:1px solid #555;background:transparent;color:#888;cursor:pointer;font-family:'Courier New',monospace;border-radius:4px}
         
-        #hud{position:fixed;top:20px;left:20px;z-index:10;color:#fff;font-size:13px;display:none}
+        /* HUD FIXED */
+        #hud{position:fixed;top:70px;left:20px;z-index:10;color:#fff;font-size:13px;display:none}
         #healthBar{width:180px;height:18px;background:rgba(255,255,255,0.1);border-radius:9px;overflow:hidden;margin:4px 0}
         #healthFill{height:100%;background:#2ecc71;width:100%}
         #o2Bar,#warmthBar{width:150px;height:10px;background:rgba(255,255,255,0.1);border-radius:5px;overflow:hidden;margin:3px 0;display:none}
         #o2Fill{height:100%;background:#4dc9f6}#warmthFill{height:100%;background:#f90}
-        #ammoDisplay{font-size:14px;color:#0ff;margin-top:4px;font-weight:bold}
         
         #bossBar{position:fixed;top:0;left:0;width:100%;height:30px;background:rgba(0,0,0,0.8);z-index:50;display:none;text-align:center;color:#fff;font-size:14px;line-height:30px}
         #bossBarFill{position:absolute;top:0;left:0;height:100%;background:linear-gradient(90deg,#e74c3c,#f39c12,#e74c3c);background-size:200% 100%;animation:bossPulse 2s linear infinite}
@@ -110,7 +77,7 @@
         #settingsBtn{right:100px;border:1px solid #aaa;color:#aaa;display:none}
         #ownerBtn2{right:180px;border:1px solid #ff0;color:#ff0;display:none}
         
-        #weaponSelector{position:fixed;top:115px;left:10px;display:flex;flex-direction:column;gap:5px;z-index:10;max-height:calc(100vh-300px);overflow-y:auto}
+        #weaponSelector{position:fixed;top:165px;left:10px;display:flex;flex-direction:column;gap:5px;z-index:10;max-height:calc(100vh-350px);overflow-y:auto}
         .weapon-btn{padding:5px 8px;background:rgba(60,60,60,0.7);border-radius:5px;font-size:11px;display:flex;align-items:center;cursor:pointer;color:#ccc;border:2px solid transparent}
         .weapon-btn.active{border-color:#5D5CDE;background:rgba(93,92,222,0.35);box-shadow:0 0 8px rgba(93,92,222,0.6)}
         
@@ -171,12 +138,6 @@
         .shape-btn:hover{border-color:#5D5CDE;transform:translateY(-2px)}
         .shape-btn.active{border-color:#0ff;color:#0ff;box-shadow:0 0 12px rgba(0,255,255,0.5)}
         
-        .keybind-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-        .keybind-btn{padding:10px 8px;border:2px solid #2a2a4a;border-radius:8px;background:rgba(255,255,255,0.03);color:#ccc;font-size:11px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;transition:0.15s;font-family:'Courier New',monospace;text-align:left}
-        .keybind-btn:hover{border-color:#5D5CDE}
-        .keybind-btn.listening{border-color:#0ff;box-shadow:0 0 12px rgba(0,255,255,0.5);background:rgba(0,255,255,0.1)}
-        .keybind-btn .key-val{color:#0ff;font-weight:bold;min-width:44px;text-align:right}
-        
         .home-actions{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px;margin-bottom:30px;flex-shrink:0}
         .home-btn{padding:10px 20px;border:2px solid #5D5CDE;border-radius:8px;background:rgba(93,92,222,0.15);color:#fff;font-size:14px;cursor:pointer;font-family:'Courier New',monospace;min-width:130px}
         .home-btn:hover{background:rgba(93,92,222,0.4);border-color:#0ff;box-shadow:0 0 15px rgba(0,255,255,0.4)}
@@ -184,7 +145,6 @@
         #timeIcon{position:fixed;top:20px;left:200px;z-index:10;font-size:20px;color:#fff;text-shadow:0 0 10px currentColor;display:none;pointer-events:none}
         #timeIcon .time-arc{position:absolute;top:28px;left:-8px;width:40px;height:3px;background:rgba(255,255,255,0.15);border-radius:2px;overflow:hidden}
         #timeIcon .time-arc-fill{height:100%;background:#fff;width:0%;transition:width 0.3s}
-        .reset-binds{width:100%;padding:8px;margin-top:8px;background:rgba(231,76,60,0.15);border:1px solid #e74c3c;color:#e74c3c;border-radius:6px;font-size:11px;cursor:pointer;font-family:'Courier New',monospace}
     </style>
 </head>
 <body>
@@ -215,7 +175,7 @@
     <button class="back-sm" id="lbBackBtn">⬅ BACK</button>
 </div>
 
-<!-- PROFILE / HOME (WITH SCROLLBAR) -->
+<!-- PROFILE / HOME -->
 <div id="profileScreen" style="display:none">
     <div class="profile-card">
         <div class="profile-avatar" id="pfAvatar">🎮</div>
@@ -239,12 +199,6 @@
     <div class="skin-section">
         <h3>🔷 TANK SHAPE</h3>
         <div class="shape-picker" id="shapePicker"></div>
-    </div>
-
-    <div class="skin-section" id="keybindSection" style="display:none">
-        <h3>⌨️ KEY BINDINGS</h3>
-        <div class="keybind-grid" id="keybindGrid"></div>
-        <button class="reset-binds" id="resetBinds">RESET TO DEFAULT</button>
     </div>
 
     <div class="home-actions">
@@ -277,11 +231,21 @@
     <div id="spinCount" style="color:#ff0;font-size:14px;margin:10px 0;font-weight:bold"></div>
     
     <div style="margin:10px; display:flex; gap:10px; justify-content:center;">
-        <button class="menu-btn" id="spinBtn" style="width:140px; padding:12px;">🔄 SPIN</button>
-        <button class="menu-btn" id="unlockAllBtn" style="width:140px; padding:12px; font-size:12px;">🔓 UNLOCK ALL</button>
+        <button class="menu-btn" id="spinBtn" style="width:100px; padding:12px;">🔄 SPIN</button>
+        <button class="menu-btn" id="ratesBtn" style="width:120px; padding:12px; font-size:12px; border-color:#f1c40f; color:#f1c40f;">📊 RATES</button>
+        <button class="menu-btn" id="unlockAllBtn" style="width:100px; padding:12px; font-size:12px;">🔓 UNLOCK</button>
     </div>
     
     <button class="menu-btn" id="spinStartBtn" style="width:280px; background:rgba(46, 204, 113, 0.2); border-color:#2ecc71; color:#2ecc71; font-weight:bold; margin-top:5px;">▶ START GAME</button>
+</div>
+
+<!-- RATES MODAL -->
+<div class="modal" id="ratesModal">
+    <div class="panel" style="border-color:#f1c40f">
+        <h2 style="color:#f1c40f">📊 DROP RATES</h2>
+        <div id="ratesContent" style="font-size:12px; line-height:1.8;"></div>
+        <button class="close-btn" id="closeRates">CLOSE</button>
+    </div>
 </div>
 
 <!-- START CONFIRM MODAL -->
@@ -312,7 +276,6 @@
     <div style="font-size:11px;color:#888">Wave: <span id="waveNum">0</span> | Enemies: <span id="enemyCnt">0</span></div>
     <div id="timerDisplay" style="color:#ff0;font-size:12px">⏱️ 00:00</div>
     <div><span style="color:#f1c40f">💰 <span id="coinCount">0</span></span> <span style="color:#0ff">💎 <span id="diamondCount">0</span></span></div>
-    <div id="ammoDisplay">🔫 AMMO: ∞</div>
 </div>
 
 <div id="weaponSelector"></div>
@@ -415,7 +378,7 @@
 
 <script>
 // ============================================================
-//  TANK ARENA – FINAL FULL BUILD (SCROLLBAR & DEVICE FIX)
+//  TANK ARENA – FINAL FULL BUILD (RARITY, AMMO, BRIGHTNESS)
 // ============================================================
 
 // ----- LOGIN SYSTEM -------------------------------------------------
@@ -465,7 +428,6 @@ function updateUserStats(won) {
         if (totalTime > u.endlessBestTime) u.endlessBestTime = totalTime;
     }
     u.totalCoins += coinsThisRun; u.totalDiamonds += diamondsThisRun;
-    checkSkinUnlocks(u);
     saveDB();
 }
 
@@ -552,20 +514,12 @@ document.getElementById('resetBinds').addEventListener('click', function() {
 function isSkinUnlocked(skinKey, u) {
     if (!u) return skinKey === 'default';
     if (skinKey === 'default') return true;
-    if (u.unlockedSkins && u.unlockedSkins.indexOf(skinKey) !== -1) return true;
     var s = skins[skinKey];
     if (!s) return false;
     if (s.unlock === 'coins' && u.totalCoins >= s.cost) return true;
     if (s.unlock === 'wave' && u.bestWave >= s.wave) return true;
     if (s.unlock === 'deaths' && u.deaths >= s.deaths) return true;
     return false;
-}
-function checkSkinUnlocks(u) {
-    if (!u.unlockedSkins) u.unlockedSkins = ['default'];
-    for (var k in skins) {
-        if (k === 'default') continue;
-        if (u.unlockedSkins.indexOf(k) === -1 && isSkinUnlocked(k, u)) u.unlockedSkins.push(k);
-    }
 }
 function getRank(u) {
     if (!u) return 'OWNER';
@@ -641,12 +595,6 @@ function renderProfile() {
         });
         sp.appendChild(btn);
     }
-
-    var kbSec = document.getElementById('keybindSection');
-    if (kbSec) {
-        if (isMobile) kbSec.style.display = 'none';
-        else { kbSec.style.display = 'block'; renderKeybinds(); }
-    }
 }
 
 // ----- UI HANDLERS -------------------------------------------------
@@ -721,38 +669,6 @@ function updateLeaderboard() {
              (userDB[users[i]].bestScore || 0) + ' | Wave: ' +
              (userDB[users[i]].bestWave || 0) + '</p>';
     }
-    var fastest = users.slice().filter(function(n){return userDB[n].normalBest > 0;});
-    fastest.sort(function(a,b){return userDB[a].normalBest - userDB[b].normalBest;});
-    h += '<h3>⚡ NORMAL - FASTEST</h3>';
-    if (fastest.length === 0) h += '<p style="color:#555">None yet</p>';
-    for (var i = 0; i < Math.min(fastest.length, 5); i++) {
-        var n = fastest[i], tt = userDB[n].normalBest;
-        h += '<p>' + (i+1) + '. <b>' + n + '</b> | ' + Math.floor(tt/60) + ':' + ('0' + Math.floor(tt%60)).slice(-2) + '</p>';
-    }
-    var slowest = users.slice().filter(function(n){return userDB[n].normalWorst < 999999;});
-    slowest.sort(function(a,b){return userDB[b].normalWorst - userDB[a].normalWorst;});
-    h += '<h3>🐢 NORMAL - SLOWEST</h3>';
-    if (slowest.length === 0) h += '<p style="color:#555">None yet</p>';
-    for (var i = 0; i < Math.min(slowest.length, 5); i++) {
-        var n = slowest[i], tt = userDB[n].normalWorst;
-        h += '<p>' + (i+1) + '. <b>' + n + '</b> | ' + Math.floor(tt/60) + ':' + ('0' + Math.floor(tt%60)).slice(-2) + '</p>';
-    }
-    var eb = users.slice().filter(function(n){return userDB[n].endlessBest > 0;});
-    eb.sort(function(a,b){return userDB[b].endlessBest - userDB[a].endlessBest;});
-    h += '<h3>♾️ ENDLESS - MOST WAVES</h3>';
-    if (eb.length === 0) h += '<p style="color:#555">None yet</p>';
-    for (var i = 0; i < Math.min(eb.length, 5); i++) {
-        var n = eb[i];
-        h += '<p>' + (i+1) + '. <b>' + n + '</b> | Wave ' + userDB[n].endlessBest + '</p>';
-    }
-    var et = users.slice().filter(function(n){return userDB[n].endlessBestTime > 0;});
-    et.sort(function(a,b){return userDB[b].endlessBestTime - userDB[a].endlessBestTime;});
-    h += '<h3>⏱️ ENDLESS - LONGEST TIME</h3>';
-    if (et.length === 0) h += '<p style="color:#555">None yet</p>';
-    for (var i = 0; i < Math.min(et.length, 5); i++) {
-        var n = et[i], tt = userDB[n].endlessBestTime;
-        h += '<p>' + (i+1) + '. <b>' + n + '</b> | ' + Math.floor(tt/60) + ':' + ('0' + Math.floor(tt%60)).slice(-2) + '</p>';
-    }
     lb.innerHTML = h;
 }
 
@@ -769,25 +685,35 @@ var spinGuns = [];
 var spinLocked = {};
 var infAmmo = false;
 
+// RARITY SYSTEM
+var rarities = {
+    common: {name:'Common', color:'#b0b0b0', chance:0.45},
+    uncommon: {name:'Uncommon', color:'#2ecc71', chance:0.25},
+    rare: {name:'Rare', color:'#3498db', chance:0.15},
+    epic: {name:'Epic', color:'#9b59b6', chance:0.08},
+    legendary: {name:'Legendary', color:'#f1c40f', chance:0.05},
+    mythic: {name:'Mythic', color:'#e74c3c', chance:0.02}
+};
+
 var weapons = {
-    handgun:{name:'Handgun',icon:'🔫',damage:25,cd:400,bs:8,bsz:5,bc:1,range:1000,color:'#f1c40f',trail:'#fef08a',maxAmmo:45,unlocked:true},
-    shotgun:{name:'Shotgun',icon:'🔫',damage:15,cd:800,bs:7,bsz:4,bc:6,spread:0.3,range:400,color:'#ff9a3c',trail:'#ffd8a8',maxAmmo:20,unlocked:true},
-    rifle:{name:'Rifle',icon:'🔫',damage:35,cd:200,bs:10,bsz:4,bc:1,range:1200,color:'#4dc9f6',trail:'#a8e6ff',maxAmmo:90,unlocked:true},
-    minigun:{name:'Minigun',icon:'🔄',damage:10,cd:50,bs:9,bsz:3,bc:1,range:800,hr:5,cr:2,maxHeat:100,color:'#bdc3c7',trail:'#ecf0f1',maxAmmo:1000,unlocked:true},
-    flamethrower:{name:'Flamethrower',icon:'🔥',damage:3,cd:30,bs:5,bsz:8,bc:3,spread:0.2,range:200,hr:3,cr:1,maxHeat:120,fx:'fire',color:'#ff6b35',trail:'#ffcc33',maxAmmo:500,unlocked:true},
-    watergun:{name:'Water Gun',icon:'💧',damage:0,cd:100,bs:6,bsz:6,bc:1,range:300,kb:60,color:'#4dc9f6',trail:'#a8e6ff',maxAmmo:80,unlocked:true},
-    sniper:{name:'Sniper',icon:'🎯',damage:80,cd:1200,bs:15,bsz:6,bc:1,range:2000,color:'#3dff8a',trail:'#a8ffcc',maxAmmo:15,unlocked:true},
-    grenade:{name:'Grenade',icon:'💣',damage:60,cd:1500,bs:5,bsz:12,bc:1,range:500,explode:true,color:'#e74c3c',trail:'#ff9a9a',maxAmmo:12,unlocked:true},
-    tesla:{name:'Tesla',icon:'⚡',damage:20,cd:100,bs:10,bsz:5,bc:1,range:600,chain:4,color:'#00ffff',trail:'#a8ffff',maxAmmo:40,unlocked:true},
-    crossbow:{name:'Crossbow',icon:'🏹',damage:50,cd:900,bs:12,bsz:4,bc:1,range:1500,color:'#ffcc33',trail:'#ffe9a8',maxAmmo:25,unlocked:true},
-    smg:{name:'SMG',icon:'🔫',damage:12,cd:80,bs:11,bsz:3,bc:1,range:500,color:'#ff9a3c',trail:'#ffd8a8',maxAmmo:120,unlocked:true},
-    burst:{name:'Burst',icon:'🔫',damage:20,cd:300,bs:10,bsz:4,bc:3,range:800,color:'#b06ee8',trail:'#d8a8ff',maxAmmo:60,unlocked:true},
-    'knife-melee':{name:'Knife',icon:'🔪',damage:100,cd:500,range:50,melee:true,color:'#dfe6e9',trail:'#ffffff',maxAmmo:-1,unlocked:true},
-    'knife-throw':{name:'Throw Knife',icon:'🔪',damage:9999,cd:1000,bs:6,bsz:10,bc:1,range:400,color:'#dfe6e9',trail:'#ffffff',maxAmmo:10,unlocked:true,noReload:true},
-    icebeam:{name:'Ice Beam',icon:'❄️',damage:35,cd:250,bs:8,bsz:5,bc:1,range:1000,slow:true,color:'#8fd6ff',trail:'#d6f0ff',maxAmmo:30,unlocked:false},
-    chainlight:{name:'Chain Light',icon:'⚡',damage:25,cd:200,bs:9,bsz:5,bc:1,range:700,chain:5,color:'#ffff33',trail:'#ffffaa',maxAmmo:25,unlocked:false},
-    missile:{name:'Missile',icon:'🚀',damage:100,cd:2000,bs:4,bsz:15,bc:1,range:800,explode:true,color:'#ff4466',trail:'#ffaabb',maxAmmo:10,unlocked:false},
-    'nuke-launcher':{name:'☢️ Nuke',icon:'☢️',damage:9999,cd:3000,bs:3,bsz:25,bc:1,range:1500,explode:true,color:'#ffff00',trail:'#ffffaa',maxAmmo:5,unlocked:false,ownerOnly:true}
+    handgun:{name:'Handgun',icon:'🔫',rarity:'common',damage:25,cd:400,bs:8,bsz:5,bc:1,range:1000,color:'#f1c40f',trail:'#fef08a',maxAmmo:45,unlocked:true},
+    smg:{name:'SMG',icon:'🔫',rarity:'common',damage:12,cd:80,bs:11,bsz:3,bc:1,range:500,color:'#ff9a3c',trail:'#ffd8a8',maxAmmo:120,unlocked:true},
+    'knife-melee':{name:'Knife',icon:'🔪',rarity:'common',damage:100,cd:500,range:50,melee:true,color:'#dfe6e9',trail:'#ffffff',maxAmmo:-1,unlocked:true},
+    rifle:{name:'Rifle',icon:'🔫',rarity:'uncommon',damage:35,cd:200,bs:10,bsz:4,bc:1,range:1200,color:'#4dc9f6',trail:'#a8e6ff',maxAmmo:90,unlocked:true},
+    burst:{name:'Burst',icon:'🔫',rarity:'uncommon',damage:20,cd:300,bs:10,bsz:4,bc:3,range:800,color:'#b06ee8',trail:'#d8a8ff',maxAmmo:60,unlocked:true},
+    crossbow:{name:'Crossbow',icon:'🏹',rarity:'uncommon',damage:50,cd:900,bs:12,bsz:4,bc:1,range:1500,color:'#ffcc33',trail:'#ffe9a8',maxAmmo:25,unlocked:true},
+    shotgun:{name:'Shotgun',icon:'🔫',rarity:'rare',damage:15,cd:800,bs:7,bsz:4,bc:6,spread:0.3,range:400,color:'#ff9a3c',trail:'#ffd8a8',maxAmmo:20,unlocked:true},
+    watergun:{name:'Water Gun',icon:'💧',rarity:'rare',damage:0,cd:100,bs:6,bsz:6,bc:1,range:300,kb:60,color:'#4dc9f6',trail:'#a8e6ff',maxAmmo:80,unlocked:true},
+    minigun:{name:'Minigun',icon:'🔄',rarity:'epic',damage:10,cd:50,bs:9,bsz:3,bc:1,range:800,hr:5,cr:2,maxHeat:100,color:'#bdc3c7',trail:'#ecf0f1',maxAmmo:1000,unlocked:true},
+    flamethrower:{name:'Flamethrower',icon:'🔥',rarity:'epic',damage:3,cd:30,bs:5,bsz:8,bc:3,spread:0.2,range:200,hr:3,cr:1,maxHeat:120,fx:'fire',color:'#ff6b35',trail:'#ffcc33',maxAmmo:500,unlocked:true},
+    grenade:{name:'Grenade',icon:'💣',rarity:'epic',damage:60,cd:1500,bs:5,bsz:12,bc:1,range:500,explode:true,color:'#e74c3c',trail:'#ff9a9a',maxAmmo:12,unlocked:true},
+    sniper:{name:'Sniper',icon:'🎯',rarity:'legendary',damage:80,cd:1200,bs:15,bsz:6,bc:1,range:2000,color:'#3dff8a',trail:'#a8ffcc',maxAmmo:15,unlocked:true},
+    tesla:{name:'Tesla',icon:'⚡',rarity:'legendary',damage:20,cd:100,bs:10,bsz:5,bc:1,range:600,chain:4,color:'#00ffff',trail:'#a8ffff',maxAmmo:40,unlocked:true},
+    missile:{name:'Missile',icon:'🚀',rarity:'legendary',damage:100,cd:2000,bs:4,bsz:15,bc:1,range:800,explode:true,color:'#ff4466',trail:'#ffaabb',maxAmmo:10,unlocked:false},
+    icebeam:{name:'Ice Beam',icon:'❄️',rarity:'legendary',damage:35,cd:250,bs:8,bsz:5,bc:1,range:1000,slow:true,color:'#8fd6ff',trail:'#d6f0ff',maxAmmo:30,unlocked:false},
+    chainlight:{name:'Chain Light',icon:'⚡',rarity:'mythic',damage:25,cd:200,bs:9,bsz:5,bc:1,range:700,chain:5,color:'#ffff33',trail:'#ffffaa',maxAmmo:25,unlocked:false},
+    'knife-throw':{name:'Throw Knife',icon:'🔪',rarity:'mythic',damage:9999,cd:1000,bs:6,bsz:10,bc:1,range:400,color:'#dfe6e9',trail:'#ffffff',maxAmmo:10,unlocked:true,noReload:true},
+    'nuke-launcher':{name:'☢️ Nuke',icon:'☢️',rarity:'mythic',damage:9999,cd:3000,bs:3,bsz:25,bc:1,range:1500,explode:true,color:'#ffff00',trail:'#ffffaa',maxAmmo:5,unlocked:false,ownerOnly:true}
 };
 
 function openSpinScreen() {
@@ -798,18 +724,49 @@ function openSpinScreen() {
 function doSpin() {
     if (spinCount <= 0) return;
     spinCount--;
+    
+    // Rarity Roll
+    var roll = Math.random();
+    var rarity = 'common';
+    if (roll < 0.02) rarity = 'mythic';
+    else if (roll < 0.07) rarity = 'legendary';
+    else if (roll < 0.15) rarity = 'epic';
+    else if (roll < 0.30) rarity = 'rare';
+    else if (roll < 0.55) rarity = 'uncommon';
+    
     var pool = [];
-    for (var k in weapons) if (weapons[k].unlocked && !weapons[k].melee && !weapons[k].ownerOnly) pool.push(k);
+    for (var k in weapons) {
+        if (weapons[k].unlocked && !weapons[k].melee && !weapons[k].ownerOnly && weapons[k].rarity === rarity) pool.push(k);
+    }
+    
+    // Fallback if pool empty
+    if (pool.length === 0) {
+        for (var k in weapons) if (weapons[k].unlocked && !weapons[k].melee && !weapons[k].ownerOnly) pool.push(k);
+    }
+    
     var locked = [];
     for (var i = 0; i < spinGuns.length; i++) if (spinLocked[spinGuns[i]]) locked.push(spinGuns[i]);
-    var needed = 3 - locked.length, temp = [];
-    for (var i = 0; i < pool.length; i++) if (locked.indexOf(pool[i]) === -1) temp.push(pool[i]);
+    
+    var needed = 3 - locked.length;
     for (var i = 0; i < needed; i++) {
-        if (temp.length === 0) break;
-        var idx = Math.floor(Math.random() * temp.length);
-        locked.push(temp[idx]); temp.splice(idx, 1);
+        if (pool.length === 0) break;
+        var idx = Math.floor(Math.random() * pool.length);
+        var chosen = pool[idx];
+        
+        // Prevent duplicates in the same loadout
+        if (locked.indexOf(chosen) !== -1) { i--; continue; }
+        
+        locked.push(chosen);
+        pool.splice(idx, 1);
     }
+    
     spinGuns = locked;
+    
+    // Trigger animation flash for high rarity
+    if (rarity === 'legendary' || rarity === 'mythic') {
+        screenShakeAmount = 10;
+    }
+    
     updateSpinDisplay(); updateSpinCount();
     if (spinCount <= 0) document.getElementById('spinBtn').style.opacity = '0.4';
 }
@@ -821,11 +778,16 @@ function updateSpinDisplay() {
         var g = spinGuns[i];
         var w = weapons[g];
         var locked = spinLocked[g];
+        var rar = rarities[w.rarity];
         
-        html += '<div class="spin-gun' + (locked ? ' locked' : '') + '" onclick="toggleLock(\'' + g + '\')">';
+        var borderColor = locked ? '#ff0' : rar.color;
+        var shadowColor = locked ? 'rgba(255,255,0,0.4)' : rar.color;
+        
+        html += '<div class="spin-gun' + (locked ? ' locked' : '') + '" onclick="toggleLock(\'' + g + '\')" style="border-color:' + borderColor + '; box-shadow: 0 0 15px ' + shadowColor + '">';
         html += '<div class="lock-icon">🔒</div>';
-        html += '<div class="gun-icon">' + w.icon + '</div>';
+        html += '<div class="gun-icon" style="text-shadow: 0 0 10px ' + rar.color + '">' + w.icon + '</div>';
         html += '<div class="gun-name">' + w.name + '</div>';
+        html += '<div class="gun-ammo" style="color:' + rar.color + '">' + rar.name + '</div>';
         html += '<div class="gun-ammo">AMMO: ' + (w.maxAmmo === -1 ? '∞' : w.maxAmmo) + '</div>';
         html += '</div>';
     }
@@ -838,6 +800,25 @@ function toggleLock(g) { spinLocked[g] = !spinLocked[g]; updateSpinDisplay(); }
 document.getElementById('spinBtn').addEventListener('click', doSpin);
 document.getElementById('unlockAllBtn').addEventListener('click', function() { spinLocked = {}; updateSpinDisplay(); });
 
+document.getElementById('ratesBtn').addEventListener('click', function() {
+    document.getElementById('ratesModal').style.display = 'flex';
+    var h = '';
+    for (var r in rarities) {
+        h += '<div style="color:' + rarities[r].color + '; font-weight:bold; margin-top:10px;">' + rarities[r].name.toUpperCase() + ' (' + (rarities[r].chance*100) + '%)</div>';
+        for (var k in weapons) {
+            if (weapons[k].rarity === r && weapons[k].unlocked && !weapons[k].ownerOnly) {
+                h += '<div style="display:flex; justify-content:space-between; color:#ccc; padding-left:10px;">' +
+                     '<span>' + weapons[k].icon + ' ' + weapons[k].name + '</span>' +
+                     '<span>' + ((rarities[r].chance / 3)*100).toFixed(1) + '%</span></div>';
+            }
+        }
+    }
+    document.getElementById('ratesContent').innerHTML = h;
+});
+document.getElementById('closeRates').addEventListener('click', function() {
+    document.getElementById('ratesModal').style.display = 'none';
+});
+
 document.getElementById('spinStartBtn').addEventListener('click', function(e) {
     e.preventDefault();
     if (spinGuns.length === 0) doSpin();
@@ -849,8 +830,9 @@ document.getElementById('spinStartBtn').addEventListener('click', function(e) {
     for (var i = 0; i < spinGuns.length; i++) {
         var w = weapons[spinGuns[i]];
         if (!w) continue;
-        listHtml += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;margin:4px 0;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid #2a2a4a;font-size:13px">' +
-            '<span>' + w.icon + ' <b style="color:' + (w.color || '#fff') + '">' + w.name + '</b></span>' +
+        var rar = rarities[w.rarity];
+        listHtml += '<div style="display:flex;justify-content:space-between;align-items:center;padding:8px 12px;margin:4px 0;background:rgba(255,255,255,0.04);border-radius:6px;border:1px solid ' + rar.color + ';font-size:13px">' +
+            '<span>' + w.icon + ' <b style="color:' + rar.color + '">' + w.name + '</b></span>' +
             '<span style="color:#0ff;font-size:11px">AMMO: ' + (w.maxAmmo === -1 ? '∞' : w.maxAmmo) + '</span>' +
             '</div>';
     }
@@ -887,7 +869,7 @@ var nightBannerShown = false;
 function getCyclePhase() {
     var len = CYCLE_LEN[settings.cycleSpeed] || 180;
     var p = (cycleTime % len) / len;
-    if (p < 0.25) return {phase:'day', tint:null, vig:0, arc:p, icon:'☀️'};
+    if (p < 0.25) return {phase:'day', tint:'rgba(255,255,200,0.1)', vig:0, arc:p, icon:'☀️'};
     if (p < 0.5) {
         var t = (p - 0.25) / 0.25;
         return {phase:'dusk', tint:'rgba(255,140,60,' + (0.25 * t) + ')', vig:0.15 * t, arc:p, icon:'🌅'};
@@ -900,13 +882,13 @@ function getCyclePhase() {
     return {phase:'dawn', tint:'rgba(255,160,200,' + (0.4 * (1 - t)) + ')', vig:0.4 * (1 - t), arc:p, icon:'🌄'};
 }
 
-// ----- WORLDS ------------------------------------------------------
+// ----- WORLDS (BRIGHTER DAY BASE) ---------------------------------
 var worlds = [
-    {name:'WASTELAND', bg:'#3a2410', bg2:'#5a3618', grid:'rgba(255,200,80,0.12)', border:'rgba(255,180,60,0.5)', accent:'#ffcc33', hazard:'toxic'},
-    {name:'INFERNO', bg:'#2a0805', bg2:'#4a1208', grid:'rgba(255,90,40,0.12)', border:'rgba(255,100,40,0.5)', accent:'#ff6b35', hazard:'lava'},
-    {name:'GLACIER', bg:'#0a2240', bg2:'#1a3a60', grid:'rgba(150,220,255,0.12)', border:'rgba(120,210,255,0.5)', accent:'#8fd6ff', hazard:'cold'},
-    {name:'JUNGLE', bg:'#0a2a10', bg2:'#1a4a1e', grid:'rgba(80,220,80,0.12)', border:'rgba(60,220,60,0.5)', accent:'#3ddc84', hazard:'vines'},
-    {name:'THE VOID', bg:'#0c0018', bg2:'#1a0830', grid:'rgba(180,80,255,0.12)', border:'rgba(200,80,255,0.5)', accent:'#b06ee8', hazard:'oxygen'}
+    {name:'WASTELAND', bg:'#6a4418', bg2:'#9a6028', grid:'rgba(255,220,100,0.2)', border:'rgba(255,200,80,0.8)', accent:'#ffcc33', hazard:'toxic'},
+    {name:'INFERNO', bg:'#5a1008', bg2:'#8a2010', grid:'rgba(255,120,60,0.2)', border:'rgba(255,100,40,0.8)', accent:'#ff6b35', hazard:'lava'},
+    {name:'GLACIER', bg:'#1a4a80', bg2:'#3a6aa0', grid:'rgba(180,230,255,0.2)', border:'rgba(120,210,255,0.8)', accent:'#8fd6ff', hazard:'cold'},
+    {name:'JUNGLE', bg:'#1a4a20', bg2:'#2a7a30', grid:'rgba(100,255,100,0.2)', border:'rgba(60,220,60,0.8)', accent:'#3ddc84', hazard:'vines'},
+    {name:'THE VOID', bg:'#2a0a40', bg2:'#4a1a60', grid:'rgba(200,100,255,0.2)', border:'rgba(200,80,255,0.8)', accent:'#b06ee8', hazard:'oxygen'}
 ];
 function getWorldIdx() { if (wave.cur <= 0) return 0; return Math.min(4, Math.floor((wave.cur - 1) / 10)); }
 function getWorld() { return worlds[getWorldIdx()]; }
@@ -981,12 +963,17 @@ function resetGame() {
 
 function buildWeaponUI() {
     var div = document.getElementById('weaponSelector'); div.innerHTML = '';
+    var available = [];
     for (var k in weapons) {
+        if (weapons[k].unlocked && (!weapons[k].ownerOnly || isOwner)) available.push(k);
+    }
+    
+    for (var i = 0; i < available.length; i++) {
+        var k = available[i];
         var w = weapons[k];
-        if (!w.unlocked || (w.ownerOnly && !isOwner)) continue;
         var btn = document.createElement('div');
         btn.className = 'weapon-btn';
-        btn.textContent = w.icon + ' ' + w.name;
+        btn.textContent = (i+1) + '. ' + w.icon + ' ' + w.name; // Show hotkey
         if (k === tank.curW) btn.classList.add('active');
         btn.onclick = function() { tank.curW = this.getAttribute('data-w'); buildWeaponUI(); };
         btn.setAttribute('data-w', k);
@@ -1002,16 +989,6 @@ function updateHUD() {
     document.getElementById('timerDisplay').textContent = '⏱️ ' + Math.floor(totalTime / 60) + ':' + ('0' + Math.floor(totalTime % 60)).slice(-2);
     document.getElementById('coinCount').textContent = coins;
     document.getElementById('diamondCount').textContent = diamonds;
-
-    var w = weapons[tank.curW];
-    var ammoEl = document.getElementById('ammoDisplay');
-    if (ammoEl) {
-        if (!w || w.melee) { ammoEl.textContent = '🔪 MELEE: ∞'; ammoEl.style.color = '#aaa'; }
-        else if (w.ownerOnly) { ammoEl.textContent = '☢️ AMMO: ∞'; ammoEl.style.color = '#ff0'; }
-        else if (ammo[tank.curW] === -1 || infAmmo) { ammoEl.textContent = '🔫 AMMO: ∞'; ammoEl.style.color = '#0ff'; }
-        else if (w.noReload) { ammoEl.textContent = '🔪 KNIVES: ' + ammo[tank.curW] + ' / ' + w.maxAmmo; ammoEl.style.color = ammo[tank.curW] === 0 ? '#e74c3c' : '#0ff'; }
-        else { ammoEl.textContent = '🔫 AMMO: ' + ammo[tank.curW] + ' / ' + w.maxAmmo; ammoEl.style.color = ammo[tank.curW] === 0 ? '#e74c3c' : ammo[tank.curW] < w.maxAmmo * 0.25 ? '#f39c12' : '#0ff'; }
-    }
 
     var cp = getCyclePhase();
     document.getElementById('timeIcon').firstChild.textContent = cp.icon;
@@ -1319,6 +1296,16 @@ window.addEventListener('keydown', function(e) {
     if (isKeyDown(e, 'fire')) { activeKeys.FIRE = true; e.preventDefault(); }
     if (isKeyDown(e, 'reload')) reloadWeapon();
     if (isDashKey && upgrades.hasDash && tank.dashCD <= 0 && !tank.dashing) dash();
+    
+    // HOTKEYS FOR WEAPONS (1, 2, 3, 4)
+    var available = [];
+    for (var k in weapons) {
+        if (weapons[k].unlocked && (!weapons[k].ownerOnly || isOwner)) available.push(k);
+    }
+    if (e.key === '1' && available[0]) { tank.curW = available[0]; buildWeaponUI(); }
+    if (e.key === '2' && available[1]) { tank.curW = available[1]; buildWeaponUI(); }
+    if (e.key === '3' && available[2]) { tank.curW = available[2]; buildWeaponUI(); }
+    if (e.key === '4' && available[3]) { tank.curW = available[3]; buildWeaponUI(); }
 });
 window.addEventListener('keyup', function(e) {
     if (isKeyDown(e, 'up')) activeKeys.up = false;
@@ -1976,6 +1963,15 @@ function draw() {
 
     var cp = getCyclePhase();
     var modalOpen = isModalOpen();
+    
+    // BRIGHTNESS FILTER
+    if (!modalOpen) {
+        if (cp.phase === 'day') ctx.filter = 'brightness(1.5) saturate(1.6) contrast(1.1)';
+        else if (cp.phase === 'dusk') ctx.filter = 'brightness(1.1) saturate(1.15)';
+        else if (cp.phase === 'night') ctx.filter = 'brightness(0.65) saturate(0.5)';
+        else if (cp.phase === 'dawn') ctx.filter = 'brightness(1.1) saturate(1.15)';
+    }
+
     if (!modalOpen && cp.tint) {
         ctx.fillStyle = cp.tint;
         ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -2101,6 +2097,20 @@ function draw() {
         ctx.restore();
     }
     ctx.globalAlpha = 1; 
+
+    // DRAW AMMO ABOVE TANK
+    var w = weapons[tank.curW];
+    var ammoText = '';
+    if (!w || w.melee) ammoText = '∞';
+    else if (w.ownerOnly || ammo[tank.curW] === -1 || infAmmo) ammoText = '∞';
+    else ammoText = ammo[tank.curW] + ' / ' + w.maxAmmo;
+
+    ctx.fillStyle = '#000';
+    ctx.font = 'bold 14px Courier New';
+    ctx.textAlign = 'center';
+    ctx.fillText(ammoText, tank.x + 1, tank.y - tank.sz/2 - 11);
+    ctx.fillStyle = '#0ff';
+    ctx.fillText(ammoText, tank.x, tank.y - tank.sz/2 - 12);
 
     ctx.save();
     ctx.translate(tank.x, tank.y);

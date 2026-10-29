@@ -251,20 +251,6 @@
             <button id="savePassBtn" style="padding:0 15px;background:rgba(231,76,60,0.15);border:1px solid #e74c3c;color:#e74c3c;border-radius:6px;font-size:12px;cursor:pointer;">CHANGE</button>
         </div>
 
-        <div style="font-size:12px;color:#7a7aa0;margin:12px 0 4px">Recovery Email</div>
-        <div style="display:flex;gap:8px;">
-            <input id="accEmail" type="email" placeholder="your@email.com" style="flex:1;padding:10px;background:#111;border:1px solid #333;border-radius:6px;color:#fff;font-family:'Courier New',monospace;outline:none">
-            <button id="saveEmailBtn" style="padding:0 15px;background:rgba(93,92,222,0.15);border:1px solid #5D5CDE;color:#5D5CDE;border-radius:6px;font-size:12px;cursor:pointer;">SAVE</button>
-        </div>
-
-        <div style="font-size:12px;color:#7a7aa0;margin:12px 0 4px">Upload Avatar</div>
-        <input type="file" id="avatarUpload" accept="image/*" style="display:none">
-        <button id="uploadAvatarBtn" style="width:100%;padding:10px;background:rgba(255,255,255,0.05);border:1px solid #555;color:#ccc;border-radius:6px;font-size:12px;cursor:pointer;">📸 Choose Image</button>
-
-        <div id="accMsg" style="font-size:11px;text-align:center;margin-top:12px;min-height:14px;color:#2ecc71"></div>
-        
-        <button class="close-btn" id="closeProfileSettings">CLOSE</button>
-    </div>
 </div>
 
 <!-- CONTROL -->
@@ -894,7 +880,6 @@ document.getElementById('profileSettingsBtn').addEventListener('click', function
     document.getElementById('profileSettingsModal').style.display = 'flex';
     var u = userDB[currentUser];
     document.getElementById('accDisplayName').value = u.displayName || currentUser;
-    document.getElementById('accEmail').value = u.email || '';
     document.getElementById('accPassword').value = '';
     document.getElementById('accMsg').textContent = '';
 });
@@ -918,15 +903,6 @@ document.getElementById('savePassBtn').addEventListener('click', function() {
     userDB[currentUser].password = newPass; saveDB();
     document.getElementById('accPassword').value = '';
     var m = document.getElementById('accMsg'); m.textContent = '✅ Password changed!'; m.style.color = '#2ecc71';
-    setTimeout(function(){ m.textContent = ''; }, 2000);
-});
-document.getElementById('saveEmailBtn').addEventListener('click', function() {
-    var newEmail = document.getElementById('accEmail').value.trim();
-    if (newEmail.length > 0 && (!newEmail.includes('@') || !newEmail.includes('.'))) {
-        var m = document.getElementById('accMsg'); m.textContent = '⚠ Invalid email address'; m.style.color = '#e74c3c'; return;
-    }
-    userDB[currentUser].email = newEmail; saveDB();
-    var m = document.getElementById('accMsg'); m.textContent = '✅ Recovery email saved!'; m.style.color = '#2ecc71';
     setTimeout(function(){ m.textContent = ''; }, 2000);
 });
 document.getElementById('uploadAvatarBtn').addEventListener('click', function() {
@@ -1347,16 +1323,7 @@ function drawBG() {
     var grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
     grad.addColorStop(0, wld.bg); grad.addColorStop(1, wld.bg2);
     ctx.fillStyle = grad; ctx.fillRect(0, 0, canvas.width, canvas.height);
-    ctx.strokeStyle = wld.grid; ctx.lineWidth = 1;
-    var gs = 50;
-    for (var x = -gs; x < canvas.width + gs; x += gs) {
-        for (var y = -gs; y < canvas.height + gs; y += gs) {
-            ctx.beginPath();
-            ctx.moveTo(x, y - gs/2); ctx.lineTo(x + gs/2, y);
-            ctx.lineTo(x, y + gs/2); ctx.lineTo(x - gs/2, y);
-            ctx.closePath(); ctx.stroke();
-        }
-    }
+   
     for (var i = 0; i < bgF.length; i++) {
         var f = bgF[i];
         ctx.globalAlpha = f.o;

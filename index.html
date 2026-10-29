@@ -1079,6 +1079,7 @@ function openSpinScreen() {
 }
 function doSpin() {
     if (spinCount <= 0) return;
+    playSound('spin');
     spinCount--;
     
     var roll = Math.random();
@@ -1866,6 +1867,7 @@ function spawnWaveE(t) {
 }
 function spawnDrop(x, y, type) { drops.push({x: x, y: y, type: type, sz: 14, st: Date.now(), life: 15000}); }
 function handleKill(en) {
+    playSound('explosion'); // <--- ADD THIS LINE
     var isBoss = en.boss;
     var pts = isBoss ? (en.bossType === 'final' ? 2000 : en.bossType === 'world' ? 500 : 200) : 100;
     score += pts;

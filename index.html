@@ -562,6 +562,9 @@ var currentUser = null;
 var isOwner = false;
 const OW = 'trashowner';
 const OP = 'cnpopcatx';
+var keybinds = {up:'w', down:'s', left:'a', right:'d', fire:' ', reload:'r', dash:'shift'};
+try { var kb = localStorage.getItem('ta_keybinds'); if (kb) keybinds = Object.assign(keybinds, JSON.parse(kb)); } catch(e) {}
+var listeningBind = null;
 
 try { var sv = localStorage.getItem('tankArenaDB'); if (sv) userDB = JSON.parse(sv); } catch(e) {}
 function saveDB() { try { localStorage.setItem('tankArenaDB', JSON.stringify(userDB)); } catch(e) {} }
@@ -820,11 +823,11 @@ document.getElementById('ctrlPC').addEventListener('click', function() {
 // WORLD SELECTOR
 var w1 = document.getElementById('w1'), w2 = document.getElementById('w2'), w3 = document.getElementById('w3'), w4 = document.getElementById('w4'), w5 = document.getElementById('w5');
 var u = isOwner ? null : userDB[currentUser];
-var bestW = u ? u.bestWave : 999;
-if (bestW >= 10) { w2.style.opacity = '1'; w2.classList.remove('locked'); }
-if (bestW >= 20) { w3.style.opacity = '1'; w3.classList.remove('locked'); }
-if (bestW >= 30) { w4.style.opacity = '1'; w4.classList.remove('locked'); }
-if (bestW >= 40) { w5.style.opacity = '1'; w5.classList.remove('locked'); }
+var bestW = u ? (u.bestWave || 0) : 0;
+if (bestW >= 11) { w2.style.opacity = '1'; w2.classList.remove('locked'); }
+if (bestW >= 21) { w3.style.opacity = '1'; w3.classList.remove('locked'); }
+if (bestW >= 31) { w4.style.opacity = '1'; w4.classList.remove('locked'); }
+if (bestW >= 41) { w5.style.opacity = '1'; w5.classList.remove('locked'); }
 
 function selectWorld(waveStart) {
     gameStartWave = waveStart;
@@ -832,10 +835,10 @@ function selectWorld(waveStart) {
     document.getElementById('modeScreen').style.display = 'flex';
 }
 w1.addEventListener('click', function() { selectWorld(1); });
-w2.addEventListener('click', function() { if (bestW >= 10 || isOwner) selectWorld(11); });
-w3.addEventListener('click', function() { if (bestW >= 20 || isOwner) selectWorld(21); });
-w4.addEventListener('click', function() { if (bestW >= 30 || isOwner) selectWorld(31); });
-w5.addEventListener('click', function() { if (bestW >= 40 || isOwner) selectWorld(41); });
+w2.addEventListener('click', function() { if (bestW >= 10 || isOwner) selectWorld(11); else showPopup('❌ Reach Wave 10 to unlock!', true); });
+w3.addEventListener('click', function() { if (bestW >= 20 || isOwner) selectWorld(21); else showPopup('❌ Reach Wave 20 to unlock!', true); });
+w4.addEventListener('click', function() { if (bestW >= 30 || isOwner) selectWorld(31); else showPopup('❌ Reach Wave 30 to unlock!', true); });
+w5.addEventListener('click', function() { if (bestW >= 40 || isOwner) selectWorld(41); else showPopup('❌ Reach Wave 40 to unlock!', true); });
 
 document.getElementById('modeNormal').addEventListener('click', function() {
     gameMode = 'normal';
@@ -1252,7 +1255,7 @@ function updateHUD() {
     document.getElementById('score').textContent = 'Score: ' + score;
     document.getElementById('healthFill').style.width = (tank.hp / tank.maxHp * 100) + '%';
     document.getElementById('healthFill').style.background = tank.hp / tank.maxHp > 0.6 ? '#2ecc71' : tank.hp / tank.maxHp > 0.3 ? '#f39c12' : '#e74c3c';
-    document.getElementById('waveNum').textContent = wave.cur + (gameMode === 'endless' ? '+' : '/50');
+    document.getElementById('waveNum').textContent = (wave.cur - (getWorldIdx() * 10)) + (gameMode === 'endless' ? '+' : '/10');
     document.getElementById('enemyCnt').textContent = 'Enemies: ' + enemies.length;
     document.getElementById('timerDisplay').textContent = '⏱️ ' + Math.floor(totalTime / 60) + ':' + ('0' + Math.floor(totalTime % 60)).slice(-2);
     document.getElementById('coinCount').textContent = coins;

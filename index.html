@@ -918,7 +918,7 @@ async function updateLeaderboard() {
     
     if (db) {
         try {
-            const snapshot = await db.collection("scores").orderBy("score", "desc").limit(15).get();
+            const snapshot = await db.collection("scores").orderBy("score", "desc").limit(50).get();
             var h = '';
             var rank = 1;
             snapshot.forEach((doc) => {
@@ -967,8 +967,11 @@ async function updateLeaderboard() {
 function sendScoreToFirebase() {
     if (!db || !currentUser || isOwner) return;
     var u = userDB[currentUser];
-    db.collection("scores").add({
+    
+    // We use the username as the Document ID so it overwrites their old score
+    db.collection("scores").doc(currentUser).set({
         name: u.displayName || currentUser,
+        username: currentUser,
         avatar: u.avatar || null,
         title: u.title || 'Rookie',
         score: score,

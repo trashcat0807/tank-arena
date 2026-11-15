@@ -992,12 +992,14 @@ var gameStartWave = 1;
 var spinCount = 3;
 var spinGuns = [];
 var spinLocked = {};
+var waterGunLocked = false;
 var infAmmo = false;
 
 var rarities = {
     common: {name:'Common', color:'#b0b0b0', chance:0.45}, uncommon: {name:'Uncommon', color:'#2ecc71', chance:0.25},
     rare: {name:'Rare', color:'#3498db', chance:0.15}, epic: {name:'Epic', color:'#9b59b6', chance:0.08},
-    legendary: {name:'Legendary', color:'#f1c40f', chance:0.05}, mythic: {name:'Mythic', color:'#e74c3c', chance:0.02}
+    legendary: {name:'Legendary', color:'#f1c40f', chance:0.05}, mythic: {name:'Mythic', color:'#e74c3c', chance:0.02},
+    lol: {name:'LOL', color:'#ff00ff', chance:0.05}
 };
 
 var weapons = {
@@ -1008,7 +1010,7 @@ var weapons = {
     burst:{name:'Burst',icon:'🔫',rarity:'uncommon',damage:20,cd:300,bs:10,bsz:4,bc:3,range:800,color:'#b06ee8',trail:'#d8a8ff',maxAmmo:60,unlocked:true},
     crossbow:{name:'Crossbow',icon:'🏹',rarity:'uncommon',damage:50,cd:900,bs:12,bsz:4,bc:1,range:1500,color:'#ffcc33',trail:'#ffe9a8',maxAmmo:25,unlocked:true},
     shotgun:{name:'Shotgun',icon:'🔫',rarity:'rare',damage:15,cd:800,bs:7,bsz:4,bc:6,spread:0.3,range:400,color:'#ff9a3c',trail:'#ffd8a8',maxAmmo:20,unlocked:true},
-    watergun:{name:'Water Gun',icon:'💧',rarity:'rare',damage:0,cd:100,bs:6,bsz:6,bc:1,range:300,kb:60,color:'#4dc9f6',trail:'#a8e6ff',maxAmmo:80,unlocked:true},
+    watergun:{name:'Water Gun',icon:'💧',rarity:'lol',damage:0,cd:100,bs:6,bsz:6,bc:1,range:300,kb:60,color:'#4dc9f6',trail:'#a8e6ff',maxAmmo:80,unlocked:true},
     minigun:{name:'Minigun',icon:'🔄',rarity:'epic',damage:10,cd:50,bs:9,bsz:3,bc:1,range:800,hr:5,cr:2,maxHeat:100,color:'#bdc3c7',trail:'#ecf0f1',maxAmmo:1000,unlocked:true},
     flamethrower:{name:'Flamethrower',icon:'🔥',rarity:'epic',damage:3,cd:30,bs:5,bsz:8,bc:3,spread:0.2,range:200,hr:3,cr:1,maxHeat:120,fx:'fire',color:'#ff6b35',trail:'#ffcc33',maxAmmo:500,unlocked:true},
     grenade:{name:'Grenade',icon:'💣',rarity:'epic',damage:60,cd:1500,bs:5,bsz:12,bc:1,range:500,explode:true,color:'#e74c3c',trail:'#ff9a9a',maxAmmo:12,unlocked:true},
@@ -1038,6 +1040,7 @@ function doSpin() {
     else if (roll < 0.15) rarity = 'epic';
     else if (roll < 0.30) rarity = 'rare';
     else if (roll < 0.55) rarity = 'uncommon';
+    else if (roll > 0.01) rarity = 'lol';
     
     var pool = [];
     for (var k in weapons) {
@@ -1060,8 +1063,14 @@ function doSpin() {
         pool.splice(idx, 1);
     }
     
-    spinGuns = locked;
-    if (rarity === 'legendary' || rarity === 'mythic') screenShakeAmount = 10;
+        spinGuns = locked;
+    
+    // Lock the water gun if rolled
+    if (spinGuns.indexOf('watergun') !== -1) {
+        waterGunLocked = true;
+    }
+    
+    if (rarity === 'legendary' || rarity === 'mythic' || rarity === 'lol') screenShakeAmount = 10;
     
     updateSpinDisplay(); updateSpinCount();
     if (spinCount <= 0) document.getElementById('spinBtn').style.opacity = '0.4';
